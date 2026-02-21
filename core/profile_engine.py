@@ -100,20 +100,46 @@ def _fill_single_cut(
 def generate_full_profile(product: ProductMaster) -> pd.DataFrame:
     """449 bin 전체 프로파일 (edge 포함, NaN이 아닌 연속값).
 
-    제품 바깥 edge 영역은 thin_edge_cal 값으로 외삽.
+    thin edge 바깥 edge 영역은 웨지 기울기를 연장하여 리니어하게 감소.
+    센터트림 영역(2컷)은 max_cal로 채움.
     """
     df = generate_profile(product)
-    # edge 영역: 가장 가까운 유효값으로 외삽
+    positions = df["Position_mm"].values
     target = df["Target_mil"].values.copy()
+    slope = product.wedge_angle_mrad / 25.4  # mil/mm
 
-    # 왼쪽 edge 채우기
-    first_valid = np.where(~np.isnan(target))[0]
-    if len(first_valid) > 0:
-        fv = first_valid[0]
-        target[:fv] = target[fv]
-        # 오른쪽 edge 채우기
-        last_valid = first_valid[-1]
-        target[last_valid + 1:] = target[last_valid]
+    valid_indices = np.where(~np.isnan(target))[0]
+    if len(valid_indices) == 0:
+        df["Target_mil"] = target
+        return df
+
+    fv = valid_indices[0]   # first valid bin (left thin edge)
+    lv = valid_indices[-1]  # last valid bin
+
+    if product.dual_cut:
+        # 좌측 edge: left thin edge에서 기울기 연장 (계속 감소)
+        if fv > 0:
+            distances = positions[fv] - positions[:fv]
+            target[:fv] = target[fv] - slope * distances
+
+        # 우측 edge: right thin edge에서 기울기 연장 (계속 감소)
+        if lv < len(target) - 1:
+            distances = positions[lv + 1:] - positions[lv]
+            target[lv + 1:] = target[lv] - slope * distances
+
+        # 센터트림: 양쪽 flat(max_cal) 사이 → forward fill
+        still_nan = np.isnan(target)
+        if np.any(still_nan):
+            s = pd.Series(target)
+            target = s.ffill().bfill().values
+    else:
+        # 싱글컷: 좌측 = thin edge (기울기 연장), 우측 = flat (상수 외삽)
+        if fv > 0:
+            distances = positions[fv] - positions[:fv]
+            target[:fv] = target[fv] - slope * distances
+
+        if lv < len(target) - 1:
+            target[lv + 1:] = target[lv]
 
     df["Target_mil"] = target
     return df

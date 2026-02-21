@@ -4,7 +4,7 @@
     "wedge_angle_mrad": 0.64,
     "roll_width_mm": 1300,
     "flat_width_mm": 300,
-    "thin_edge_cal_mil": 31.50,
+    "thin_edge_cal_mil": 31.5,
     "film_type": "Clear",
     "hud_bot_mm": null,
     "hud_top_mm": null,
@@ -16,7 +16,7 @@
     "wedge_angle_mrad": 0.64,
     "roll_width_mm": 960,
     "flat_width_mm": 300,
-    "thin_edge_cal_mil": 31.50,
+    "thin_edge_cal_mil": 31.5,
     "film_type": "Clear",
     "hud_bot_mm": 262,
     "hud_top_mm": 502,
@@ -26,13 +26,16 @@
   "W2264AE": {
     "name": "W2264AE",
     "wedge_angle_mrad": 0.64,
-    "roll_width_mm": 1100,
-    "flat_width_mm": 300,
-    "thin_edge_cal_mil": 31.50,
+    "roll_width_mm": 1100.0,
+    "flat_width_mm": 300.0,
+    "thin_edge_cal_mil": 31.5,
     "film_type": "Clear",
-    "hud_bot_mm": 200,
-    "hud_top_mm": 600,
-    "gwa_bot_mm": 150,
-    "gwa_top_mm": 600
+    "hud_bot_mm": 200.0,
+    "hud_top_mm": 600.0,
+    "gwa_bot_mm": 150.0,
+    "gwa_top_mm": 600.0,
+    "wedge_portion_mm": 800.0,
+    "max_cal_mil": 51.6575,
+    "dual_cut": true
   }
 }

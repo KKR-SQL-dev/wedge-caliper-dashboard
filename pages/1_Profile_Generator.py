@@ -35,15 +35,15 @@ with st.sidebar:
     if selected != "(신규 입력)":
         m = masters[selected]
         default_name = m["name"]
-        default_wa = m["wedge_angle_mrad"]
-        default_rw = m["roll_width_mm"]
-        default_fw = m["flat_width_mm"]
-        default_te = m["thin_edge_cal_mil"]
+        default_wa = float(m["wedge_angle_mrad"])
+        default_rw = float(m["roll_width_mm"])
+        default_fw = float(m["flat_width_mm"])
+        default_te = float(m["thin_edge_cal_mil"])
         default_type = m.get("film_type", "Clear")
-        default_hud_bot = m.get("hud_bot_mm") or 0.0
-        default_hud_top = m.get("hud_top_mm") or 0.0
-        default_gwa_bot = m.get("gwa_bot_mm") or 0.0
-        default_gwa_top = m.get("gwa_top_mm") or 0.0
+        default_hud_bot = float(m.get("hud_bot_mm") or 0)
+        default_hud_top = float(m.get("hud_top_mm") or 0)
+        default_gwa_bot = float(m.get("gwa_bot_mm") or 0)
+        default_gwa_top = float(m.get("gwa_top_mm") or 0)
     else:
         default_name = "NEW_PRODUCT"
         default_wa = 0.64
@@ -152,13 +152,23 @@ fig.add_trace(go.Scatter(
 
 # HUD 영역 표시
 if product.hud_bot_mm and product.hud_top_mm:
-    te_pos = layout["left_start_mm"]
+    # 좌측 HUD
+    left_te = layout["left_start_mm"]
     fig.add_vrect(
-        x0=te_pos + product.hud_bot_mm, x1=te_pos + product.hud_top_mm,
+        x0=left_te + product.hud_bot_mm, x1=left_te + product.hud_top_mm,
         fillcolor="rgba(255,0,255,0.1)", line_width=1,
         line=dict(color="magenta", dash="dash"),
-        annotation_text="HUD Area", annotation_position="top left",
+        annotation_text="HUD (L)", annotation_position="top left",
     )
+    # 우측 HUD (대칭)
+    if product.dual_cut:
+        right_te = layout["right_end_mm"]
+        fig.add_vrect(
+            x0=right_te - product.hud_top_mm, x1=right_te - product.hud_bot_mm,
+            fillcolor="rgba(255,0,255,0.1)", line_width=1,
+            line=dict(color="magenta", dash="dash"),
+            annotation_text="HUD (R)", annotation_position="top right",
+        )
 
 fig.update_layout(
     title=f"Target Profile: {name}",

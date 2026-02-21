@@ -1,0 +1,38 @@
+{
+  "W2264AC": {
+    "name": "W2264AC",
+    "wedge_angle_mrad": 0.64,
+    "roll_width_mm": 1300,
+    "flat_width_mm": 300,
+    "thin_edge_cal_mil": 31.50,
+    "film_type": "Clear",
+    "hud_bot_mm": null,
+    "hud_top_mm": null,
+    "gwa_bot_mm": null,
+    "gwa_top_mm": null
+  },
+  "W2264AD": {
+    "name": "W2264AD",
+    "wedge_angle_mrad": 0.64,
+    "roll_width_mm": 960,
+    "flat_width_mm": 300,
+    "thin_edge_cal_mil": 31.50,
+    "film_type": "Clear",
+    "hud_bot_mm": 262,
+    "hud_top_mm": 502,
+    "gwa_bot_mm": 120,
+    "gwa_top_mm": 580
+  },
+  "W2264AE": {
+    "name": "W2264AE",
+    "wedge_angle_mrad": 0.64,
+    "roll_width_mm": 1100,
+    "flat_width_mm": 300,
+    "thin_edge_cal_mil": 31.50,
+    "film_type": "Clear",
+    "hud_bot_mm": 200,
+    "hud_top_mm": 600,
+    "gwa_bot_mm": 150,
+    "gwa_top_mm": 600
+  }
+}

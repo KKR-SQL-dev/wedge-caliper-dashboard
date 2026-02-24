@@ -10,15 +10,18 @@ import streamlit as st
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from config import (
-    CENTER_TRIM_MM, DIE_FULL_WIDTH_MM, PROJECT_ROOT,
-    load_masters, save_masters,
+    CENTER_TRIM_MM, DIE_FULL_WIDTH_MM, MASTER_PATH, PROJECT_ROOT,
+    auto_refresh_masters, get_excel_master_path, load_masters, save_masters,
 )
+from core.excel_importer import refresh_masters
 from core.profile_engine import generate_full_profile
 from core.wedge_geometry import ProductMaster
 
 GENERATED_DIR = PROJECT_ROOT / "data" / "generated_profiles"
 GENERATED_DIR.mkdir(parents=True, exist_ok=True)
 
+# ── 자동 동기화 ──────────────────────────────────────────
+auto_refresh_masters()
 
 # ── 페이지 설정 ──────────────────────────────────────────
 st.header("Profile Generator")
@@ -26,10 +29,52 @@ st.caption("제품 스펙을 입력하면 449 bin 타겟 프로파일을 자동 
 
 masters = load_masters()
 
-# ── 사이드바: 제품 선택 / 신규 입력 ──────────────────────
+# ── 사이드바: 필터 + 제품 선택 / 신규 입력 ────────────────
 with st.sidebar:
+    # 엑셀 새로고침 버튼
+    if st.button("Refresh from Excel", type="secondary"):
+        excel_path = get_excel_master_path()
+        if excel_path.exists():
+            masters = refresh_masters(excel_path, MASTER_PATH)
+            st.success(f"엑셀에서 {len(masters)}개 제품 로드 완료!")
+            st.rerun()
+        else:
+            st.error(f"엑셀 파일 없음: {excel_path}")
+
+    st.divider()
+    st.subheader("Filter")
+
+    # 라인 필터
+    all_lines = sorted(set(m.get("extr_line", "L9") for m in masters.values()))
+    if len(all_lines) > 1:
+        selected_lines = st.multiselect("Extr. Line", all_lines, default=all_lines)
+    else:
+        selected_lines = all_lines
+
+    # 상태 필터
+    all_statuses = sorted(set(m.get("status", "Unknown") for m in masters.values()))
+    if len(all_statuses) > 1:
+        selected_statuses = st.multiselect("Status", all_statuses, default=all_statuses)
+    else:
+        selected_statuses = all_statuses
+
+    # 필터 적용
+    filtered_names = [
+        name for name, m in masters.items()
+        if m.get("extr_line", "L9") in selected_lines
+        and m.get("status", "Unknown") in selected_statuses
+    ]
+
+    st.caption(f"필터 결과: {len(filtered_names)} / {len(masters)} 제품")
+
+    st.divider()
     st.subheader("제품 선택")
-    product_names = ["(신규 입력)"] + list(masters.keys())
+    search_query = st.text_input("제품명 검색", "", placeholder="W2264 입력하면 필터...")
+    if search_query:
+        matched = [n for n in sorted(filtered_names) if search_query.upper() in n.upper()]
+    else:
+        matched = sorted(filtered_names)
+    product_names = ["(신규 입력)"] + matched
     selected = st.selectbox("기존 제품 로드", product_names)
 
     if selected != "(신규 입력)":
@@ -40,6 +85,7 @@ with st.sidebar:
         default_fw = float(m["flat_width_mm"])
         default_te = float(m["thin_edge_cal_mil"])
         default_type = m.get("film_type", "Clear")
+        default_cut_type = m.get("cut_type", "auto")
         default_hud_bot = float(m.get("hud_bot_mm") or 0)
         default_hud_top = float(m.get("hud_top_mm") or 0)
         default_gwa_bot = float(m.get("gwa_bot_mm") or 0)
@@ -51,6 +97,7 @@ with st.sidebar:
         default_fw = 300.0
         default_te = 31.50
         default_type = "Clear"
+        default_cut_type = "auto"
         default_hud_bot = 0.0
         default_hud_top = 0.0
         default_gwa_bot = 0.0
@@ -63,7 +110,25 @@ with st.sidebar:
     roll_width = st.number_input("Roll Width (mm)", value=default_rw, step=10.0)
     flat_width = st.number_input("Flat Width (mm)", value=default_fw, step=10.0)
     thin_edge = st.number_input("Thin Edge Cal (mil)", value=default_te, step=0.1, format="%.2f")
-    film_type = st.selectbox("Film Type", ["Clear", "Acoustic", "Tinted"], index=["Clear", "Acoustic", "Tinted"].index(default_type))
+    film_type = st.selectbox("Film Type", ["Clear", "Acoustic", "Tinted"], index=["Clear", "Acoustic", "Tinted"].index(default_type) if default_type in ["Clear", "Acoustic", "Tinted"] else 0)
+
+    st.divider()
+    st.subheader("Cut Type")
+    cut_type_options = ["auto", "dual", "single_left", "single_right", "single_center"]
+    cut_type_labels = {
+        "auto": "Auto (폭 기준 자동)",
+        "dual": "2-Cut (좌+우)",
+        "single_left": "Single - Left",
+        "single_right": "Single - Right",
+        "single_center": "Single - Center",
+    }
+    cut_type_idx = cut_type_options.index(default_cut_type) if default_cut_type in cut_type_options else 0
+    cut_type = st.selectbox(
+        "Cut Type",
+        cut_type_options,
+        index=cut_type_idx,
+        format_func=lambda x: cut_type_labels[x],
+    )
 
     st.divider()
     st.subheader("HUD / GWA 영역 (optional)")
@@ -72,6 +137,16 @@ with st.sidebar:
     hud_top = st.number_input("HUD Top (mm)", value=default_hud_top, step=10.0)
     gwa_bot = st.number_input("GWA Bot (mm)", value=default_gwa_bot, step=10.0)
     gwa_top = st.number_input("GWA Top (mm)", value=default_gwa_top, step=10.0)
+
+# ── 선택된 제품 메타데이터 표시 ─────────────────────────────
+if selected != "(신규 입력)" and selected in masters:
+    meta = masters[selected]
+    meta_cols = st.columns(5)
+    meta_cols[0].caption(f"Line: **{meta.get('extr_line', '-')}**")
+    meta_cols[1].caption(f"Status: **{meta.get('status', '-')}**")
+    meta_cols[2].caption(f"PVB: **{meta.get('pvb_type', '-')}**")
+    meta_cols[3].caption(f"Pattern: **{meta.get('pattern', '-')}**")
+    meta_cols[4].caption(f"Band: **{meta.get('band_color', '-')}**")
 
 # ── 제품 객체 생성 ────────────────────────────────────────
 product = ProductMaster(
@@ -85,13 +160,14 @@ product = ProductMaster(
     hud_top_mm=hud_top if hud_top > 0 else None,
     gwa_bot_mm=gwa_bot if gwa_bot > 0 else None,
     gwa_top_mm=gwa_top if gwa_top > 0 else None,
+    cut_type=cut_type,
 )
 
 # ── 자동 계산 표시 ────────────────────────────────────────
 col1, col2, col3, col4 = st.columns(4)
 col1.metric("Wedge Portion", f"{product.wedge_portion_mm:.0f} mm")
 col2.metric("Max/Flat Cal", f"{product.max_cal_mil:.2f} mil")
-col3.metric("Cut Type", "2-Cut" if product.dual_cut else "Single")
+col3.metric("Cut Type", product.cut_label)
 if product.dual_cut:
     edge_waste = DIE_FULL_WIDTH_MM - (roll_width * 2 + CENTER_TRIM_MM)
     col4.metric("Edge Waste (양쪽 합)", f"{edge_waste:.1f} mm")

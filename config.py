@@ -42,11 +42,45 @@ def is_dual_cut(roll_width_mm: float) -> bool:
     return (roll_width_mm * 2 + CENTER_TRIM_MM) <= DIE_FULL_WIDTH_MM
 
 
-# ── 프로젝트 경로 & 마스터 데이터 I/O ───────────────────
+# ── 프로젝트 경로 & 설정 ─────────────────────────────────
 PROJECT_ROOT = Path(__file__).resolve().parent
 MASTER_PATH = PROJECT_ROOT / "data" / "product_master.json"
+SETTINGS_PATH = PROJECT_ROOT / "data" / "settings.json"
+DEFAULT_EXCEL_PATH = PROJECT_ROOT / "Wedge Raw test data.xlsx"
 
 
+def load_settings() -> dict:
+    """data/settings.json에서 설정 로드."""
+    if SETTINGS_PATH.exists():
+        with open(SETTINGS_PATH, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return {}
+
+
+def save_settings(settings: dict):
+    """설정을 data/settings.json에 저장."""
+    SETTINGS_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with open(SETTINGS_PATH, "w", encoding="utf-8") as f:
+        json.dump(settings, f, indent=2, ensure_ascii=False)
+
+
+def get_excel_master_path() -> Path:
+    """설정에서 엑셀 마스터 경로를 가져오거나 기본값 반환."""
+    settings = load_settings()
+    p = settings.get("excel_master_path")
+    if p:
+        return Path(p)
+    return DEFAULT_EXCEL_PATH
+
+
+def set_excel_master_path(path: str | Path):
+    """엑셀 마스터 경로를 설정에 저장."""
+    settings = load_settings()
+    settings["excel_master_path"] = str(path)
+    save_settings(settings)
+
+
+# ── 마스터 데이터 I/O ────────────────────────────────────
 def load_masters() -> dict:
     """product_master.json에서 제품 마스터 로드."""
     if MASTER_PATH.exists():
@@ -57,5 +91,23 @@ def load_masters() -> dict:
 
 def save_masters(masters: dict):
     """제품 마스터를 product_master.json에 저장."""
+    MASTER_PATH.parent.mkdir(parents=True, exist_ok=True)
     with open(MASTER_PATH, "w", encoding="utf-8") as f:
         json.dump(masters, f, indent=2, ensure_ascii=False)
+
+
+def should_refresh_masters() -> bool:
+    """엑셀이 JSON보다 최신이면 True."""
+    excel_path = get_excel_master_path()
+    if not excel_path.exists():
+        return False
+    if not MASTER_PATH.exists():
+        return True
+    return excel_path.stat().st_mtime > MASTER_PATH.stat().st_mtime
+
+
+def auto_refresh_masters():
+    """엑셀이 더 최신이면 자동으로 마스터를 새로고침."""
+    if should_refresh_masters():
+        from core.excel_importer import refresh_masters
+        refresh_masters(get_excel_master_path(), MASTER_PATH)

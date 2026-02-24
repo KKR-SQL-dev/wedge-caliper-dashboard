@@ -10,12 +10,14 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from config import BIN_PITCH_MM, load_masters
+from config import BIN_PITCH_MM, auto_refresh_masters, load_masters
 from core.dummy_data import generate_dummy_actual
 from core.mrad_calculator import calc_gwa, calc_lwa, calc_uwa, judge_gwa, judge_lwa
 from core.profile_engine import generate_full_profile
 from core.wedge_geometry import ProductMaster
 
+# ── 자동 동기화 ──────────────────────────────────────────
+auto_refresh_masters()
 
 # ── 페이지 설정 ──────────────────────────────────────────
 st.header("Monitoring Dashboard")
@@ -25,10 +27,67 @@ if not masters:
     st.warning("제품 마스터가 없습니다. Profile Generator에서 먼저 제품을 등록하세요.")
     st.stop()
 
-# ── 사이드바: 제품 선택 + 더미 데이터 파라미터 ────────────
+# ── 사이드바: 필터 + 제품 선택 + 더미 데이터 파라미터 ────
 with st.sidebar:
+    st.subheader("Filter")
+
+    # 라인 필터
+    all_lines = sorted(set(m.get("extr_line", "L9") for m in masters.values()))
+    if len(all_lines) > 1:
+        selected_lines = st.multiselect("Extr. Line", all_lines, default=all_lines, key="mon_line")
+    else:
+        selected_lines = all_lines
+
+    # 상태 필터
+    all_statuses = sorted(set(m.get("status", "Unknown") for m in masters.values()))
+    if len(all_statuses) > 1:
+        selected_statuses = st.multiselect("Status", all_statuses, default=all_statuses, key="mon_status")
+    else:
+        selected_statuses = all_statuses
+
+    # 필터 적용
+    filtered_names = sorted([
+        name for name, m in masters.items()
+        if m.get("extr_line", "L9") in selected_lines
+        and m.get("status", "Unknown") in selected_statuses
+    ])
+
+    st.caption(f"필터 결과: {len(filtered_names)} / {len(masters)} 제품")
+
+    st.divider()
     st.subheader("제품 선택")
-    selected_name = st.selectbox("Recipe (제품명)", list(masters.keys()))
+    if not filtered_names:
+        st.warning("필터 조건에 맞는 제품이 없습니다.")
+        st.stop()
+    search_query = st.text_input("제품명 검색", "", placeholder="W2264 입력하면 필터...", key="mon_search")
+    if search_query:
+        matched = [n for n in filtered_names if search_query.upper() in n.upper()]
+    else:
+        matched = filtered_names
+    if not matched:
+        st.warning("검색 결과 없음")
+        st.stop()
+    selected_name = st.selectbox("Recipe (제품명)", matched)
+
+    st.divider()
+    st.subheader("Cut Type Override")
+    cut_type_options = ["auto", "dual", "single_left", "single_right", "single_center"]
+    cut_type_labels = {
+        "auto": "Auto (폭 기준 자동)",
+        "dual": "2-Cut (좌+우)",
+        "single_left": "Single - Left",
+        "single_right": "Single - Right",
+        "single_center": "Single - Center",
+    }
+    mon_default_cut = masters[selected_name].get("cut_type", "auto") if selected_name in masters else "auto"
+    mon_cut_idx = cut_type_options.index(mon_default_cut) if mon_default_cut in cut_type_options else 0
+    mon_cut_type = st.selectbox(
+        "Cut Type",
+        cut_type_options,
+        index=mon_cut_idx,
+        format_func=lambda x: cut_type_labels[x],
+        key="mon_cut_type",
+    )
 
     st.divider()
     st.subheader("Dummy Data Settings")
@@ -45,8 +104,18 @@ with st.sidebar:
     gwa_tol = st.number_input("GWA Tolerance (mrad)", value=0.03, step=0.01, format="%.3f")
     lwa_tol = st.number_input("LWA Tolerance (mrad)", value=0.15, step=0.01, format="%.3f")
 
+# ── 선택된 제품 메타데이터 표시 ─────────────────────────────
+meta = masters[selected_name]
+meta_cols = st.columns(5)
+meta_cols[0].caption(f"Line: **{meta.get('extr_line', '-')}**")
+meta_cols[1].caption(f"Status: **{meta.get('status', '-')}**")
+meta_cols[2].caption(f"PVB: **{meta.get('pvb_type', '-')}**")
+meta_cols[3].caption(f"Pattern: **{meta.get('pattern', '-')}**")
+meta_cols[4].caption(f"Band: **{meta.get('band_color', '-')}**")
+
 # ── 제품 로드 & 프로파일 생성 ─────────────────────────────
-m = masters[selected_name]
+m = dict(masters[selected_name])
+m["cut_type"] = mon_cut_type  # 사이드바에서 선택한 cut type 적용
 product = ProductMaster.from_dict(m)
 df_target = generate_full_profile(product)
 
@@ -113,7 +182,7 @@ with tab1:
         ))
 
     fig.update_layout(
-        title=f"Full Profile: {product.name} ({'2-Cut' if product.dual_cut else 'Single'})",
+        title=f"Full Profile: {product.name} ({product.cut_label})",
         xaxis_title="Position (mm)",
         yaxis_title="Caliper (mil)",
         height=450,
@@ -220,22 +289,33 @@ def _plot_cut(
 # TAB 2: Left Product
 # ══════════════════════════════════════════════════════════
 with tab2:
-    left_te_pos = _plot_cut(
-        "Left Product",
-        layout["left_start_mm"], layout["left_end_mm"],
-        thin_edge_pos_mm=layout["left_start_mm"],
-        direction="left",
-    )
+    if product.resolved_cut_type == "single_right":
+        st.info("Single-Right 모드 – Left Product 없음. Right Product 탭을 확인하세요.")
+    else:
+        _plot_cut(
+            "Left Product",
+            layout["left_start_mm"], layout["left_end_mm"],
+            thin_edge_pos_mm=layout["left_start_mm"],
+            direction="left",
+        )
 
 # ══════════════════════════════════════════════════════════
 # TAB 3: Right Product
 # ══════════════════════════════════════════════════════════
 with tab3:
     if product.dual_cut:
-        right_te_pos = _plot_cut(
+        _plot_cut(
             "Right Product",
             layout["right_start_mm"], layout["right_end_mm"],
             thin_edge_pos_mm=layout["right_end_mm"],
+            direction="right",
+        )
+    elif product.resolved_cut_type == "single_right":
+        # single_right: left 좌표에 우측 위치가 들어있고, direction=right로 표시
+        _plot_cut(
+            "Right Product (Single)",
+            layout["left_start_mm"], layout["left_end_mm"],
+            thin_edge_pos_mm=layout["left_end_mm"],
             direction="right",
         )
     else:

@@ -1,11 +1,13 @@
 """제품 마스터 데이터클래스 & 컷 타입별 레이아웃 계산.
 
 cut_type:
-  "dual"         – 2컷 (좌+우), 센터트림 사이에 배치
-  "single_left"  – 싱글컷, 2컷 레이아웃의 좌측 위치에 배치
-  "single_right" – 싱글컷, 2컷 레이아웃의 우측 위치에 배치
-  "single_center"– 싱글컷, 다이 중앙 정렬 (폭이 너무 커서 2컷 불가)
-  "auto"         – 폭 기준 자동 판별 (기본값)
+  "dual"              – 2컷 (좌+우), 센터트림 사이에 배치
+  "single_left"       – 좌측에 웨지 제품, 우측은 flat
+  "single_right"      – 우측에 웨지 제품, 좌측은 flat
+  "single_center"     – 싱글컷, 다이 중앙 정렬
+  "single_left_dual"  – 양쪽 웨지 형상, 좌측 메인 (우측은 남는 폭)
+  "single_right_dual" – 양쪽 웨지 형상, 우측 메인 (좌측은 남는 폭)
+  "auto"              – 폭 기준 자동 판별 (기본값)
 """
 from __future__ import annotations
 
@@ -18,7 +20,10 @@ from config import (
 )
 
 # 유효한 cut_type 값
-VALID_CUT_TYPES = ("auto", "dual", "single_left", "single_right", "single_center")
+VALID_CUT_TYPES = (
+    "auto", "dual", "single_left", "single_right", "single_center",
+    "single_left_dual", "single_right_dual",
+)
 
 
 @dataclass
@@ -36,8 +41,11 @@ class ProductMaster:
     gwa_bot_mm: Optional[float] = None
     gwa_top_mm: Optional[float] = None
 
-    # 컷 타입: "auto", "dual", "single_left", "single_right", "single_center"
+    # 컷 타입
     cut_type: str = "auto"
+
+    # 센터트림 폭 (제품별 가변, 기본 1인치)
+    center_trim_mm: float = CENTER_TRIM_MM
 
     # ── 자동 계산 필드 ────────────────────────────────
     wedge_portion_mm: float = field(init=False)
@@ -53,14 +61,24 @@ class ProductMaster:
         )
         # cut_type 결정
         if self.cut_type == "auto":
-            if is_dual_cut(self.roll_width_mm):
+            if is_dual_cut(self.roll_width_mm, self.center_trim_mm):
                 self.resolved_cut_type = "dual"
             else:
                 self.resolved_cut_type = "single_center"
         else:
             self.resolved_cut_type = self.cut_type
 
-        self.dual_cut = self.resolved_cut_type == "dual"
+        self.dual_cut = self.resolved_cut_type in ("dual", "single_left_dual", "single_right_dual")
+
+    @property
+    def opposite_roll_width_mm(self) -> float:
+        """Dual Shape 시 반대쪽 롤폭 = 다이폭 - 센터트림 - 메인롤폭."""
+        return DIE_FULL_WIDTH_MM - self.center_trim_mm - self.roll_width_mm
+
+    @property
+    def opposite_flat_width_mm(self) -> float:
+        """반대쪽 flat 폭 = 반대쪽 롤폭 - 동일한 wedge_portion."""
+        return max(0.0, self.opposite_roll_width_mm - self.wedge_portion_mm)
 
     # ── 레이아웃 계산 ────────────────────────────────
     def layout(self) -> dict:
@@ -68,42 +86,57 @@ class ProductMaster:
 
         Returns dict:
             center_mm, left_start_mm, left_end_mm
-            + dual이면 right_start_mm, right_end_mm
+            + dual 계열이면 right_start_mm, right_end_mm
             + 각각의 bin index
+            + Dual Shape이면 opposite 정보
         """
         center_mm = DIE_FULL_WIDTH_MM / 2.0
-        half_trim = CENTER_TRIM_MM / 2.0
+        half_trim = self.center_trim_mm / 2.0
+
+        right_start_mm = None
+        right_end_mm = None
 
         if self.resolved_cut_type == "dual":
-            # 좌측: center - half_trim - roll_width ~ center - half_trim
             left_end_mm = center_mm - half_trim
             left_start_mm = left_end_mm - self.roll_width_mm
-            # 우측: center + half_trim ~ center + half_trim + roll_width
             right_start_mm = center_mm + half_trim
             right_end_mm = right_start_mm + self.roll_width_mm
 
         elif self.resolved_cut_type == "single_left":
-            # 2컷 좌측 위치에 싱글 배치
+            # 좌측에 웨지 제품, 우측은 flat (profile_engine에서 처리)
             left_end_mm = center_mm - half_trim
             left_start_mm = left_end_mm - self.roll_width_mm
-            right_start_mm = None
-            right_end_mm = None
+            # 우측 flat 영역
+            right_start_mm = center_mm + half_trim
+            right_end_mm = right_start_mm + self.opposite_roll_width_mm
 
         elif self.resolved_cut_type == "single_right":
-            # 2컷 우측 위치에 싱글 배치 → left_start/end에 우측 좌표 넣음
+            # 우측에 웨지 제품, 좌측은 flat (profile_engine에서 처리)
             right_start_mm = center_mm + half_trim
             right_end_mm = right_start_mm + self.roll_width_mm
-            # left 좌표는 right 좌표로 세팅 (차트/계산 호환)
-            left_start_mm = right_start_mm
-            left_end_mm = right_end_mm
-            right_start_mm = None
-            right_end_mm = None
+            # 좌측 flat 영역
+            left_end_mm = center_mm - half_trim
+            left_start_mm = left_end_mm - self.opposite_roll_width_mm
+
+        elif self.resolved_cut_type == "single_left_dual":
+            # 좌측 메인, 우측은 남는 폭으로 웨지 형상
+            left_end_mm = center_mm - half_trim
+            left_start_mm = left_end_mm - self.roll_width_mm
+            opp_rw = self.opposite_roll_width_mm
+            right_start_mm = center_mm + half_trim
+            right_end_mm = right_start_mm + opp_rw
+
+        elif self.resolved_cut_type == "single_right_dual":
+            # 우측 메인, 좌측은 남는 폭으로 웨지 형상
+            right_start_mm = center_mm + half_trim
+            right_end_mm = right_start_mm + self.roll_width_mm
+            opp_rw = self.opposite_roll_width_mm
+            left_end_mm = center_mm - half_trim
+            left_start_mm = left_end_mm - opp_rw
 
         else:  # single_center
             left_start_mm = center_mm - self.roll_width_mm / 2.0
             left_end_mm = center_mm + self.roll_width_mm / 2.0
-            right_start_mm = None
-            right_end_mm = None
 
         def mm_to_bin(mm_pos: float) -> int:
             return max(0, min(NUM_BINS - 1, round(mm_pos / BIN_PITCH_MM)))
@@ -116,13 +149,19 @@ class ProductMaster:
             "left_end_bin": mm_to_bin(left_end_mm),
             "cut_type": self.resolved_cut_type,
         }
-        if self.dual_cut:
+        if right_start_mm is not None:
             result.update({
                 "right_start_mm": right_start_mm,
                 "right_end_mm": right_end_mm,
                 "right_start_bin": mm_to_bin(right_start_mm),
                 "right_end_bin": mm_to_bin(right_end_mm),
             })
+
+        # Dual Shape 추가 정보
+        if self.resolved_cut_type in ("single_left_dual", "single_right_dual"):
+            result["main_side"] = "left" if "left" in self.resolved_cut_type else "right"
+            result["opposite_roll_width_mm"] = self.opposite_roll_width_mm
+
         return result
 
     @property
@@ -132,11 +171,13 @@ class ProductMaster:
             "single_left": "Single (Left)",
             "single_right": "Single (Right)",
             "single_center": "Single (Center)",
+            "single_left_dual": "Single Left (Dual Shape)",
+            "single_right_dual": "Single Right (Dual Shape)",
         }
         return labels.get(self.resolved_cut_type, self.resolved_cut_type)
 
     def to_dict(self) -> dict:
-        return {
+        d = {
             "name": self.name,
             "wedge_angle_mrad": self.wedge_angle_mrad,
             "roll_width_mm": self.roll_width_mm,
@@ -148,10 +189,15 @@ class ProductMaster:
             "gwa_bot_mm": self.gwa_bot_mm,
             "gwa_top_mm": self.gwa_top_mm,
             "cut_type": self.cut_type,
+            "center_trim_mm": self.center_trim_mm,
             "wedge_portion_mm": self.wedge_portion_mm,
-            "max_cal_mil": round(self.max_cal_mil, 4),
+            "max_cal_mil": self.max_cal_mil,
             "dual_cut": self.dual_cut,
         }
+        if self.resolved_cut_type in ("single_left_dual", "single_right_dual"):
+            d["opposite_roll_width_mm"] = self.opposite_roll_width_mm
+            d["opposite_flat_width_mm"] = self.opposite_flat_width_mm
+        return d
 
     @classmethod
     def from_dict(cls, d: dict) -> "ProductMaster":
@@ -167,4 +213,5 @@ class ProductMaster:
             gwa_bot_mm=d.get("gwa_bot_mm"),
             gwa_top_mm=d.get("gwa_top_mm"),
             cut_type=d.get("cut_type", "auto"),
+            center_trim_mm=float(d.get("center_trim_mm", CENTER_TRIM_MM)),
         )

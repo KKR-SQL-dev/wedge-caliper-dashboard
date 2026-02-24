@@ -11,11 +11,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from config import (
     CENTER_TRIM_MM, DIE_FULL_WIDTH_MM, MASTER_PATH, PROJECT_ROOT,
-    auto_refresh_masters, get_excel_master_path, load_masters, save_masters,
+    auto_refresh_masters, get_excel_master_path, is_dual_cut, load_masters, save_masters,
 )
 from core.excel_importer import refresh_masters
 from core.profile_engine import generate_full_profile
-from core.wedge_geometry import ProductMaster
+from core.wedge_geometry import ProductMaster, VALID_CUT_TYPES
 
 GENERATED_DIR = PROJECT_ROOT / "data" / "generated_profiles"
 GENERATED_DIR.mkdir(parents=True, exist_ok=True)
@@ -74,8 +74,22 @@ with st.sidebar:
         matched = [n for n in sorted(filtered_names) if search_query.upper() in n.upper()]
     else:
         matched = sorted(filtered_names)
+
+    def _cut_label(name: str) -> str:
+        """제품명 옆에 (2-Cut) / (Single) 자동 표시."""
+        m = masters.get(name)
+        if not m:
+            return name
+        rw = float(m.get("roll_width_mm", 0))
+        ct_mm = float(m.get("center_trim_mm", CENTER_TRIM_MM))
+        tag = "2-Cut" if is_dual_cut(rw, ct_mm) else "Single"
+        return f"{name} ({tag})"
+
     product_names = ["(신규 입력)"] + matched
-    selected = st.selectbox("기존 제품 로드", product_names)
+    selected = st.selectbox(
+        "기존 제품 로드", product_names,
+        format_func=lambda x: x if x == "(신규 입력)" else _cut_label(x),
+    )
 
     if selected != "(신규 입력)":
         m = masters[selected]
@@ -86,6 +100,7 @@ with st.sidebar:
         default_te = float(m["thin_edge_cal_mil"])
         default_type = m.get("film_type", "Clear")
         default_cut_type = m.get("cut_type", "auto")
+        default_center_trim = float(m.get("center_trim_mm", CENTER_TRIM_MM))
         default_hud_bot = float(m.get("hud_bot_mm") or 0)
         default_hud_top = float(m.get("hud_top_mm") or 0)
         default_gwa_bot = float(m.get("gwa_bot_mm") or 0)
@@ -98,6 +113,7 @@ with st.sidebar:
         default_te = 31.50
         default_type = "Clear"
         default_cut_type = "auto"
+        default_center_trim = CENTER_TRIM_MM
         default_hud_bot = 0.0
         default_hud_top = 0.0
         default_gwa_bot = 0.0
@@ -113,21 +129,28 @@ with st.sidebar:
     film_type = st.selectbox("Film Type", ["Clear", "Acoustic", "Tinted"], index=["Clear", "Acoustic", "Tinted"].index(default_type) if default_type in ["Clear", "Acoustic", "Tinted"] else 0)
 
     st.divider()
-    st.subheader("Cut Type")
-    cut_type_options = ["auto", "dual", "single_left", "single_right", "single_center"]
+    st.subheader("Cut Type & Center Trim")
+    cut_type_options = list(VALID_CUT_TYPES)
     cut_type_labels = {
         "auto": "Auto (폭 기준 자동)",
         "dual": "2-Cut (좌+우)",
-        "single_left": "Single - Left",
-        "single_right": "Single - Right",
-        "single_center": "Single - Center",
+        "single_left": "Single Left (우측 flat)",
+        "single_right": "Single Right (좌측 flat)",
+        "single_center": "Single Center",
+        "single_left_dual": "Single Left - Dual Shape (짝짝이)",
+        "single_right_dual": "Single Right - Dual Shape (짝짝이)",
     }
     cut_type_idx = cut_type_options.index(default_cut_type) if default_cut_type in cut_type_options else 0
     cut_type = st.selectbox(
         "Cut Type",
         cut_type_options,
         index=cut_type_idx,
-        format_func=lambda x: cut_type_labels[x],
+        format_func=lambda x: cut_type_labels.get(x, x),
+    )
+
+    center_trim = st.number_input(
+        "Center Trim (mm)", value=default_center_trim, step=1.0, format="%.1f",
+        help="센터트림 폭 (기본 25.4mm = 1 inch)",
     )
 
     st.divider()
@@ -161,17 +184,30 @@ product = ProductMaster(
     gwa_bot_mm=gwa_bot if gwa_bot > 0 else None,
     gwa_top_mm=gwa_top if gwa_top > 0 else None,
     cut_type=cut_type,
+    center_trim_mm=center_trim,
 )
 
 # ── 자동 계산 표시 ────────────────────────────────────────
-col1, col2, col3, col4 = st.columns(4)
-col1.metric("Wedge Portion", f"{product.wedge_portion_mm:.0f} mm")
-col2.metric("Max/Flat Cal", f"{product.max_cal_mil:.2f} mil")
-col3.metric("Cut Type", product.cut_label)
-if product.dual_cut:
-    edge_waste = DIE_FULL_WIDTH_MM - (roll_width * 2 + CENTER_TRIM_MM)
+ct = product.resolved_cut_type
+if ct in ("single_left_dual", "single_right_dual"):
+    col1, col2, col3, col4, col5 = st.columns(5)
+    col1.metric("Wedge Portion", f"{product.wedge_portion_mm:.0f} mm")
+    col2.metric("Max/Flat Cal", f"{product.max_cal_mil:.2f} mil")
+    col3.metric("Cut Type", product.cut_label)
+    col4.metric("Opposite Roll W", f"{product.opposite_roll_width_mm:.0f} mm")
+    col5.metric("Opposite Flat W", f"{product.opposite_flat_width_mm:.0f} mm")
+elif ct == "dual":
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("Wedge Portion", f"{product.wedge_portion_mm:.0f} mm")
+    col2.metric("Max/Flat Cal", f"{product.max_cal_mil:.2f} mil")
+    col3.metric("Cut Type", product.cut_label)
+    edge_waste = DIE_FULL_WIDTH_MM - (roll_width * 2 + center_trim)
     col4.metric("Edge Waste (양쪽 합)", f"{edge_waste:.1f} mm")
 else:
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("Wedge Portion", f"{product.wedge_portion_mm:.0f} mm")
+    col2.metric("Max/Flat Cal", f"{product.max_cal_mil:.2f} mil")
+    col3.metric("Cut Type", product.cut_label)
     edge_waste = DIE_FULL_WIDTH_MM - roll_width
     col4.metric("Edge Waste", f"{edge_waste:.1f} mm")
 
@@ -182,13 +218,15 @@ layout = product.layout()
 # ── Plotly 차트 ───────────────────────────────────────────
 fig = go.Figure()
 
-# 제품 영역 배경
+# 제품 영역 배경 (좌측)
 fig.add_vrect(
     x0=layout["left_start_mm"], x1=layout["left_end_mm"],
     fillcolor="rgba(0,100,255,0.07)", line_width=0,
     annotation_text="Left Product", annotation_position="top left",
 )
-if product.dual_cut:
+
+# 제품 영역 배경 (우측) - dual 계열 + single_left/right
+if layout.get("right_start_mm") is not None:
     fig.add_vrect(
         x0=layout["right_start_mm"], x1=layout["right_end_mm"],
         fillcolor="rgba(255,100,0,0.07)", line_width=0,
@@ -196,28 +234,48 @@ if product.dual_cut:
     )
 
 # Wedge / Flat 구간 구분 (좌측)
-left_wedge_end_mm = layout["left_start_mm"] + product.wedge_portion_mm
-fig.add_vrect(
-    x0=layout["left_start_mm"], x1=left_wedge_end_mm,
-    fillcolor="rgba(255,255,0,0.08)", line_width=0,
-    annotation_text="Wedge", annotation_position="bottom left",
-)
-fig.add_vrect(
-    x0=left_wedge_end_mm, x1=layout["left_end_mm"],
-    fillcolor="rgba(0,255,0,0.08)", line_width=0,
-    annotation_text="Flat", annotation_position="bottom left",
-)
-
-if product.dual_cut:
-    right_wedge_start_mm = layout["right_end_mm"] - product.wedge_portion_mm
+if ct not in ("single_right",):
+    # 좌측에 웨지 형상이 있는 경우
+    left_wp = product.wedge_portion_mm
+    left_wedge_end_mm = layout["left_start_mm"] + left_wp
     fig.add_vrect(
-        x0=layout["right_start_mm"], x1=right_wedge_start_mm,
-        fillcolor="rgba(0,255,0,0.08)", line_width=0,
-    )
-    fig.add_vrect(
-        x0=right_wedge_start_mm, x1=layout["right_end_mm"],
+        x0=layout["left_start_mm"], x1=left_wedge_end_mm,
         fillcolor="rgba(255,255,0,0.08)", line_width=0,
+        annotation_text="Wedge", annotation_position="bottom left",
     )
+    fig.add_vrect(
+        x0=left_wedge_end_mm, x1=layout["left_end_mm"],
+        fillcolor="rgba(0,255,0,0.08)", line_width=0,
+        annotation_text="Flat", annotation_position="bottom left",
+    )
+else:
+    # single_right: 좌측은 전부 flat
+    fig.add_vrect(
+        x0=layout["left_start_mm"], x1=layout["left_end_mm"],
+        fillcolor="rgba(0,255,0,0.08)", line_width=0,
+        annotation_text="Flat", annotation_position="bottom left",
+    )
+
+# Wedge / Flat 구간 구분 (우측)
+if layout.get("right_start_mm") is not None:
+    if ct == "single_left":
+        # single_left: 우측은 전부 flat
+        fig.add_vrect(
+            x0=layout["right_start_mm"], x1=layout["right_end_mm"],
+            fillcolor="rgba(0,255,0,0.08)", line_width=0,
+        )
+    else:
+        # dual, single_left_dual, single_right_dual, single_right
+        right_wp = product.wedge_portion_mm
+        right_wedge_start_mm = layout["right_end_mm"] - right_wp
+        fig.add_vrect(
+            x0=layout["right_start_mm"], x1=right_wedge_start_mm,
+            fillcolor="rgba(0,255,0,0.08)", line_width=0,
+        )
+        fig.add_vrect(
+            x0=right_wedge_start_mm, x1=layout["right_end_mm"],
+            fillcolor="rgba(255,255,0,0.08)", line_width=0,
+        )
 
 # 타겟 프로파일
 fig.add_trace(go.Scatter(
@@ -228,22 +286,41 @@ fig.add_trace(go.Scatter(
 
 # HUD 영역 표시
 if product.hud_bot_mm and product.hud_top_mm:
-    # 좌측 HUD
-    left_te = layout["left_start_mm"]
-    fig.add_vrect(
-        x0=left_te + product.hud_bot_mm, x1=left_te + product.hud_top_mm,
-        fillcolor="rgba(255,0,255,0.1)", line_width=1,
-        line=dict(color="magenta", dash="dash"),
-        annotation_text="HUD (L)", annotation_position="top left",
-    )
-    # 우측 HUD (대칭)
-    if product.dual_cut:
+    # 좌측 HUD (single_right 제외)
+    if ct not in ("single_right",):
+        left_te = layout["left_start_mm"]
+        fig.add_vrect(
+            x0=left_te + product.hud_bot_mm, x1=left_te + product.hud_top_mm,
+            fillcolor="rgba(255,0,255,0.1)", line_width=1,
+            line=dict(color="magenta", dash="dash"),
+            annotation_text="HUD (L)", annotation_position="top left",
+        )
+    # 우측 HUD (dual 계열)
+    if layout.get("right_start_mm") is not None and ct not in ("single_left",):
         right_te = layout["right_end_mm"]
         fig.add_vrect(
             x0=right_te - product.hud_top_mm, x1=right_te - product.hud_bot_mm,
             fillcolor="rgba(255,0,255,0.1)", line_width=1,
             line=dict(color="magenta", dash="dash"),
             annotation_text="HUD (R)", annotation_position="top right",
+        )
+
+# Dual Shape: 메인쪽 강조
+if ct in ("single_left_dual", "single_right_dual"):
+    main_side = layout.get("main_side", "left")
+    if main_side == "left":
+        fig.add_vrect(
+            x0=layout["left_start_mm"], x1=layout["left_end_mm"],
+            fillcolor="rgba(0,0,0,0)", line_width=2,
+            line=dict(color="green", dash="solid"),
+            annotation_text="MAIN", annotation_position="top left",
+        )
+    else:
+        fig.add_vrect(
+            x0=layout["right_start_mm"], x1=layout["right_end_mm"],
+            fillcolor="rgba(0,0,0,0)", line_width=2,
+            line=dict(color="green", dash="solid"),
+            annotation_text="MAIN", annotation_position="top right",
         )
 
 fig.update_layout(

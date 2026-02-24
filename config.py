@@ -37,9 +37,9 @@ def bin_positions_mm() -> list[float]:
     return [i * BIN_PITCH_MM for i in range(NUM_BINS)]
 
 
-def is_dual_cut(roll_width_mm: float) -> bool:
-    """2컷 가능 여부: (roll_width × 2) + 25.4mm ≤ 2828.9mm."""
-    return (roll_width_mm * 2 + CENTER_TRIM_MM) <= DIE_FULL_WIDTH_MM
+def is_dual_cut(roll_width_mm: float, center_trim_mm: float = CENTER_TRIM_MM) -> bool:
+    """2컷 가능 여부: (roll_width × 2) + center_trim ≤ 2828.9mm."""
+    return (roll_width_mm * 2 + center_trim_mm) <= DIE_FULL_WIDTH_MM
 
 
 # ── 프로젝트 경로 & 설정 ─────────────────────────────────

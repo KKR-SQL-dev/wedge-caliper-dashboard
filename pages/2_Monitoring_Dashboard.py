@@ -10,7 +10,7 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from config import BIN_PITCH_MM, auto_refresh_masters, load_masters
+from config import BIN_PITCH_MM, CENTER_TRIM_MM, auto_refresh_masters, is_dual_cut, load_masters
 from core.dummy_data import generate_dummy_actual
 from core.mrad_calculator import calc_gwa, calc_lwa, calc_uwa, judge_gwa, judge_lwa
 from core.profile_engine import generate_full_profile
@@ -67,17 +67,33 @@ with st.sidebar:
     if not matched:
         st.warning("검색 결과 없음")
         st.stop()
-    selected_name = st.selectbox("Recipe (제품명)", matched)
+
+    def _cut_label(name: str) -> str:
+        m = masters.get(name)
+        if not m:
+            return name
+        rw = float(m.get("roll_width_mm", 0))
+        ct_mm = float(m.get("center_trim_mm", CENTER_TRIM_MM))
+        tag = "2-Cut" if is_dual_cut(rw, ct_mm) else "Single"
+        return f"{name} ({tag})"
+
+    selected_name = st.selectbox(
+        "Recipe (제품명)", matched,
+        format_func=_cut_label,
+    )
 
     st.divider()
     st.subheader("Cut Type Override")
-    cut_type_options = ["auto", "dual", "single_left", "single_right", "single_center"]
+    from core.wedge_geometry import VALID_CUT_TYPES
+    cut_type_options = list(VALID_CUT_TYPES)
     cut_type_labels = {
         "auto": "Auto (폭 기준 자동)",
         "dual": "2-Cut (좌+우)",
-        "single_left": "Single - Left",
-        "single_right": "Single - Right",
-        "single_center": "Single - Center",
+        "single_left": "Single Left (우측 flat)",
+        "single_right": "Single Right (좌측 flat)",
+        "single_center": "Single Center",
+        "single_left_dual": "Single Left - Dual Shape",
+        "single_right_dual": "Single Right - Dual Shape",
     }
     mon_default_cut = masters[selected_name].get("cut_type", "auto") if selected_name in masters else "auto"
     mon_cut_idx = cut_type_options.index(mon_default_cut) if mon_default_cut in cut_type_options else 0
@@ -85,7 +101,7 @@ with st.sidebar:
         "Cut Type",
         cut_type_options,
         index=mon_cut_idx,
-        format_func=lambda x: cut_type_labels[x],
+        format_func=lambda x: cut_type_labels.get(x, x),
         key="mon_cut_type",
     )
 
@@ -150,7 +166,7 @@ with tab1:
         fillcolor="rgba(0,100,255,0.05)", line_width=0,
         annotation_text="L", annotation_position="top left",
     )
-    if product.dual_cut:
+    if layout.get("right_start_mm") is not None:
         fig.add_vrect(
             x0=layout["right_start_mm"], x1=layout["right_end_mm"],
             fillcolor="rgba(255,100,0,0.05)", line_width=0,
@@ -198,6 +214,8 @@ def _plot_cut(
     end_mm: float,
     thin_edge_pos_mm: float,
     direction: str,
+    wedge_portion_override: float = None,
+    is_flat_only: bool = False,
 ):
     """한 컷 제품의 프로파일 + 구간 표시."""
     mask = (positions >= start_mm) & (positions <= end_mm)
@@ -208,8 +226,12 @@ def _plot_cut(
     fig = go.Figure()
 
     # Wedge / Flat 구간
-    wp = product.wedge_portion_mm
-    if direction == "left":
+    wp = wedge_portion_override if wedge_portion_override is not None else product.wedge_portion_mm
+    if is_flat_only:
+        fig.add_vrect(x0=start_mm, x1=end_mm,
+                       fillcolor="rgba(0,200,100,0.12)", line_width=0,
+                       annotation_text="Flat", annotation_position="top left")
+    elif direction == "left":
         wedge_end = start_mm + wp
         fig.add_vrect(x0=start_mm, x1=wedge_end,
                        fillcolor="rgba(255,200,0,0.12)", line_width=0,
@@ -288,9 +310,28 @@ def _plot_cut(
 # ══════════════════════════════════════════════════════════
 # TAB 2: Left Product
 # ══════════════════════════════════════════════════════════
+ct = product.resolved_cut_type
 with tab2:
-    if product.resolved_cut_type == "single_right":
-        st.info("Single-Right 모드 – Left Product 없음. Right Product 탭을 확인하세요.")
+    if ct == "single_right":
+        # 좌측은 flat only
+        if layout.get("left_start_mm") is not None:
+            _plot_cut(
+                "Left Product (Flat)",
+                layout["left_start_mm"], layout["left_end_mm"],
+                thin_edge_pos_mm=layout["left_start_mm"],
+                direction="left",
+                is_flat_only=True,
+            )
+        else:
+            st.info("Single-Right 모드 – Left Product는 flat입니다.")
+    elif ct == "single_right_dual":
+        # 좌측은 남는 폭 웨지 (같은 wedge_portion, flat만 더 넓음)
+        _plot_cut(
+            "Left Product (Opposite)",
+            layout["left_start_mm"], layout["left_end_mm"],
+            thin_edge_pos_mm=layout["left_start_mm"],
+            direction="left",
+        )
     else:
         _plot_cut(
             "Left Product",
@@ -303,21 +344,35 @@ with tab2:
 # TAB 3: Right Product
 # ══════════════════════════════════════════════════════════
 with tab3:
-    if product.dual_cut:
+    if ct == "single_left":
+        # 우측은 flat only
+        if layout.get("right_start_mm") is not None:
+            _plot_cut(
+                "Right Product (Flat)",
+                layout["right_start_mm"], layout["right_end_mm"],
+                thin_edge_pos_mm=layout["right_end_mm"],
+                direction="right",
+                is_flat_only=True,
+            )
+        else:
+            st.info("Single-Left 모드 – Right Product는 flat입니다.")
+    elif ct == "single_left_dual":
+        # 우측은 남는 폭 웨지 (같은 wedge_portion, flat만 더 넓음)
+        _plot_cut(
+            "Right Product (Opposite)",
+            layout["right_start_mm"], layout["right_end_mm"],
+            thin_edge_pos_mm=layout["right_end_mm"],
+            direction="right",
+        )
+    elif layout.get("right_start_mm") is not None:
         _plot_cut(
             "Right Product",
             layout["right_start_mm"], layout["right_end_mm"],
             thin_edge_pos_mm=layout["right_end_mm"],
             direction="right",
         )
-    elif product.resolved_cut_type == "single_right":
-        # single_right: left 좌표에 우측 위치가 들어있고, direction=right로 표시
-        _plot_cut(
-            "Right Product (Single)",
-            layout["left_start_mm"], layout["left_end_mm"],
-            thin_edge_pos_mm=layout["left_end_mm"],
-            direction="right",
-        )
+    elif ct == "single_center":
+        st.info("싱글 센터 제품 – Right Product 없음")
     else:
         st.info("싱글컷 제품 – Right Product 없음")
 
@@ -336,8 +391,9 @@ with tab4:
         lwa_pos_l, lwa_val_l = calc_lwa(positions, actual_mil,
                                          product.hud_bot_mm, product.hud_top_mm, left_te, "left")
 
-        fig_lwa = make_subplots(rows=1, cols=2 if product.dual_cut else 1,
-                                 subplot_titles=["Left LWA"] + (["Right LWA"] if product.dual_cut else []),
+        has_right = layout.get("right_start_mm") is not None
+        fig_lwa = make_subplots(rows=1, cols=2 if has_right else 1,
+                                 subplot_titles=["Left LWA"] + (["Right LWA"] if has_right else []),
                                  shared_yaxes=True)
 
         target_wa = product.wedge_angle_mrad
@@ -353,7 +409,7 @@ with tab4:
             fig_lwa.add_hline(y=target_wa + lwa_tol, line_color="gray", line_dash="dot", row=1, col=1)
             fig_lwa.add_hline(y=target_wa - lwa_tol, line_color="gray", line_dash="dot", row=1, col=1)
 
-        if product.dual_cut:
+        if has_right:
             right_te = layout["right_end_mm"]
             lwa_pos_r, lwa_val_r = calc_lwa(positions, actual_mil,
                                              product.hud_bot_mm, product.hud_top_mm, right_te, "right")
@@ -399,7 +455,7 @@ with tab4:
         results.append(row_data)
 
         # Right
-        if product.dual_cut:
+        if has_right:
             right_te = layout["right_end_mm"]
             uwa_r = calc_uwa(positions, actual_mil,
                               layout["right_end_mm"] - product.wedge_portion_mm, layout["right_end_mm"])

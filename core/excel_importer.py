@@ -131,6 +131,7 @@ def import_from_excel(excel_path: str | Path) -> dict:
             "hud_top_mm": hud_top,
             "gwa_bot_mm": gwa_bot,
             "gwa_top_mm": gwa_top,
+            "center_trim_mm": 25.4,  # 기본값, 엑셀에 컬럼 추가 시 읽기
             # 메타데이터
             "status": status,
             "extr_line": extr_line,

@@ -7,7 +7,7 @@ st.set_page_config(
     page_title="L9 Wedge Caliper Monitor",
     page_icon="📐",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
 # ── 앱 시작 시 엑셀 → JSON 자동 동기화 ──────────────────

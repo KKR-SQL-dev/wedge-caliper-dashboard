@@ -101,16 +101,20 @@ def generate_profile(product: ProductMaster) -> pd.DataFrame:
             product=product,
             direction="left",
         )
-        # 우측: 같은 wedge_angle/thin_edge/max_cal, flat만 더 넓음
+        # 우측 opposite: max_cal 동일, 기울기 동일, 좁으면 thin edge만 높아짐
+        opp_rw = layout["right_end_mm"] - layout["right_start_mm"]
+        opp_slope = product.wedge_angle_mrad / 25.4  # 기울기 동일
+        opp_wp = min(product.wedge_portion_mm, opp_rw)
+        opp_thin = product.max_cal_mil - opp_slope * opp_wp
         _fill_wedge_cut_custom(
             cals, positions,
             start_mm=layout["right_start_mm"],
             end_mm=layout["right_end_mm"],
             direction="right",
-            thin_cal=product.thin_edge_cal_mil,
+            thin_cal=opp_thin,
             max_cal=product.max_cal_mil,
-            wedge_portion_mm=product.wedge_portion_mm,
-            slope_mil_per_mm=product.wedge_angle_mrad / 25.4,
+            wedge_portion_mm=opp_wp,
+            slope_mil_per_mm=opp_slope,
         )
 
     elif ct == "single_right_dual":
@@ -122,16 +126,20 @@ def generate_profile(product: ProductMaster) -> pd.DataFrame:
             product=product,
             direction="right",
         )
-        # 좌측: 같은 wedge_angle/thin_edge/max_cal, flat만 더 넓음
+        # 좌측 opposite: max_cal 동일, 기울기 동일, 좁으면 thin edge만 높아짐
+        opp_rw = layout["left_end_mm"] - layout["left_start_mm"]
+        opp_slope = product.wedge_angle_mrad / 25.4  # 기울기 동일
+        opp_wp = min(product.wedge_portion_mm, opp_rw)
+        opp_thin = product.max_cal_mil - opp_slope * opp_wp
         _fill_wedge_cut_custom(
             cals, positions,
             start_mm=layout["left_start_mm"],
             end_mm=layout["left_end_mm"],
             direction="left",
-            thin_cal=product.thin_edge_cal_mil,
+            thin_cal=opp_thin,
             max_cal=product.max_cal_mil,
-            wedge_portion_mm=product.wedge_portion_mm,
-            slope_mil_per_mm=product.wedge_angle_mrad / 25.4,
+            wedge_portion_mm=opp_wp,
+            slope_mil_per_mm=opp_slope,
         )
 
     return pd.DataFrame({

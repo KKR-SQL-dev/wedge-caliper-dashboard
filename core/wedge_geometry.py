@@ -91,48 +91,52 @@ class ProductMaster:
             + Dual Shape이면 opposite 정보
         """
         center_mm = DIE_FULL_WIDTH_MM / 2.0
-        half_trim = self.center_trim_mm / 2.0
+        ct = self.resolved_cut_type
 
         right_start_mm = None
         right_end_mm = None
 
-        if self.resolved_cut_type == "dual":
+        if ct == "dual":
+            # 대칭: 센터트림 기준 좌우 동일 폭, edge waste 균등
+            half_trim = self.center_trim_mm / 2.0
             left_end_mm = center_mm - half_trim
             left_start_mm = left_end_mm - self.roll_width_mm
             right_start_mm = center_mm + half_trim
             right_end_mm = right_start_mm + self.roll_width_mm
 
-        elif self.resolved_cut_type == "single_left":
-            # 좌측에 웨지 제품, 우측은 flat (profile_engine에서 처리)
-            left_end_mm = center_mm - half_trim
-            left_start_mm = left_end_mm - self.roll_width_mm
-            # 우측 flat 영역
-            right_start_mm = center_mm + half_trim
-            right_end_mm = right_start_mm + self.opposite_roll_width_mm
+        elif ct == "single_left":
+            # 좌측 웨지 제품, 우측 flat — 좌측 edge 정렬
+            left_start_mm = 0.0
+            left_end_mm = self.roll_width_mm
+            right_start_mm = left_end_mm + self.center_trim_mm
+            right_end_mm = DIE_FULL_WIDTH_MM
 
-        elif self.resolved_cut_type == "single_right":
-            # 우측에 웨지 제품, 좌측은 flat (profile_engine에서 처리)
-            right_start_mm = center_mm + half_trim
-            right_end_mm = right_start_mm + self.roll_width_mm
-            # 좌측 flat 영역
-            left_end_mm = center_mm - half_trim
-            left_start_mm = left_end_mm - self.opposite_roll_width_mm
+        elif ct == "single_right":
+            # 우측 웨지 제품, 좌측 flat — 우측 edge 정렬
+            right_end_mm = DIE_FULL_WIDTH_MM
+            right_start_mm = right_end_mm - self.roll_width_mm
+            left_end_mm = right_start_mm - self.center_trim_mm
+            left_start_mm = 0.0
 
-        elif self.resolved_cut_type == "single_left_dual":
-            # 좌측 메인, 우측은 남는 폭으로 웨지 형상
-            left_end_mm = center_mm - half_trim
-            left_start_mm = left_end_mm - self.roll_width_mm
+        elif ct == "single_left_dual":
+            # 좌측 메인 + 우측 남는 폭 웨지, edge waste 균등
             opp_rw = self.opposite_roll_width_mm
-            right_start_mm = center_mm + half_trim
+            total = self.roll_width_mm + self.center_trim_mm + opp_rw
+            half_waste = max(0.0, DIE_FULL_WIDTH_MM - total) / 2.0
+            left_start_mm = half_waste
+            left_end_mm = left_start_mm + self.roll_width_mm
+            right_start_mm = left_end_mm + self.center_trim_mm
             right_end_mm = right_start_mm + opp_rw
 
-        elif self.resolved_cut_type == "single_right_dual":
-            # 우측 메인, 좌측은 남는 폭으로 웨지 형상
-            right_start_mm = center_mm + half_trim
-            right_end_mm = right_start_mm + self.roll_width_mm
+        elif ct == "single_right_dual":
+            # 우측 메인 + 좌측 남는 폭 웨지, edge waste 균등
             opp_rw = self.opposite_roll_width_mm
-            left_end_mm = center_mm - half_trim
-            left_start_mm = left_end_mm - opp_rw
+            total = opp_rw + self.center_trim_mm + self.roll_width_mm
+            half_waste = max(0.0, DIE_FULL_WIDTH_MM - total) / 2.0
+            left_start_mm = half_waste
+            left_end_mm = left_start_mm + opp_rw
+            right_start_mm = left_end_mm + self.center_trim_mm
+            right_end_mm = right_start_mm + self.roll_width_mm
 
         else:  # single_center
             left_start_mm = center_mm - self.roll_width_mm / 2.0

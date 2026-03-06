@@ -37,6 +37,12 @@ def bin_positions_mm() -> list[float]:
     return [i * BIN_PITCH_MM for i in range(NUM_BINS)]
 
 
+# ── Bin No 보조 x축 틱 데이터 ────────────────────────────
+_BIN_TICKS = [1] + list(range(25, NUM_BINS, 25)) + [NUM_BINS]
+BIN_AXIS_TICK_POSITIONS = [(b - 1) * BIN_PITCH_MM for b in _BIN_TICKS]
+BIN_AXIS_TICK_LABELS = [str(b) for b in _BIN_TICKS]
+
+
 def is_dual_cut(roll_width_mm: float, center_trim_mm: float = CENTER_TRIM_MM) -> bool:
     """2컷 가능 여부: (roll_width × 2) + center_trim ≤ 2828.9mm."""
     return (roll_width_mm * 2 + center_trim_mm) <= DIE_FULL_WIDTH_MM

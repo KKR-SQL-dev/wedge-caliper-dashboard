@@ -10,6 +10,7 @@ import streamlit as st
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from config import (
+    BIN_AXIS_TICK_LABELS, BIN_AXIS_TICK_POSITIONS, BIN_PITCH_MM,
     CENTER_TRIM_MM, DIE_FULL_WIDTH_MM, MASTER_PATH, PROJECT_ROOT,
     auto_refresh_masters, get_excel_master_path, is_dual_cut, load_masters, save_masters,
 )
@@ -26,6 +27,13 @@ auto_refresh_masters()
 # ── 페이지 설정 ──────────────────────────────────────────
 st.header("Profile Generator")
 st.caption("제품 스펙을 입력하면 449 bin 타겟 프로파일을 자동 생성합니다.")
+
+# ── 선택된 제품명 상단 표시 ───────────────────────────────
+_sel = st.session_state.get("product_select")
+if _sel and _sel != "(신규 입력)":
+    st.subheader(f"Selected: {_sel}")
+else:
+    st.subheader("Selected: (신규 입력)")
 
 masters = load_masters()
 
@@ -58,11 +66,33 @@ with st.sidebar:
     else:
         selected_statuses = all_statuses
 
+    # Cut Type 필터
+    def _resolve_cut_tag(m: dict) -> str:
+        """마스터 dict에서 cut type 태그를 결정."""
+        ct = m.get("cut_type", "auto")
+        if ct in ("single_left_dual", "single_right_dual"):
+            return "Dual Shape"
+        if ct in ("single_left", "single_right", "single_center"):
+            return "Single"
+        if ct == "dual":
+            return "2-Cut"
+        # auto → 폭 기준 판별
+        rw = float(m.get("roll_width_mm", 0))
+        ct_mm = float(m.get("center_trim_mm", CENTER_TRIM_MM))
+        return "2-Cut" if is_dual_cut(rw, ct_mm) else "Single"
+
+    all_cut_tags = sorted(set(_resolve_cut_tag(m) for m in masters.values()))
+    if len(all_cut_tags) > 1:
+        selected_cut_tags = st.multiselect("Cut Type", all_cut_tags, default=all_cut_tags)
+    else:
+        selected_cut_tags = all_cut_tags
+
     # 필터 적용
     filtered_names = [
         name for name, m in masters.items()
         if m.get("extr_line", "L9") in selected_lines
         and m.get("status", "Unknown") in selected_statuses
+        and _resolve_cut_tag(m) in selected_cut_tags
     ]
 
     st.caption(f"필터 결과: {len(filtered_names)} / {len(masters)} 제품")
@@ -70,10 +100,6 @@ with st.sidebar:
     st.divider()
     st.subheader("제품 선택")
     search_query = st.text_input("제품명 검색", "", placeholder="W2264 입력하면 필터...")
-    if search_query:
-        matched = [n for n in sorted(filtered_names) if search_query.upper() in n.upper()]
-    else:
-        matched = sorted(filtered_names)
 
     def _cut_label(name: str) -> str:
         """제품명 옆에 (2-Cut) / (Single) 자동 표시."""
@@ -85,10 +111,23 @@ with st.sidebar:
         tag = "2-Cut" if is_dual_cut(rw, ct_mm) else "Single"
         return f"{name} ({tag})"
 
-    product_names = ["(신규 입력)"] + matched
+    if search_query:
+        matched = [n for n in sorted(filtered_names) if search_query.upper() in n.upper()]
+        st.caption(f"검색 결과: **{len(matched)}**개 매칭")
+        if len(matched) == 0:
+            st.warning("검색 결과가 없습니다.")
+            product_names = ["(신규 입력)"]
+        else:
+            product_names = matched
+    else:
+        matched = sorted(filtered_names)
+        product_names = ["(신규 입력)"] + matched
+
     selected = st.selectbox(
-        "기존 제품 로드", product_names,
+        "제품 선택" if search_query else "기존 제품 로드",
+        product_names,
         format_func=lambda x: x if x == "(신규 입력)" else _cut_label(x),
+        key="product_select",
     )
 
     if selected != "(신규 입력)":
@@ -219,120 +258,152 @@ layout = product.layout()
 fig = go.Figure()
 
 # 제품 영역 배경 (좌측)
-fig.add_vrect(
-    x0=layout["left_start_mm"], x1=layout["left_end_mm"],
-    fillcolor="rgba(0,100,255,0.07)", line_width=0,
-    annotation_text="Left Product", annotation_position="top left",
-)
-
-# 제품 영역 배경 (우측) - dual 계열 + single_left/right
+fig.add_vrect(x0=layout["left_start_mm"], x1=layout["left_end_mm"],
+              fillcolor="rgba(0,100,255,0.07)", line_width=0)
+# 제품 영역 배경 (우측)
 if layout.get("right_start_mm") is not None:
-    fig.add_vrect(
-        x0=layout["right_start_mm"], x1=layout["right_end_mm"],
-        fillcolor="rgba(255,100,0,0.07)", line_width=0,
-        annotation_text="Right Product", annotation_position="top right",
-    )
+    fig.add_vrect(x0=layout["right_start_mm"], x1=layout["right_end_mm"],
+                  fillcolor="rgba(255,100,0,0.07)", line_width=0)
 
 # Wedge / Flat 구간 구분 (좌측)
 if ct not in ("single_right",):
-    # 좌측에 웨지 형상이 있는 경우
     left_wp = product.wedge_portion_mm
     left_wedge_end_mm = layout["left_start_mm"] + left_wp
-    fig.add_vrect(
-        x0=layout["left_start_mm"], x1=left_wedge_end_mm,
-        fillcolor="rgba(255,255,0,0.08)", line_width=0,
-        annotation_text="Wedge", annotation_position="bottom left",
-    )
-    fig.add_vrect(
-        x0=left_wedge_end_mm, x1=layout["left_end_mm"],
-        fillcolor="rgba(0,255,0,0.08)", line_width=0,
-        annotation_text="Flat", annotation_position="bottom left",
-    )
+    fig.add_vrect(x0=layout["left_start_mm"], x1=left_wedge_end_mm,
+                  fillcolor="rgba(255,255,0,0.08)", line_width=0)
+    fig.add_vrect(x0=left_wedge_end_mm, x1=layout["left_end_mm"],
+                  fillcolor="rgba(0,255,0,0.08)", line_width=0)
 else:
-    # single_right: 좌측은 전부 flat
-    fig.add_vrect(
-        x0=layout["left_start_mm"], x1=layout["left_end_mm"],
-        fillcolor="rgba(0,255,0,0.08)", line_width=0,
-        annotation_text="Flat", annotation_position="bottom left",
-    )
+    fig.add_vrect(x0=layout["left_start_mm"], x1=layout["left_end_mm"],
+                  fillcolor="rgba(0,255,0,0.08)", line_width=0)
 
 # Wedge / Flat 구간 구분 (우측)
 if layout.get("right_start_mm") is not None:
     if ct == "single_left":
-        # single_left: 우측은 전부 flat
-        fig.add_vrect(
-            x0=layout["right_start_mm"], x1=layout["right_end_mm"],
-            fillcolor="rgba(0,255,0,0.08)", line_width=0,
-        )
+        fig.add_vrect(x0=layout["right_start_mm"], x1=layout["right_end_mm"],
+                      fillcolor="rgba(0,255,0,0.08)", line_width=0)
     else:
-        # dual, single_left_dual, single_right_dual, single_right
         right_wp = product.wedge_portion_mm
         right_wedge_start_mm = layout["right_end_mm"] - right_wp
-        fig.add_vrect(
-            x0=layout["right_start_mm"], x1=right_wedge_start_mm,
-            fillcolor="rgba(0,255,0,0.08)", line_width=0,
-        )
-        fig.add_vrect(
-            x0=right_wedge_start_mm, x1=layout["right_end_mm"],
-            fillcolor="rgba(255,255,0,0.08)", line_width=0,
-        )
-
-# 타겟 프로파일
-fig.add_trace(go.Scatter(
-    x=df["Position_mm"], y=df["Target_mil"],
-    mode="lines", name="Target Profile",
-    line=dict(color="blue", width=2),
-))
+        fig.add_vrect(x0=layout["right_start_mm"], x1=right_wedge_start_mm,
+                      fillcolor="rgba(0,255,0,0.08)", line_width=0)
+        fig.add_vrect(x0=right_wedge_start_mm, x1=layout["right_end_mm"],
+                      fillcolor="rgba(255,255,0,0.08)", line_width=0)
 
 # HUD 영역 표시
 if product.hud_bot_mm and product.hud_top_mm:
-    # 좌측 HUD (single_right 제외)
     if ct not in ("single_right",):
         left_te = layout["left_start_mm"]
-        fig.add_vrect(
-            x0=left_te + product.hud_bot_mm, x1=left_te + product.hud_top_mm,
-            fillcolor="rgba(255,0,255,0.1)", line_width=1,
-            line=dict(color="magenta", dash="dash"),
-            annotation_text="HUD (L)", annotation_position="top left",
-        )
-    # 우측 HUD (dual 계열)
+        fig.add_vrect(x0=left_te + product.hud_bot_mm, x1=left_te + product.hud_top_mm,
+                      fillcolor="rgba(255,0,255,0.1)", line_width=1,
+                      line=dict(color="magenta", dash="dash"))
     if layout.get("right_start_mm") is not None and ct not in ("single_left",):
         right_te = layout["right_end_mm"]
-        fig.add_vrect(
-            x0=right_te - product.hud_top_mm, x1=right_te - product.hud_bot_mm,
-            fillcolor="rgba(255,0,255,0.1)", line_width=1,
-            line=dict(color="magenta", dash="dash"),
-            annotation_text="HUD (R)", annotation_position="top right",
-        )
+        fig.add_vrect(x0=right_te - product.hud_top_mm, x1=right_te - product.hud_bot_mm,
+                      fillcolor="rgba(255,0,255,0.1)", line_width=1,
+                      line=dict(color="magenta", dash="dash"))
 
 # Dual Shape: 메인쪽 강조
 if ct in ("single_left_dual", "single_right_dual"):
     main_side = layout.get("main_side", "left")
-    if main_side == "left":
-        fig.add_vrect(
-            x0=layout["left_start_mm"], x1=layout["left_end_mm"],
-            fillcolor="rgba(0,0,0,0)", line_width=2,
-            line=dict(color="green", dash="solid"),
-            annotation_text="MAIN", annotation_position="top left",
-        )
-    else:
-        fig.add_vrect(
-            x0=layout["right_start_mm"], x1=layout["right_end_mm"],
-            fillcolor="rgba(0,0,0,0)", line_width=2,
-            line=dict(color="green", dash="solid"),
-            annotation_text="MAIN", annotation_position="top right",
-        )
+    _ms = layout["left_start_mm"] if main_side == "left" else layout["right_start_mm"]
+    _me = layout["left_end_mm"] if main_side == "left" else layout["right_end_mm"]
+    fig.add_vrect(x0=_ms, x1=_me, fillcolor="rgba(0,0,0,0)", line_width=2,
+                  line=dict(color="green", dash="solid"))
+
+# 타겟 프로파일
+fig.add_trace(go.Scatter(
+    x=df["Position_mm"], y=df["Target_mil"],
+    customdata=df["Bin"],
+    mode="lines", name="Target Profile",
+    line=dict(color="blue", width=2),
+    hovertemplate="Bin %{customdata} | %{x:.1f}mm<br>%{y:.2f} mil<extra>Target</extra>",
+))
+
+# ── 구간 라벨 (fig.add_annotation) — 각 구간 중앙에 겹치지 않게 배치 ──
+# yref="paper" → 0=차트 하단, 1=차트 상단
+# 상단 레이어 (y=1.02): Left/Right Product
+# 하단 레이어 (y=-0.06): Wedge/Flat
+# 중간 레이어 (y=0.5):  HUD
+
+def _add_label(x_center, text, y_paper, color="white", size=11):
+    fig.add_annotation(
+        x=x_center, y=y_paper, text=f"<b>{text}</b>",
+        xref="x", yref="paper",
+        showarrow=False, font=dict(color=color, size=size),
+        bgcolor="rgba(0,0,0,0.6)", borderpad=3,
+    )
+
+# Left Product
+_add_label((layout["left_start_mm"] + layout["left_end_mm"]) / 2,
+           "Left Product", 1.02, color="dodgerblue")
+
+# Right Product
+if layout.get("right_start_mm") is not None:
+    _add_label((layout["right_start_mm"] + layout["right_end_mm"]) / 2,
+               "Right Product", 1.02, color="orange")
+
+# Wedge / Flat (좌측)
+if ct not in ("single_right",):
+    _add_label((layout["left_start_mm"] + left_wedge_end_mm) / 2,
+               "Wedge", 0.05, color="yellow", size=10)
+    _add_label((left_wedge_end_mm + layout["left_end_mm"]) / 2,
+               "Flat", 0.05, color="lime", size=10)
+else:
+    _add_label((layout["left_start_mm"] + layout["left_end_mm"]) / 2,
+               "Flat", 0.05, color="lime", size=10)
+
+# Wedge / Flat (우측)
+if layout.get("right_start_mm") is not None and ct not in ("single_left",):
+    _add_label((layout["right_start_mm"] + right_wedge_start_mm) / 2,
+               "Flat", 0.05, color="lime", size=10)
+    _add_label((right_wedge_start_mm + layout["right_end_mm"]) / 2,
+               "Wedge", 0.05, color="yellow", size=10)
+
+# HUD (좌측)
+if product.hud_bot_mm and product.hud_top_mm and ct not in ("single_right",):
+    _hud_l_center = layout["left_start_mm"] + (product.hud_bot_mm + product.hud_top_mm) / 2
+    _add_label(_hud_l_center, "HUD (L)", 0.5, color="magenta", size=10)
+
+# HUD (우측)
+if product.hud_bot_mm and product.hud_top_mm and layout.get("right_start_mm") is not None and ct not in ("single_left",):
+    _hud_r_center = layout["right_end_mm"] - (product.hud_bot_mm + product.hud_top_mm) / 2
+    _add_label(_hud_r_center, "HUD (R)", 0.5, color="magenta", size=10)
+
+# Dual Shape: MAIN 라벨
+if ct in ("single_left_dual", "single_right_dual"):
+    _add_label((_ms + _me) / 2, "MAIN", 0.92, color="lime", size=10)
+
+# ── 레이아웃 ─────────────────────────────────────────────
+# Bin No 상단 축: 50 간격, 깔끔하게
+_bin_ticks_50 = [1] + list(range(50, 449, 50)) + [449]
+_bin_tick_pos_50 = [(b - 1) * BIN_PITCH_MM for b in _bin_ticks_50]
+_bin_tick_lbl_50 = [str(b) for b in _bin_ticks_50]
 
 fig.update_layout(
     title=f"Target Profile: {name}",
     xaxis_title="Position (mm)",
     yaxis_title="Caliper (mil)",
-    height=500,
-    hovermode="x unified",
+    height=550,
+    hovermode="closest",
     legend=dict(yanchor="top", y=0.99, xanchor="right", x=0.99),
+    margin=dict(t=80, b=60),
+    xaxis2=dict(
+        title="Bin No",
+        overlaying="x",
+        side="top",
+        matches="x",
+        tickmode="array",
+        tickvals=_bin_tick_pos_50,
+        ticktext=_bin_tick_lbl_50,
+        showgrid=False,
+        tickangle=0,
+        tickfont=dict(size=11),
+    ),
 )
+fig.add_trace(go.Scatter(x=[None], y=[None], xaxis="x2", showlegend=False, hoverinfo="skip"))
 
-st.plotly_chart(fig, use_container_width=True)
+st.plotly_chart(fig, use_container_width=True, config={"edits": {"legendPosition": True}})
 
 # ── 데이터 테이블 (접기) ─────────────────────────────────
 with st.expander("Profile Data Table"):

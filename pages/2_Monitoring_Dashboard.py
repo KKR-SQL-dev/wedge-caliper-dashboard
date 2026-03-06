@@ -210,24 +210,41 @@ if is_live:
 
     scan_time, scan_recipe, actual_mil = scan_result
 
+    # Recipe 파싱: "W2238 AC 0.40MRAD" → "W2238AC"
+    import re
+    _recipe_parts = scan_recipe.upper().split()
+    _parsed_recipe = ""
+    for _part in _recipe_parts:
+        # 숫자+MRAD 같은 스펙 부분은 제외
+        if re.match(r"^\d+\.?\d*MRAD$", _part):
+            break
+        _parsed_recipe += _part
+    if not _parsed_recipe:
+        _parsed_recipe = scan_recipe.strip()
+
     # Recipe로 마스터 자동 매칭
-    if scan_recipe in masters:
+    if _parsed_recipe in masters:
+        selected_name = _parsed_recipe
+    elif scan_recipe in masters:
         selected_name = scan_recipe
     else:
-        # 부분 매칭 시도
-        recipe_matches = [n for n in masters if scan_recipe.upper() in n.upper()]
+        # 파싱된 코드로 prefix 매칭 시도
+        recipe_matches = [n for n in masters if n.upper().startswith(_parsed_recipe)]
+        if not recipe_matches:
+            # 원본으로 부분 매칭 시도
+            recipe_matches = [n for n in masters if _parsed_recipe in n.upper()]
         if recipe_matches:
             selected_name = recipe_matches[0]
         else:
             _use_flat_fallback = True
             st.info(
-                f"SQL Recipe **'{scan_recipe}'** → 마스터 미등록. "
+                f"SQL Recipe **'{scan_recipe}'** (파싱: {_parsed_recipe}) → 마스터 미등록. "
                 f"플랫 제품(0 mrad)으로 표시합니다."
             )
 
     st.caption(
         f"**Live** | Scan Time: **{scan_time}** | "
-        f"Recipe: **{scan_recipe}** → "
+        f"Recipe: **{scan_recipe}** → Parse: **{_parsed_recipe}** → "
         + (f"Matched: **{selected_name}**" if not _use_flat_fallback
            else "**Flat Fallback**")
     )

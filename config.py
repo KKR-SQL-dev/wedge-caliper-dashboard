@@ -17,8 +17,8 @@ DB_HOST = "KR-KURARAYSQL"
 DB_NAME = "KURARAY_PLCDATA"
 DB_TABLE = "dbo.RAW_BCALIPER_L9"
 DB_USER = "sa"
-DB_PWD = "Kuraray1"
-DB_DRIVER = "{ODBC Driver 18 for SQL Server}"
+DB_PWD = "p@ssw0rd"
+DB_DRIVER = "{ODBC Driver 17 for SQL Server}"
 
 
 def get_db_connection():

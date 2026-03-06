@@ -423,15 +423,9 @@ with tab1:
         else:
             c3.metric("LWA", "N/A", "미정의")
 
-    if _show_left and _show_right:
-        _col_l, _col_r = st.columns(2)
-        with _col_l:
-            _show_side_metrics("Left", layout["left_start_mm"], "left")
-        with _col_r:
-            _show_side_metrics("Right", layout["right_end_mm"], "right")
-    elif _show_left:
+    if _show_left:
         _show_side_metrics("Left", layout["left_start_mm"], "left")
-    elif _show_right:
+    if _show_right:
         _show_side_metrics("Right", layout["right_end_mm"], "right")
 
 

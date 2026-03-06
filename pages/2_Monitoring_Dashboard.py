@@ -15,7 +15,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from config import (
     BIN_AXIS_TICK_LABELS, BIN_AXIS_TICK_POSITIONS, BIN_PITCH_MM,
-    CENTER_TRIM_MM, auto_refresh_masters, is_dual_cut, load_masters,
+    CENTER_TRIM_MM, DIE_FULL_WIDTH_MM, auto_refresh_masters, is_dual_cut,
+    load_masters,
 )
 from core.dummy_data import generate_dummy_actual
 from core.mrad_calculator import calc_gwa, calc_lwa, calc_uwa, judge_gwa, judge_lwa
@@ -199,6 +200,8 @@ with st.sidebar:
     lwa_tol = st.number_input("LWA Tolerance (mrad)", value=0.15, step=0.01, format="%.3f")
 
 # ── 데이터 로드 (Live / Dummy) ─────────────────────────────
+_use_flat_fallback = False  # Recipe 미매칭 시 플랫 대체 플래그
+
 if is_live:
     scan_result = fetch_latest_scan()
     if scan_result is None:
@@ -216,33 +219,56 @@ if is_live:
         if recipe_matches:
             selected_name = recipe_matches[0]
         else:
-            st.warning(
-                f"SQL Recipe '{scan_recipe}'에 매칭되는 마스터가 없습니다. "
-                f"사이드바에서 수동 선택된 제품을 사용합니다."
+            _use_flat_fallback = True
+            st.info(
+                f"SQL Recipe **'{scan_recipe}'** → 마스터 미등록. "
+                f"플랫 제품(0 mrad)으로 표시합니다."
             )
 
     st.caption(
         f"**Live** | Scan Time: **{scan_time}** | "
-        f"Recipe: **{scan_recipe}** → Matched: **{selected_name}**"
+        f"Recipe: **{scan_recipe}** → "
+        + (f"Matched: **{selected_name}**" if not _use_flat_fallback
+           else "**Flat Fallback**")
     )
 else:
     scan_time = None
 
-# ── 선택된 제품 메타데이터 표시 ─────────────────────────────
-meta = masters[selected_name]
-st.caption(
-    f"**{selected_name}** | "
-    f"Line: {meta.get('extr_line', '-')} | "
-    f"Status: {meta.get('status', '-')} | "
-    f"PVB: {meta.get('pvb_type', '-')} | "
-    f"Pattern: {meta.get('pattern', '-')} | "
-    f"Band: {meta.get('band_color', '-')}"
-)
-
 # ── 제품 로드 & 프로파일 생성 ─────────────────────────────
-m = dict(masters[selected_name])
-m["cut_type"] = mon_cut_type  # 사이드바에서 선택한 cut type 적용
+if _use_flat_fallback:
+    # 마스터 미등록 → 플랫 대체 제품 생성
+    _flat_cal = float(np.nanmedian(actual_mil)) if np.any(~np.isnan(actual_mil)) else 30.0
+    m = {
+        "name": scan_recipe or "Unknown",
+        "wedge_angle_mrad": 0.0,
+        "roll_width_mm": DIE_FULL_WIDTH_MM,
+        "flat_width_mm": DIE_FULL_WIDTH_MM,
+        "thin_edge_cal_mil": _flat_cal,
+        "cut_type": "single_center",
+    }
+    st.caption(
+        f"**{m['name']}** | Flat Product (0 mrad) | "
+        f"Caliper: {_flat_cal:.2f} mil (median)"
+    )
+else:
+    # ── 선택된 제품 메타데이터 표시 ─────────────────────────
+    meta = masters[selected_name]
+    st.caption(
+        f"**{selected_name}** | "
+        f"Line: {meta.get('extr_line', '-')} | "
+        f"Status: {meta.get('status', '-')} | "
+        f"PVB: {meta.get('pvb_type', '-')} | "
+        f"Pattern: {meta.get('pattern', '-')} | "
+        f"Band: {meta.get('band_color', '-')}"
+    )
+    m = dict(masters[selected_name])
+    m["cut_type"] = mon_cut_type  # 사이드바에서 선택한 cut type 적용
+
 product = ProductMaster.from_dict(m)
+
+# 웨지 각도 0인 경우 (마스터 등록 플랫 제품 포함) → 플랫 처리
+is_flat_product = product.wedge_angle_mrad == 0.0
+
 df_target = generate_full_profile(product)
 
 positions = df_target["Position_mm"].values
@@ -280,35 +306,43 @@ with tab1:
         fig.add_vrect(x0=layout["right_start_mm"], x1=layout["right_end_mm"],
                       fillcolor="rgba(255,100,0,0.05)", line_width=0)
 
-    # Wedge / Flat 구간 (좌측)
-    if ct not in ("single_right",):
-        _lwp = product.wedge_portion_mm
-        _lwe = layout["left_start_mm"] + _lwp
-        fig.add_vrect(x0=layout["left_start_mm"], x1=_lwe,
-                      fillcolor="rgba(255,255,0,0.06)", line_width=0)
-        fig.add_vrect(x0=_lwe, x1=layout["left_end_mm"],
+    if is_flat_product:
+        # 플랫 제품: 전체 영역을 Flat 색상으로 표시
+        fig.add_vrect(x0=layout["left_start_mm"], x1=layout["left_end_mm"],
                       fillcolor="rgba(0,255,0,0.06)", line_width=0)
-    # Wedge / Flat 구간 (우측)
-    if layout.get("right_start_mm") is not None and ct not in ("single_left",):
-        _rwp = product.wedge_portion_mm
-        _rws = layout["right_end_mm"] - _rwp
-        fig.add_vrect(x0=layout["right_start_mm"], x1=_rws,
-                      fillcolor="rgba(0,255,0,0.06)", line_width=0)
-        fig.add_vrect(x0=_rws, x1=layout["right_end_mm"],
-                      fillcolor="rgba(255,255,0,0.06)", line_width=0)
-
-    # HUD 영역
-    if product.hud_bot_mm and product.hud_top_mm:
+        _lwe = layout["left_end_mm"]  # Wedge/Flat 라벨용 변수 (웨지 없음)
+        if layout.get("right_start_mm") is not None:
+            _rws = layout["right_start_mm"]
+    else:
+        # Wedge / Flat 구간 (좌측)
         if ct not in ("single_right",):
-            _lte = layout["left_start_mm"]
-            fig.add_vrect(x0=_lte + product.hud_bot_mm, x1=_lte + product.hud_top_mm,
-                          fillcolor="rgba(255,0,255,0.08)", line_width=1,
-                          line=dict(color="magenta", dash="dash"))
+            _lwp = product.wedge_portion_mm
+            _lwe = layout["left_start_mm"] + _lwp
+            fig.add_vrect(x0=layout["left_start_mm"], x1=_lwe,
+                          fillcolor="rgba(255,255,0,0.06)", line_width=0)
+            fig.add_vrect(x0=_lwe, x1=layout["left_end_mm"],
+                          fillcolor="rgba(0,255,0,0.06)", line_width=0)
+        # Wedge / Flat 구간 (우측)
         if layout.get("right_start_mm") is not None and ct not in ("single_left",):
-            _rte = layout["right_end_mm"]
-            fig.add_vrect(x0=_rte - product.hud_top_mm, x1=_rte - product.hud_bot_mm,
-                          fillcolor="rgba(255,0,255,0.08)", line_width=1,
-                          line=dict(color="magenta", dash="dash"))
+            _rwp = product.wedge_portion_mm
+            _rws = layout["right_end_mm"] - _rwp
+            fig.add_vrect(x0=layout["right_start_mm"], x1=_rws,
+                          fillcolor="rgba(0,255,0,0.06)", line_width=0)
+            fig.add_vrect(x0=_rws, x1=layout["right_end_mm"],
+                          fillcolor="rgba(255,255,0,0.06)", line_width=0)
+
+        # HUD 영역
+        if product.hud_bot_mm and product.hud_top_mm:
+            if ct not in ("single_right",):
+                _lte = layout["left_start_mm"]
+                fig.add_vrect(x0=_lte + product.hud_bot_mm, x1=_lte + product.hud_top_mm,
+                              fillcolor="rgba(255,0,255,0.08)", line_width=1,
+                              line=dict(color="magenta", dash="dash"))
+            if layout.get("right_start_mm") is not None and ct not in ("single_left",):
+                _rte = layout["right_end_mm"]
+                fig.add_vrect(x0=_rte - product.hud_top_mm, x1=_rte - product.hud_bot_mm,
+                              fillcolor="rgba(255,0,255,0.08)", line_width=1,
+                              line=dict(color="magenta", dash="dash"))
 
     fig.add_trace(go.Scatter(
         x=positions, y=target_mil, customdata=bin_nos,
@@ -340,7 +374,7 @@ with tab1:
 
     # ── LWA Out-of-Spec 화살표 마커 ──
     _target_mrad = product.wedge_angle_mrad
-    if product.hud_bot_mm and product.hud_top_mm:
+    if not is_flat_product and product.hud_bot_mm and product.hud_top_mm:
         _lwa_out_x, _lwa_out_y, _lwa_out_v = [], [], []
         _fp_show_left = ct not in ("single_right",)
         _fp_show_right = (layout.get("right_start_mm") is not None
@@ -390,23 +424,27 @@ with tab1:
                            font=dict(color=color, size=size),
                            bgcolor="rgba(0,0,0,0.6)", borderpad=3)
 
-    _add_label((layout["left_start_mm"] + layout["left_end_mm"]) / 2,
-               "Left Product", 1.02, color="dodgerblue")
-    if layout.get("right_start_mm") is not None:
-        _add_label((layout["right_start_mm"] + layout["right_end_mm"]) / 2,
-                   "Right Product", 1.02, color="orange")
-    if ct not in ("single_right",):
-        _add_label((layout["left_start_mm"] + _lwe) / 2, "Wedge", 0.05, color="yellow", size=10)
-        _add_label((_lwe + layout["left_end_mm"]) / 2, "Flat", 0.05, color="lime", size=10)
-    if layout.get("right_start_mm") is not None and ct not in ("single_left",):
-        _add_label((layout["right_start_mm"] + _rws) / 2, "Flat", 0.05, color="lime", size=10)
-        _add_label((_rws + layout["right_end_mm"]) / 2, "Wedge", 0.05, color="yellow", size=10)
-    if product.hud_bot_mm and product.hud_top_mm and ct not in ("single_right",):
-        _hc = layout["left_start_mm"] + (product.hud_bot_mm + product.hud_top_mm) / 2
-        _add_label(_hc, "HUD (L)", 0.5, color="magenta", size=10)
-    if product.hud_bot_mm and product.hud_top_mm and layout.get("right_start_mm") is not None and ct not in ("single_left",):
-        _hc = layout["right_end_mm"] - (product.hud_bot_mm + product.hud_top_mm) / 2
-        _add_label(_hc, "HUD (R)", 0.5, color="magenta", size=10)
+    if is_flat_product:
+        _add_label((layout["left_start_mm"] + layout["left_end_mm"]) / 2,
+                   "Flat Product", 1.02, color="lime")
+    else:
+        _add_label((layout["left_start_mm"] + layout["left_end_mm"]) / 2,
+                   "Left Product", 1.02, color="dodgerblue")
+        if layout.get("right_start_mm") is not None:
+            _add_label((layout["right_start_mm"] + layout["right_end_mm"]) / 2,
+                       "Right Product", 1.02, color="orange")
+        if ct not in ("single_right",):
+            _add_label((layout["left_start_mm"] + _lwe) / 2, "Wedge", 0.05, color="yellow", size=10)
+            _add_label((_lwe + layout["left_end_mm"]) / 2, "Flat", 0.05, color="lime", size=10)
+        if layout.get("right_start_mm") is not None and ct not in ("single_left",):
+            _add_label((layout["right_start_mm"] + _rws) / 2, "Flat", 0.05, color="lime", size=10)
+            _add_label((_rws + layout["right_end_mm"]) / 2, "Wedge", 0.05, color="yellow", size=10)
+        if product.hud_bot_mm and product.hud_top_mm and ct not in ("single_right",):
+            _hc = layout["left_start_mm"] + (product.hud_bot_mm + product.hud_top_mm) / 2
+            _add_label(_hc, "HUD (L)", 0.5, color="magenta", size=10)
+        if product.hud_bot_mm and product.hud_top_mm and layout.get("right_start_mm") is not None and ct not in ("single_left",):
+            _hc = layout["right_end_mm"] - (product.hud_bot_mm + product.hud_top_mm) / 2
+            _add_label(_hc, "HUD (R)", 0.5, color="magenta", size=10)
 
     # Bin No 상단 축: 50 간격
     _bin_ticks = [1] + list(range(50, 449, 50)) + [449]
@@ -414,7 +452,7 @@ with tab1:
     _bin_lbl = [str(b) for b in _bin_ticks]
 
     fig.update_layout(
-        title=f"Full Profile: {product.name} ({product.cut_label})",
+        title=f"Full Profile: {product.name} ({'Flat' if is_flat_product else product.cut_label})",
         xaxis_title="Position (mm)",
         yaxis_title="Caliper (mil)",
         height=500, hovermode="closest",
@@ -435,9 +473,13 @@ with tab1:
 
     st.markdown(f"**Angle Target : {_wa_t:.4f} mrad**")
 
-    _show_left = ct not in ("single_right",)
+    if is_flat_product:
+        st.info("플랫 제품 (Wedge Angle = 0 mrad) – 웨지 판정 없음")
+
+    _show_left = ct not in ("single_right",) and not is_flat_product
     _show_right = (layout.get("right_start_mm") is not None
-                   and ct not in ("single_left", "single_center"))
+                   and ct not in ("single_left", "single_center")
+                   and not is_flat_product)
 
     def _show_side_metrics(side_label, te_pos, direction):
         """한쪽 제품의 UWA/GWA/LWA metric 카드 표시."""
@@ -649,7 +691,9 @@ def _plot_cut(
 # ══════════════════════════════════════════════════════════
 ct = product.resolved_cut_type
 with tab2:
-    if ct == "single_right":
+    if is_flat_product:
+        st.info("플랫 제품 – 웨지 구간 없음. Full Profile 탭에서 전체 프로파일을 확인하세요.")
+    elif ct == "single_right":
         # 좌측은 flat only
         if layout.get("left_start_mm") is not None:
             _plot_cut(
@@ -681,7 +725,9 @@ with tab2:
 # TAB 3: Right Product
 # ══════════════════════════════════════════════════════════
 with tab3:
-    if ct == "single_left":
+    if is_flat_product:
+        st.info("플랫 제품 – 웨지 구간 없음. Full Profile 탭에서 전체 프로파일을 확인하세요.")
+    elif ct == "single_left":
         # 우측은 flat only
         if layout.get("right_start_mm") is not None:
             _plot_cut(
@@ -717,7 +763,9 @@ with tab3:
 # TAB 4: LWA Detail
 # ══════════════════════════════════════════════════════════
 with tab4:
-    if not (product.hud_bot_mm and product.hud_top_mm):
+    if is_flat_product:
+        st.info("플랫 제품 (Wedge Angle = 0 mrad) – LWA 분석 대상이 아닙니다.")
+    elif not (product.hud_bot_mm and product.hud_top_mm):
         st.info("HUD 영역이 정의되지 않은 제품입니다.")
     else:
         # Left

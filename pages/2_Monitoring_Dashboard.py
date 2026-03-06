@@ -1,5 +1,6 @@
 """Page 2: 모니터링 대시보드 – 타겟 vs 실측 비교, UWA/GWA/LWA 판정."""
 import sys
+import time
 from pathlib import Path
 
 import numpy as np
@@ -19,6 +20,7 @@ from config import (
 from core.dummy_data import generate_dummy_actual
 from core.mrad_calculator import calc_gwa, calc_lwa, calc_uwa, judge_gwa, judge_lwa
 from core.profile_engine import generate_full_profile
+from core.sql_data import fetch_latest_scan
 from core.wedge_geometry import ProductMaster
 
 # ── 자동 동기화 ──────────────────────────────────────────
@@ -109,6 +111,23 @@ with st.sidebar:
     st.caption(f"필터 결과: {len(filtered_names)} / {len(masters)} 제품")
 
     st.divider()
+    st.subheader("Data Source")
+    data_source = st.radio(
+        "데이터 소스",
+        ["Live (SQL)", "Dummy (Simulation)"],
+        index=0,
+        key="data_source",
+        horizontal=True,
+    )
+    is_live = data_source == "Live (SQL)"
+
+    if is_live:
+        auto_refresh = st.checkbox("Auto Refresh", value=False, key="auto_refresh")
+        refresh_interval = st.number_input(
+            "Refresh Interval (sec)", 3, 60, 5, key="refresh_interval",
+        ) if auto_refresh else 5
+
+    st.divider()
     st.subheader("제품 선택")
     if not filtered_names:
         st.warning("필터 조건에 맞는 제품이 없습니다.")
@@ -163,20 +182,51 @@ with st.sidebar:
         key="mon_cut_type",
     )
 
-    st.divider()
-    st.subheader("Dummy Data Settings")
-    st.caption("실측 데이터 시뮬레이션 파라미터")
-    noise_std = st.slider("Noise Std (mil)", 0.0, 1.0, 0.25, 0.05)
-    offset = st.slider("Global Offset (mil)", -2.0, 2.0, 0.0, 0.1)
-    bump_on = st.checkbox("Add Local Bump", value=False)
-    bump_bin = st.number_input("Bump Center (bin)", 1, 449, 200, disabled=not bump_on)
-    bump_amp = st.number_input("Bump Amplitude (mil)", -3.0, 3.0, 1.0, 0.1, disabled=not bump_on)
-    seed = st.number_input("Random Seed", 0, 9999, 42)
+    if not is_live:
+        st.divider()
+        st.subheader("Dummy Data Settings")
+        st.caption("실측 데이터 시뮬레이션 파라미터")
+        noise_std = st.slider("Noise Std (mil)", 0.0, 1.0, 0.25, 0.05)
+        offset = st.slider("Global Offset (mil)", -2.0, 2.0, 0.0, 0.1)
+        bump_on = st.checkbox("Add Local Bump", value=False)
+        bump_bin = st.number_input("Bump Center (bin)", 1, 449, 200, disabled=not bump_on)
+        bump_amp = st.number_input("Bump Amplitude (mil)", -3.0, 3.0, 1.0, 0.1, disabled=not bump_on)
+        seed = st.number_input("Random Seed", 0, 9999, 42)
 
     st.divider()
     st.subheader("Spec Tolerances")
     gwa_tol = st.number_input("GWA Tolerance (mrad)", value=0.03, step=0.01, format="%.3f")
     lwa_tol = st.number_input("LWA Tolerance (mrad)", value=0.15, step=0.01, format="%.3f")
+
+# ── 데이터 로드 (Live / Dummy) ─────────────────────────────
+if is_live:
+    scan_result = fetch_latest_scan()
+    if scan_result is None:
+        st.error("SQL Server 연결 실패 또는 데이터가 없습니다. Dummy 모드로 전환하세요.")
+        st.stop()
+
+    scan_time, scan_recipe, actual_mil = scan_result
+
+    # Recipe로 마스터 자동 매칭
+    if scan_recipe in masters:
+        selected_name = scan_recipe
+    else:
+        # 부분 매칭 시도
+        recipe_matches = [n for n in masters if scan_recipe.upper() in n.upper()]
+        if recipe_matches:
+            selected_name = recipe_matches[0]
+        else:
+            st.warning(
+                f"SQL Recipe '{scan_recipe}'에 매칭되는 마스터가 없습니다. "
+                f"사이드바에서 수동 선택된 제품을 사용합니다."
+            )
+
+    st.caption(
+        f"**Live** | Scan Time: **{scan_time}** | "
+        f"Recipe: **{scan_recipe}** → Matched: **{selected_name}**"
+    )
+else:
+    scan_time = None
 
 # ── 선택된 제품 메타데이터 표시 ─────────────────────────────
 meta = masters[selected_name]
@@ -199,15 +249,16 @@ positions = df_target["Position_mm"].values
 target_mil = df_target["Target_mil"].values
 bin_nos = df_target["Bin"].values
 
-# ── 더미 실측 데이터 ──────────────────────────────────────
-actual_mil = generate_dummy_actual(
-    target_mil,
-    noise_std=noise_std,
-    offset=offset,
-    bump_center_bin=(bump_bin - 1) if bump_on else None,
-    bump_amplitude=bump_amp if bump_on else 0,
-    seed=seed,
-)
+# ── 실측 데이터 ──────────────────────────────────────────
+if not is_live:
+    actual_mil = generate_dummy_actual(
+        target_mil,
+        noise_std=noise_std,
+        offset=offset,
+        bump_center_bin=(bump_bin - 1) if bump_on else None,
+        bump_amplitude=bump_amp if bump_on else 0,
+        seed=seed,
+    )
 
 layout = product.layout()
 ct = product.resolved_cut_type
@@ -864,3 +915,8 @@ with tab4:
             results.append(row_data_r)
 
         st.dataframe(pd.DataFrame(results), use_container_width=True, hide_index=True)
+
+# ── Auto Refresh (Live 모드) ─────────────────────────────
+if is_live and auto_refresh:
+    time.sleep(refresh_interval)
+    st.rerun()

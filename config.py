@@ -12,6 +12,33 @@ NUM_DIE_LIPS = 99
 DIE_LIP_PITCH_INCH = 1.125
 CENTER_TRIM_MM = 25.4                           # 1 inch
 
+# ── SQL Server 연결 설정 ──────────────────────────────────
+DB_HOST = "KR-KURARAYSQL"
+DB_NAME = "KURARAY_PLCDATA"
+DB_TABLE = "dbo.RAW_BCALIPER_L9"
+DB_USER = "sa"
+DB_PWD = "Kuraray1"
+DB_DRIVER = "{ODBC Driver 18 for SQL Server}"
+
+
+def get_db_connection():
+    """SQL Server 연결 객체 반환. 실패 시 None."""
+    try:
+        import pyodbc
+        conn = pyodbc.connect(
+            f"DRIVER={DB_DRIVER};"
+            f"SERVER={DB_HOST};"
+            f"DATABASE={DB_NAME};"
+            f"UID={DB_USER};"
+            f"PWD={DB_PWD};"
+            "TrustServerCertificate=yes;",
+            timeout=5,
+        )
+        return conn
+    except Exception:
+        return None
+
+
 # ── 단위 변환 ─────────────────────────────────────────────
 MIL_TO_MM = 0.0254        # 1 mil = 0.0254 mm
 MM_TO_MIL = 1.0 / MIL_TO_MM  # ≈ 39.3701

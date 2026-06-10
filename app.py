@@ -28,7 +28,7 @@ st.set_page_config(
     page_title="L9 Wedge Caliper Monitor",
     page_icon="📐",
     layout="wide",
-    initial_sidebar_state="collapsed",
+    initial_sidebar_state="expanded",
 )
 
 # ── 자동 동기화 ──────────────────────────────────────────
@@ -37,30 +37,13 @@ auto_refresh_masters()
 # ── 페이지 설정 ──────────────────────────────────────────
 st.markdown("""
 <style>
-    /* 상단 헤더(Deploy 버튼 등) 숨김 */
-    header[data-testid="stHeader"] { display: none !important; }
     /* 메인 콘텐츠 패딩 최소화 – 전체 너비 활용 */
     .stMainBlockContainer {
-        padding-top: 0.5rem !important;
+        padding-top: 1rem !important;
         padding-left: 1rem !important;
         padding-right: 1rem !important;
         padding-bottom: 0.5rem !important;
         max-width: 100% !important;
-    }
-    /* 사이드바 상단 패딩 줄이기 */
-    [data-testid="stSidebarContent"] {
-        padding-top: 1rem !important;
-    }
-    /* 데이터프레임 컬럼 텍스트 잘림 방지 */
-    [data-testid="stDataFrame"] table {
-        width: 100% !important;
-    }
-    [data-testid="stDataFrame"] th,
-    [data-testid="stDataFrame"] td {
-        white-space: nowrap !important;
-        overflow: visible !important;
-        text-overflow: unset !important;
-        min-width: fit-content !important;
     }
 </style>
 """, unsafe_allow_html=True)

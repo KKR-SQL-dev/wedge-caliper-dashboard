@@ -150,9 +150,43 @@ with st.sidebar:
         tag = "2-Cut" if is_dual_cut(rw, ct_mm) else "Single"
         return f"{name} ({tag})"
 
+    # Live 모드: SQL Recipe로 사전 매칭하여 selectbox 기본값 설정
+    _live_matched_name = None
+    if is_live:
+        _pre_scan = fetch_latest_scan()
+        if _pre_scan:
+            _pre_recipe = _pre_scan[1]
+            _pre_parts = _pre_recipe.upper().split()
+            _pre_parsed = ""
+            for _pp in _pre_parts:
+                if re.match(r"^\d+\.?\d*MRAD$", _pp):
+                    break
+                _pre_parsed += _pp
+            if not _pre_parsed:
+                _pre_parsed = _pre_recipe.strip().upper()
+            # 매칭 시도
+            for _candidate in [_pre_parsed, _pre_recipe]:
+                if _candidate in masters:
+                    _live_matched_name = _candidate
+                    break
+            if not _live_matched_name:
+                _prefix_matches = [n for n in masters if n.upper().startswith(_pre_parsed)]
+                if not _prefix_matches:
+                    _prefix_matches = [n for n in masters if _pre_parsed in n.upper()]
+                if _prefix_matches:
+                    _live_matched_name = _prefix_matches[0]
+
+    # selectbox index 결정
+    _select_idx = 0
+    if _live_matched_name and _live_matched_name in matched:
+        _select_idx = matched.index(_live_matched_name)
+
     selected_name = st.selectbox(
         "Recipe (제품명)", matched,
+        index=_select_idx,
         format_func=_cut_label,
+        disabled=is_live and _live_matched_name is not None,
+        help="Live 모드에서는 SQL Recipe로 자동 선택됩니다." if is_live else None,
     )
 
     st.divider()

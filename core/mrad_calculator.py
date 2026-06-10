@@ -7,6 +7,12 @@ from scipy.stats import linregress
 from config import MIL_TO_MM
 
 
+def _drop_nan(pos: np.ndarray, cal: np.ndarray):
+    """NaN인 bin 제거 후 (pos, cal) 반환."""
+    valid = ~np.isnan(cal)
+    return pos[valid], cal[valid]
+
+
 def _resolve_abs_range(
     rel_bot_mm: float,
     rel_top_mm: float,
@@ -41,8 +47,7 @@ def calc_uwa(
     lo = min(thin_edge_pos_mm, flat_start_pos_mm)
     hi = max(thin_edge_pos_mm, flat_start_pos_mm)
     mask = (positions_mm >= lo) & (positions_mm <= hi)
-    pos = positions_mm[mask]
-    cal = cals_mil[mask]
+    pos, cal = _drop_nan(positions_mm[mask], cals_mil[mask])
     if len(pos) < 2:
         return 0.0
     slope, _, _, _, _ = linregress(pos, cal)
@@ -66,8 +71,7 @@ def calc_gwa(
         gwa_bot_mm, gwa_top_mm, thin_edge_pos_mm, direction
     )
     mask = (positions_mm >= abs_lo) & (positions_mm <= abs_hi)
-    pos = positions_mm[mask]
-    cal = cals_mil[mask]
+    pos, cal = _drop_nan(positions_mm[mask], cals_mil[mask])
     if len(pos) < 2:
         return 0.0
     slope, _, _, _, _ = linregress(pos, cal)
@@ -103,8 +107,7 @@ def calc_lwa(
 
     for cp in hud_pos:
         win_mask = (positions_mm >= cp - window_mm) & (positions_mm <= cp + window_mm)
-        wp = positions_mm[win_mask]
-        wc = cals_mil[win_mask]
+        wp, wc = _drop_nan(positions_mm[win_mask], cals_mil[win_mask])
         if len(wp) < 2:
             continue
         slope, _, _, _, _ = linregress(wp, wc)

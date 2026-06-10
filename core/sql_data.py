@@ -37,6 +37,9 @@ def _parse_row(row, columns):
         for idx in data_indices
     ])
 
+    # 0은 "측정 없음" → NaN 처리 (차트/계산에서 제외)
+    actual_mil[actual_mil == 0.0] = np.nan
+
     return (scan_time, recipe, rollid, rollno, actual_mil)
 
 

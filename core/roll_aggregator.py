@@ -20,6 +20,8 @@ class ScanRecord:
     time: datetime
     recipe: str
     actual_mil: np.ndarray  # shape (449,)
+    rollid: str = ""
+    rollno: str = ""
 
 
 @dataclass
@@ -70,25 +72,35 @@ def build_roll_buffer_from_scans(
 ) -> RollBuffer:
     """SQL에서 가져온 스캔 리스트로 현재 롤 버퍼 구축.
 
-    scan_list: [(time, recipe, actual_mil), ...] — 최신 순(DESC)
+    scan_list: [(time, recipe, rollid, rollno, actual_mil), ...] — 최신 순(DESC)
     target_recipe: 현재 매칭된 레시피명
 
-    최신 스캔부터 역순으로 같은 recipe인 연속 구간만 취한다.
-    recipe가 바뀌는 지점 = 이전 롤의 끝.
+    롤 경계 판정: ROLLNO가 바뀌면 새 롤.
+    최신 스캔의 ROLLNO와 동일한 연속 구간만 취한다.
     """
     buf = RollBuffer(recipe=target_recipe)
 
-    for scan_time, recipe, actual_mil in scan_list:
-        # recipe 정규화 (공백 제거, 대문자)
-        norm = recipe.strip().upper().replace(" ", "")
-        target_norm = target_recipe.strip().upper().replace(" ", "")
+    if not scan_list:
+        return buf
 
-        # 동일 recipe 여부 (prefix 매칭 허용)
-        if norm == target_norm or norm.startswith(target_norm) or target_norm.startswith(norm):
-            buf.add_scan(ScanRecord(time=scan_time, recipe=recipe, actual_mil=actual_mil))
-        else:
-            # recipe 변경 = 롤 경계 → 여기서 중단
-            break
+    # 최신 스캔의 ROLLNO를 기준으로
+    current_rollno = scan_list[0][3] if len(scan_list[0]) >= 5 else ""
+
+    for scan_tuple in scan_list:
+        scan_time = scan_tuple[0]
+        recipe = scan_tuple[1]
+        rollid = scan_tuple[2] if len(scan_tuple) >= 5 else ""
+        rollno = scan_tuple[3] if len(scan_tuple) >= 5 else ""
+        actual_mil = scan_tuple[-1]
+
+        # ROLLNO 기준 롤 경계 판정
+        if current_rollno and rollno != current_rollno:
+            break  # ROLLNO 변경 = 이전 롤 → 중단
+
+        buf.add_scan(ScanRecord(
+            time=scan_time, recipe=recipe, actual_mil=actual_mil,
+            rollid=rollid, rollno=rollno,
+        ))
 
     # 시간 순서대로 정렬 (SQL은 DESC로 가져오므로)
     buf.scans.sort(key=lambda s: s.time)

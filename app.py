@@ -215,7 +215,7 @@ if is_live:
         st.error("SQL Server 연결 실패 또는 데이터가 없습니다. Dummy 모드로 전환하세요.")
         st.stop()
 
-    scan_time, scan_recipe, actual_mil = scan_result
+    scan_time, scan_recipe, scan_rollid, scan_rollno, actual_mil = scan_result
 
     # Recipe 파싱: "W2238 AC 0.40MRAD" → "W2238AC"
     _recipe_parts = scan_recipe.upper().split()
@@ -251,6 +251,7 @@ if is_live:
     st.markdown(
         f'<div style="font-size:1.8rem; font-weight:bold;">'
         f'Live | Scan: {scan_time} | '
+        f'Roll: {scan_rollno or scan_rollid or "-"} | '
         f'Recipe: {scan_recipe} → '
         + (f'<span style="color:#4FC3F7;">{selected_name}</span>' if not _use_flat_fallback
            else '<span style="color:#FF8A65;">Flat Fallback</span>')
@@ -646,8 +647,11 @@ with tab1:
     # ── 롤 집계 판정 테이블 (STEP D/E) ──────────────────
     if roll_buf and roll_buf.count >= 2 and not is_flat_product:
         st.divider()
+        _rollno_label = ""
+        if roll_buf.scans and roll_buf.scans[0].rollno:
+            _rollno_label = f" | ROLLNO: {roll_buf.scans[0].rollno}"
         st.markdown(
-            f'**Roll Aggregation** — {roll_buf.count} scans '
+            f'**Roll Aggregation{_rollno_label}** — {roll_buf.count} scans '
             f'({roll_buf.start_time} ~ {roll_buf.end_time})'
         )
 

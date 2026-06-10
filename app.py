@@ -276,23 +276,23 @@ if _use_flat_fallback:
         "thin_edge_cal_mil": _flat_cal,
         "cut_type": "single_center",
     }
+    _roll_tag = f' | Roll: {scan_rollno}' if scan_rollno else ''
     st.markdown(
         f'<div style="font-size:1.8rem; font-weight:bold;">'
-        f'<span style="color:#FF8A65;">{m["name"]}</span> | Flat Product (0 mrad) | '
+        f'<span style="color:#FF8A65;">{m["name"]}</span> | Flat Product (0 mrad){_roll_tag} | '
         f'Caliper: {_flat_cal:.2f} mil (median)</div>',
         unsafe_allow_html=True,
     )
 else:
     # ── 선택된 제품 메타데이터 표시 ─────────────────────────
     meta = masters[selected_name]
+    _roll_tag = f' | Roll: {scan_rollno}' if scan_rollno else ''
     st.markdown(
         f'<div style="font-size:1.8rem; font-weight:bold;">'
-        f'<span style="color:#4FC3F7;">{selected_name}</span> | '
+        f'<span style="color:#4FC3F7;">{selected_name}</span>{_roll_tag} | '
         f'Line: {meta.get("extr_line", "-")} | '
         f'Status: {meta.get("status", "-")} | '
-        f'PVB: {meta.get("pvb_type", "-")} | '
-        f'Pattern: {meta.get("pattern", "-")} | '
-        f'Band: {meta.get("band_color", "-")}</div>',
+        f'PVB: {meta.get("pvb_type", "-")}</div>',
         unsafe_allow_html=True,
     )
     m = dict(masters[selected_name])

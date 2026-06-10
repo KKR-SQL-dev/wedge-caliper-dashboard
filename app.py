@@ -13,6 +13,7 @@ from config import (
     CENTER_TRIM_MM, DIE_FULL_WIDTH_MM, auto_refresh_masters, is_dual_cut,
     load_masters,
 )
+from core.cut_detector import apply_offset_to_layout, calc_drift_offset, detect_thin_edges
 from core.dummy_data import generate_dummy_actual
 from core.mrad_calculator import calc_gwa, calc_lwa, calc_uwa, judge_gwa, judge_lwa
 from core.profile_engine import generate_full_profile
@@ -311,8 +312,45 @@ if not is_live:
         seed=seed,
     )
 
-layout = product.layout()
+raw_layout = product.layout()
 ct = product.resolved_cut_type
+
+# ── 컷지점 검출 + 드리프트 보정 (STEP C) ────────────────
+if not is_flat_product:
+    detected = detect_thin_edges(actual_mil, raw_layout)
+    drift = calc_drift_offset(raw_layout, detected)
+
+    with st.sidebar:
+        st.divider()
+        st.subheader("Drift Correction")
+        _left_det = detected["left_thin_edge_bin"]
+        _left_off = drift["left_offset_bins"]
+        st.caption(
+            f"Left thin edge: bin **{_left_det}** "
+            f"(target bin {raw_layout['left_start_bin']}, offset **{_left_off:+d}**)"
+        )
+        manual_left = st.number_input(
+            "Left Manual Adj (bins)", -20, 20, 0, key="man_left",
+            help="자동검출 기준에서 추가 보정. +면 오른쪽 이동",
+        )
+
+        if "right_end_bin" in raw_layout:
+            _right_det = detected["right_thin_edge_bin"]
+            _right_off = drift["right_offset_bins"]
+            st.caption(
+                f"Right thin edge: bin **{_right_det}** "
+                f"(target bin {raw_layout['right_end_bin']}, offset **{_right_off:+d}**)"
+            )
+            manual_right = st.number_input(
+                "Right Manual Adj (bins)", -20, 20, 0, key="man_right",
+                help="자동검출 기준에서 추가 보정. +면 오른쪽 이동",
+            )
+        else:
+            manual_right = 0
+
+    layout = apply_offset_to_layout(raw_layout, drift, manual_left, manual_right)
+else:
+    layout = raw_layout
 
 # ══════════════════════════════════════════════════════════
 # TAB 1: 전체 프로파일

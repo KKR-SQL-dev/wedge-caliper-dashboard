@@ -272,15 +272,21 @@ if is_live or is_sample:
     scan_time, scan_recipe, scan_rollid, scan_rollno, actual_mil = scan_result
     _parsed_recipe = _parse_recipe(scan_recipe)
 
+    # Recipe에 "MRAD" 없으면 플랫 제품으로 자동 인식
+    _recipe_is_flat = "MRAD" not in scan_recipe.upper()
+
     # 마스터 자동 매칭
     _matched = _match_recipe(_parsed_recipe, scan_recipe)
     if _matched:
         selected_name = _matched
+        # 마스터에 있어도 Recipe에 MRAD 없으면 플랫 강제
+        if _recipe_is_flat:
+            pass  # is_flat_product은 아래에서 wedge_angle로 판정 — 여기서는 매칭만
     else:
         _use_flat_fallback = True
         st.info(
             f"Recipe **'{scan_recipe}'** (파싱: {_parsed_recipe}) → 마스터 미등록. "
-            f"플랫 제품(0 mrad)으로 표시합니다."
+            f"{'플랫 제품' if _recipe_is_flat else 'Flat Fallback'}으로 표시합니다."
         )
 
     _mode_label = "Live" if is_live else "Sample"
@@ -328,6 +334,10 @@ else:
     )
     m = dict(masters[selected_name])
     m["cut_type"] = mon_cut_type  # 사이드바에서 선택한 cut type 적용
+
+    # Recipe에 MRAD가 없으면 플랫 강제 (마스터에 wedge 있어도)
+    if (is_live or is_sample) and _recipe_is_flat:
+        m["wedge_angle_mrad"] = 0.0
 
 product = ProductMaster.from_dict(m)
 
@@ -635,7 +645,27 @@ with tab1:
     st.markdown(f"**Angle Target : {_wa_t:.4f} mrad**")
 
     if is_flat_product:
-        st.info("플랫 제품 (Wedge Angle = 0 mrad) – 웨지 판정 없음")
+        # 플랫 제품: 편차(variation) 판정
+        _valid = ~np.isnan(actual_mil)
+        _valid_cal = actual_mil[_valid]
+        if len(_valid_cal) > 0:
+            _flat_target = float(np.nanmedian(actual_mil))
+            _flat_mean = float(np.nanmean(_valid_cal))
+            _flat_std = float(np.nanstd(_valid_cal))
+            _flat_range = float(np.nanmax(_valid_cal) - np.nanmin(_valid_cal))
+            _flat_max_dev = float(np.max(np.abs(_valid_cal - _flat_target)))
+            _flat_judge = "OK" if _flat_max_dev <= lwa_tol * 25.4 else "NG"  # mrad tol → mil 근사 비교
+
+            st.markdown(f"**Flat Product** | Target: {_flat_target:.2f} mil (median)")
+            c1, c2, c3, c4 = st.columns(4)
+            c1.metric("Mean", f"{_flat_mean:.2f} mil")
+            c2.metric("Std Dev", f"{_flat_std:.3f} mil")
+            c3.metric("Range", f"{_flat_range:.2f} mil")
+            c4.metric("Max Dev", f"{_flat_max_dev:.2f} mil",
+                      _flat_judge,
+                      delta_color="normal" if _flat_judge == "OK" else "inverse")
+        else:
+            st.info("플랫 제품 – 유효 데이터 없음")
 
     _show_left = ct not in ("single_right",) and not is_flat_product
     _show_right = (layout.get("right_start_mm") is not None

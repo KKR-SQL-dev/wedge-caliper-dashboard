@@ -344,7 +344,7 @@ if not is_flat_product:
 
     with st.sidebar:
         st.divider()
-        st.subheader("Drift Correction")
+        st.subheader("Target Alignment")
         _left_det = detected["left_thin_edge_bin"]
         _left_off = drift["left_offset_bins"]
         st.caption(
@@ -352,8 +352,8 @@ if not is_flat_product:
             f"(target bin {raw_layout['left_start_bin']}, offset **{_left_off:+d}**)"
         )
         manual_left = st.number_input(
-            "Left Manual Adj (bins)", -20, 20, 0, key="man_left",
-            help="자동검출 기준에서 추가 보정. +면 오른쪽 이동",
+            "Left ±bin", -20, 20, 0, key="man_left",
+            help="+면 오른쪽 이동",
         )
 
         if "right_end_bin" in raw_layout:
@@ -364,13 +364,33 @@ if not is_flat_product:
                 f"(target bin {raw_layout['right_end_bin']}, offset **{_right_off:+d}**)"
             )
             manual_right = st.number_input(
-                "Right Manual Adj (bins)", -20, 20, 0, key="man_right",
-                help="자동검출 기준에서 추가 보정. +면 오른쪽 이동",
+                "Right ±bin", -20, 20, 0, key="man_right",
+                help="+면 오른쪽 이동",
             )
         else:
             manual_right = 0
 
+        manual_mil_offset = st.number_input(
+            "±mil (vertical)", -3.0, 3.0, 0.0, 0.1, key="man_mil",
+            help="타겟 전체를 위/아래로 이동 (mil)",
+        )
+
     layout = apply_offset_to_layout(raw_layout, drift, manual_left, manual_right)
+
+    # 타겟 프로파일을 보정된 layout에 맞춰 재정렬 (bin shift + mil offset)
+    _total_left_shift = drift["left_offset_bins"] + manual_left
+    if _total_left_shift != 0:
+        target_mil = np.roll(target_mil, _total_left_shift)
+        # 롤 후 빈 구간은 NaN
+        if _total_left_shift > 0:
+            target_mil[:_total_left_shift] = np.nan
+        else:
+            target_mil[_total_left_shift:] = np.nan
+
+    if manual_mil_offset != 0.0:
+        _valid_target = ~np.isnan(target_mil)
+        target_mil[_valid_target] += manual_mil_offset
+
 else:
     layout = raw_layout
 

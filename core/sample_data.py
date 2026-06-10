@@ -13,21 +13,56 @@ import pandas as pd
 from config import NUM_BINS
 
 # CSV 파일 경로
-SAMPLE_CSV = Path(__file__).resolve().parent.parent / "data" / "sample-real.csv"
+_DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+SAMPLE_CSV_WEDGE = _DATA_DIR / "sample-real.csv"
+SAMPLE_CSV_FLAT = _DATA_DIR / "sample-flat-31_5.csv"
 
-# CSV 컬럼: Time, Recipe, ROLLID, ROLLNO, Data1~Data449 (헤더 없음)
+# CSV 컬럼: Time, Recipe, ROLLID, ROLLNO, Data1~Data449
 _COL_NAMES = ["Time", "Recipe", "ROLLID", "ROLLNO"] + [f"Data{i}" for i in range(1, NUM_BINS + 1)]
 
 
-def _load_csv() -> pd.DataFrame:
-    """CSV를 DataFrame으로 로드. 캐시."""
-    if not SAMPLE_CSV.exists():
+def list_sample_files() -> list[Path]:
+    """data/ 디렉토리의 sample-*.csv 파일 목록."""
+    return sorted(_DATA_DIR.glob("sample-*.csv"))
+
+
+def _load_csv(csv_path: Path | None = None) -> pd.DataFrame:
+    """CSV를 DataFrame으로 로드."""
+    if csv_path is None:
+        csv_path = SAMPLE_CSV_WEDGE
+    if not csv_path.exists():
         return pd.DataFrame()
-    df = pd.read_csv(
-        SAMPLE_CSV, header=None, names=_COL_NAMES,
-        encoding="utf-8-sig", parse_dates=["Time"],
-    )
+
+    # 헤더 유무 자동 감지: 첫 줄이 "Time"으로 시작하면 헤더 있음
+    with open(csv_path, "r", encoding="utf-8-sig") as f:
+        first_line = f.readline().strip()
+    has_header = first_line.startswith("Time")
+
+    if has_header:
+        df = pd.read_csv(csv_path, encoding="utf-8-sig", parse_dates=["Time"])
+        # 컬럼명 정규화
+        df.columns = [c.strip() for c in df.columns]
+    else:
+        df = pd.read_csv(
+            csv_path, header=None, names=_COL_NAMES,
+            encoding="utf-8-sig", parse_dates=["Time"],
+        )
     return df.sort_values("Time", ascending=False).reset_index(drop=True)
+
+
+# 현재 선택된 CSV (Streamlit session_state로 전환 가능)
+_current_csv: Path | None = None
+
+
+def set_sample_csv(path: Path):
+    """현재 사용할 샘플 CSV 설정."""
+    global _current_csv
+    _current_csv = path
+
+
+def get_current_csv() -> Path:
+    """현재 샘플 CSV 경로."""
+    return _current_csv or SAMPLE_CSV_WEDGE
 
 
 def sample_available() -> bool:

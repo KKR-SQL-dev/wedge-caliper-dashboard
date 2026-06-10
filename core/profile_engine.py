@@ -17,8 +17,12 @@ from config import BIN_PITCH_MM, DIE_FULL_WIDTH_MM, NUM_BINS
 from core.wedge_geometry import ProductMaster
 
 
-def generate_profile(product: ProductMaster) -> pd.DataFrame:
+def generate_profile(product: ProductMaster, layout: dict = None) -> pd.DataFrame:
     """449 bin 타겟 프로파일을 생성한다.
+
+    Args:
+        product: 제품 마스터
+        layout: 외부 레이아웃 (정렬용). None이면 product.layout() 사용.
 
     Returns:
         DataFrame with columns: Bin, Position_mm, Target_mil
@@ -26,7 +30,8 @@ def generate_profile(product: ProductMaster) -> pd.DataFrame:
     positions = np.arange(NUM_BINS) * BIN_PITCH_MM
     cals = np.full(NUM_BINS, np.nan)
 
-    layout = product.layout()
+    if layout is None:
+        layout = product.layout()
     ct = product.resolved_cut_type
 
     if ct == "dual":
@@ -216,13 +221,17 @@ def _fill_flat(
             cals[i] = cal_mil
 
 
-def generate_full_profile(product: ProductMaster) -> pd.DataFrame:
+def generate_full_profile(product: ProductMaster, layout: dict = None) -> pd.DataFrame:
     """449 bin 전체 프로파일 (edge 포함, NaN이 아닌 연속값).
 
     thin edge 바깥 edge 영역은 웨지 기울기를 연장하여 리니어하게 감소.
     센터트림 영역(dual 계열)은 인접 flat 값으로 채움.
+
+    Args:
+        product: 제품 마스터
+        layout: 외부 레이아웃 (정렬용). None이면 product.layout() 사용.
     """
-    df = generate_profile(product)
+    df = generate_profile(product, layout=layout)
     positions = df["Position_mm"].values
     target = df["Target_mil"].values.copy()
     slope = product.wedge_angle_mrad / 25.4  # mil/mm

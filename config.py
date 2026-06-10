@@ -13,7 +13,7 @@ DIE_LIP_PITCH_INCH = 1.125
 CENTER_TRIM_MM = 25.4                           # 1 inch
 
 # ── SQL Server 연결 설정 ──────────────────────────────────
-DB_HOST = "KR-KURARAYSQL"
+DB_HOST = "192.168.107.6"
 DB_NAME = "KURARAY_PLCDATA"
 DB_TABLE = "dbo.RAW_BCALIPER_L9"
 DB_USER = "sa"

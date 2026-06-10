@@ -66,30 +66,30 @@ def get_current_csv() -> Path:
 
 
 def sample_available() -> bool:
-    """샘플 CSV 파일이 존재하는지."""
-    return SAMPLE_CSV.exists()
+    """샘플 CSV 파일이 하나라도 존재하는지."""
+    return len(list_sample_files()) > 0
 
 
-def fetch_sample_latest():
+def fetch_sample_latest(csv_path: Path | None = None):
     """CSV에서 가장 최근 1건 반환.
 
     Returns:
         (time, recipe, rollid, rollno, actual_mil) 또는 None.
     """
-    df = _load_csv()
+    df = _load_csv(csv_path or get_current_csv())
     if df.empty:
         return None
     row = df.iloc[0]
     return _parse_row(row)
 
 
-def fetch_sample_recent(n=500):
+def fetch_sample_recent(n=500, csv_path: Path | None = None):
     """CSV에서 최근 N건 반환.
 
     Returns:
         list of (time, recipe, rollid, rollno, actual_mil).
     """
-    df = _load_csv()
+    df = _load_csv(csv_path or get_current_csv())
     if df.empty:
         return []
     results = []

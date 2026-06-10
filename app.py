@@ -22,7 +22,10 @@ from core.mrad_calculator import (
 from core.profile_engine import generate_full_profile
 from core.recipe_matcher import match_recipe, parse_recipe
 from core.roll_aggregator import RollBuffer, ScanRecord, build_roll_buffer_from_scans, fetch_current_roll_buffer
-from core.sample_data import fetch_sample_latest, fetch_sample_recent, sample_available
+from core.sample_data import (
+    fetch_sample_latest, fetch_sample_recent, list_sample_files,
+    sample_available, set_sample_csv,
+)
 from core.sql_data import fetch_latest_scan
 from core.wedge_geometry import ProductMaster
 
@@ -208,7 +211,15 @@ with st.sidebar:
     if is_sample:
         st.divider()
         st.subheader("Sample Data")
-        st.caption("data/sample-real.csv 사용")
+        _csv_files = list_sample_files()
+        if _csv_files:
+            _csv_names = [f.name for f in _csv_files]
+            _csv_sel = st.selectbox("CSV 파일", _csv_names, key="sample_csv")
+            _csv_path = next(f for f in _csv_files if f.name == _csv_sel)
+            set_sample_csv(_csv_path)
+            st.caption(f"Using: {_csv_sel}")
+        else:
+            st.warning("data/sample-*.csv 파일이 없습니다.")
 
     st.divider()
     st.subheader("Spec Tolerances")
@@ -312,6 +323,14 @@ df_target = generate_full_profile(product)
 positions = df_target["Position_mm"].values
 target_mil = df_target["Target_mil"].values
 bin_nos = df_target["Bin"].values
+
+# 플랫 제품: 타겟을 수평선(목표두께)으로 설정
+if is_flat_product:
+    _flat_target_cal = product.thin_edge_cal_mil  # 마스터 목표두께
+    if _flat_target_cal <= 0:
+        # 마스터에 목표두께 없으면 실측 median 폴백
+        _flat_target_cal = float(np.nanmedian(actual_mil)) if np.any(~np.isnan(actual_mil)) else 30.0
+    target_mil = np.full_like(positions, _flat_target_cal)
 
 # actual_mil은 Live/Sample 모드 모두 위에서 이미 로드됨
 
@@ -612,14 +631,13 @@ with tab1:
         _valid = ~np.isnan(actual_mil)
         _valid_cal = actual_mil[_valid]
         if len(_valid_cal) > 0:
-            _flat_target = float(np.nanmedian(actual_mil))
             _flat_mean = float(np.nanmean(_valid_cal))
             _flat_std = float(np.nanstd(_valid_cal))
             _flat_range = float(np.nanmax(_valid_cal) - np.nanmin(_valid_cal))
-            _flat_max_dev = float(np.max(np.abs(_valid_cal - _flat_target)))
-            _flat_judge = "OK" if _flat_max_dev <= lwa_tol * 25.4 else "NG"  # mrad tol → mil 근사 비교
+            _flat_max_dev = float(np.max(np.abs(_valid_cal - _flat_target_cal)))
+            _flat_judge = "OK" if _flat_max_dev <= lwa_tol * 25.4 else "NG"
 
-            st.markdown(f"**Flat Product** | Target: {_flat_target:.2f} mil (median)")
+            st.markdown(f"**Flat Product** | Target: {_flat_target_cal:.2f} mil")
             c1, c2, c3, c4 = st.columns(4)
             c1.metric("Mean", f"{_flat_mean:.2f} mil")
             c2.metric("Std Dev", f"{_flat_std:.3f} mil")

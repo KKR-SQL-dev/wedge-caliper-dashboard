@@ -13,24 +13,53 @@ DIE_LIP_PITCH_INCH = 1.125
 CENTER_TRIM_MM = 25.4                           # 1 inch
 
 # ── SQL Server 연결 설정 ──────────────────────────────────
-DB_HOST = "192.168.107.6"
-DB_NAME = "KURARAY_PLCDATA"
-DB_TABLE = "dbo.RAW_BCALIPER_L9"
-DB_USER = "sa"
-DB_PWD = "p@ssw0rd"
-DB_DRIVER = "{ODBC Driver 17 for SQL Server}"
+# 우선순위: 환경변수 > data/settings.json > 기본값
+# 개발 PC에서는 설정 안 하면 테스트모드로 동작.
+# 사무 PC에서만 settings.json 또는 환경변수에 접속정보 채워넣기.
+import os as _os
+
+def _load_db_settings() -> dict:
+    """settings.json의 db_* 키와 환경변수를 합쳐 DB 설정 반환."""
+    # load_settings()는 이 파일 아래에서 정의됨 — 직접 호출
+    _settings_path = Path(__file__).resolve().parent / "data" / "settings.json"
+    _s = {}
+    if _settings_path.exists():
+        with open(_settings_path, "r", encoding="utf-8") as _f:
+            _s = json.load(_f)
+    return {
+        "host":   _os.environ.get("WC_DB_HOST")   or _s.get("db_host", ""),
+        "name":   _os.environ.get("WC_DB_NAME")   or _s.get("db_name", "KURARAY_PLCDATA"),
+        "table":  _os.environ.get("WC_DB_TABLE")  or _s.get("db_table", "dbo.RAW_BCALIPER_L9"),
+        "user":   _os.environ.get("WC_DB_USER")   or _s.get("db_user", ""),
+        "pwd":    _os.environ.get("WC_DB_PWD")    or _s.get("db_pwd", ""),
+        "driver": _os.environ.get("WC_DB_DRIVER") or _s.get("db_driver", "{ODBC Driver 17 for SQL Server}"),
+    }
+
+
+def get_db_table() -> str:
+    """DB 테이블명 반환 (lazy 로드)."""
+    return _load_db_settings()["table"]
+
+
+def is_sql_configured() -> bool:
+    """SQL 접속에 필요한 최소 정보(host, user)가 설정되어 있는지."""
+    s = _load_db_settings()
+    return bool(s["host"]) and bool(s["user"])
 
 
 def get_db_connection():
-    """SQL Server 연결 객체 반환. 실패 시 None."""
+    """SQL Server 연결 객체 반환. 미설정이거나 실패 시 None."""
+    s = _load_db_settings()
+    if not s["host"] or not s["user"]:
+        return None
     try:
         import pyodbc
         conn = pyodbc.connect(
-            f"DRIVER={DB_DRIVER};"
-            f"SERVER={DB_HOST};"
-            f"DATABASE={DB_NAME};"
-            f"UID={DB_USER};"
-            f"PWD={DB_PWD};"
+            f"DRIVER={s['driver']};"
+            f"SERVER={s['host']};"
+            f"DATABASE={s['name']};"
+            f"UID={s['user']};"
+            f"PWD={s['pwd']};"
             "TrustServerCertificate=yes;",
             timeout=5,
         )

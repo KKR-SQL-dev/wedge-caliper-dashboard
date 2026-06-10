@@ -1,7 +1,7 @@
 """SQL Server에서 캘리퍼 스캔 데이터를 조회하는 모듈."""
 import numpy as np
 
-from config import DB_TABLE, NUM_BINS, get_db_connection
+from config import NUM_BINS, get_db_connection, get_db_table
 
 
 def _parse_row(row, columns):
@@ -51,7 +51,7 @@ def fetch_latest_scan():
         return None
     try:
         cursor = conn.cursor()
-        cursor.execute(f"SELECT TOP 1 * FROM {DB_TABLE} ORDER BY [Time] DESC")
+        cursor.execute(f"SELECT TOP 1 * FROM {get_db_table()} ORDER BY [Time] DESC")
         row = cursor.fetchone()
         if row is None:
             return None
@@ -74,7 +74,7 @@ def fetch_recent_scans(n=10):
         return []
     try:
         cursor = conn.cursor()
-        cursor.execute(f"SELECT TOP {int(n)} * FROM {DB_TABLE} ORDER BY [Time] DESC")
+        cursor.execute(f"SELECT TOP {int(n)} * FROM {get_db_table()} ORDER BY [Time] DESC")
         rows = cursor.fetchall()
         if not rows:
             return []

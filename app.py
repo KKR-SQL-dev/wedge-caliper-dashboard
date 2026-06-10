@@ -11,7 +11,7 @@ import streamlit as st
 from config import (
     BIN_AXIS_TICK_LABELS, BIN_AXIS_TICK_POSITIONS, BIN_PITCH_MM,
     CENTER_TRIM_MM, DIE_FULL_WIDTH_MM, auto_refresh_masters, is_dual_cut,
-    load_masters,
+    is_sql_configured, load_masters,
 )
 from core.cut_detector import apply_offset_to_layout, calc_drift_offset, detect_thin_edges
 from core.dummy_data import generate_dummy_actual
@@ -120,14 +120,19 @@ with st.sidebar:
 
     st.divider()
     st.subheader("Data Source")
+    _sql_ok = is_sql_configured()
+    if not _sql_ok:
+        st.caption("SQL 미설정 → Test Mode only")
+        st.caption("Settings 페이지에서 DB 접속정보 입력")
     data_source = st.radio(
         "데이터 소스",
-        ["Live (SQL)", "Dummy (Simulation)"],
-        index=0,
+        ["Live (SQL)", "Test (Dummy)"],
+        index=0 if _sql_ok else 1,
         key="data_source",
         horizontal=True,
+        disabled=not _sql_ok if not _sql_ok else False,
     )
-    is_live = data_source == "Live (SQL)"
+    is_live = data_source == "Live (SQL)" and _sql_ok
 
     if is_live:
         auto_refresh = st.checkbox("Auto Refresh", value=False, key="auto_refresh")

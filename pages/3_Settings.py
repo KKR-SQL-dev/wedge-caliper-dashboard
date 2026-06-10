@@ -7,12 +7,49 @@ import streamlit as st
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from config import (
-    MASTER_PATH, get_excel_master_path, load_masters,
-    set_excel_master_path,
+    MASTER_PATH, get_excel_master_path, is_sql_configured, load_masters,
+    load_settings, save_settings, set_excel_master_path,
 )
 from core.excel_importer import refresh_masters
 
 st.header("Settings")
+
+# ── SQL Server 접속 설정 ─────────────────────────────────
+st.subheader("SQL Server Connection")
+_settings = load_settings()
+_sql_status = "Connected" if is_sql_configured() else "Not configured"
+st.caption(f"Status: **{_sql_status}**")
+st.caption("환경변수(`WC_DB_HOST` 등)가 있으면 그쪽이 우선합니다.")
+
+_db_host = st.text_input("DB Host (IP)", value=_settings.get("db_host", ""), placeholder="192.168.107.6")
+_db_name = st.text_input("DB Name", value=_settings.get("db_name", "KURARAY_PLCDATA"))
+_db_table = st.text_input("DB Table", value=_settings.get("db_table", "dbo.RAW_BCALIPER_L9"))
+_db_user = st.text_input("DB User", value=_settings.get("db_user", ""))
+_db_pwd = st.text_input("DB Password", value=_settings.get("db_pwd", ""), type="password")
+_db_driver = st.text_input("ODBC Driver", value=_settings.get("db_driver", "{ODBC Driver 17 for SQL Server}"))
+
+col_db1, col_db2 = st.columns(2)
+with col_db1:
+    if st.button("Save DB Settings", type="primary"):
+        _settings["db_host"] = _db_host
+        _settings["db_name"] = _db_name
+        _settings["db_table"] = _db_table
+        _settings["db_user"] = _db_user
+        _settings["db_pwd"] = _db_pwd
+        _settings["db_driver"] = _db_driver
+        save_settings(_settings)
+        st.success("DB 설정 저장 완료! 메인 페이지 새로고침하세요.")
+with col_db2:
+    if st.button("Test Connection"):
+        from config import get_db_connection
+        conn = get_db_connection()
+        if conn:
+            st.success("SQL Server 연결 성공!")
+            conn.close()
+        else:
+            st.error("연결 실패. Host/User/Password를 확인하세요.")
+
+st.divider()
 
 # ── 마스터 엑셀 경로 ─────────────────────────────────────
 st.subheader("Master Excel Path")

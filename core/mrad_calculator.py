@@ -117,6 +117,143 @@ def calc_lwa(
     return np.array(centers), np.array(slopes)
 
 
+# ══════════════════════════════════════════════════════════
+# 멀티스캔 집계 (Avg / Worst / Last)
+# ══════════════════════════════════════════════════════════
+
+def calc_multi_scan_angles(
+    positions_mm: np.ndarray,
+    scans_mil: np.ndarray,
+    product_layout: dict,
+    product,
+    side: str = "left",
+) -> dict:
+    """여러 스캔에 대해 UWA/GWA/LWA를 일괄 계산.
+
+    Args:
+        positions_mm: (449,) bin 위치
+        scans_mil: (N, 449) 멀티스캔 데이터
+        product_layout: 보정된 layout dict
+        product: ProductMaster 인스턴스
+        side: "left" 또는 "right"
+
+    Returns:
+        dict with uwa_values, gwa_values, lwa_worst_values (각각 ndarray, 스캔별)
+    """
+    n_scans = scans_mil.shape[0]
+    target_wa = product.wedge_angle_mrad
+    wp = product.wedge_portion_mm
+
+    uwa_vals = np.zeros(n_scans)
+    gwa_vals = np.full(n_scans, np.nan)
+    lwa_worst_vals = np.full(n_scans, np.nan)  # 각 스캔의 LWA 중 타겟에서 최대 편차
+
+    if side == "left":
+        te_pos = product_layout["left_start_mm"]
+        flat_pos = te_pos + wp
+    else:
+        te_pos = product_layout["right_end_mm"]
+        flat_pos = te_pos - wp
+
+    for i in range(n_scans):
+        cal = scans_mil[i]
+
+        # UWA
+        uwa_vals[i] = calc_uwa(positions_mm, cal, min(te_pos, flat_pos), max(te_pos, flat_pos))
+
+        # GWA
+        if product.gwa_bot_mm and product.gwa_top_mm:
+            gwa_vals[i] = calc_gwa(
+                positions_mm, cal,
+                product.gwa_bot_mm, product.gwa_top_mm, te_pos, side,
+            )
+
+        # LWA — worst deviation from target per scan
+        if product.hud_bot_mm and product.hud_top_mm:
+            _, lv = calc_lwa(
+                positions_mm, cal,
+                product.hud_bot_mm, product.hud_top_mm, te_pos, side,
+            )
+            if len(lv) > 0:
+                deviations = np.abs(lv - target_wa)
+                lwa_worst_vals[i] = lv[np.argmax(deviations)]
+
+    return {
+        "uwa": uwa_vals,
+        "gwa": gwa_vals,
+        "lwa_worst": lwa_worst_vals,
+    }
+
+
+def summarize_angles(
+    angle_values: dict,
+    target_mrad: float,
+    gwa_tol: float = 0.03,
+    lwa_tol: float = 0.15,
+) -> dict:
+    """멀티스캔 각도 값에서 Avg/Worst/Last + 판정 산출.
+
+    Args:
+        angle_values: calc_multi_scan_angles() 결과
+        target_mrad: 타겟 웨지 앵글
+        gwa_tol: GWA 톨러런스
+        lwa_tol: LWA 톨러런스
+
+    Returns:
+        dict with:
+            uwa: {avg, worst, last, worst_judge}
+            gwa: {avg, worst, last, worst_judge}
+            lwa: {avg, worst, last, worst_judge}
+            n_scans: int
+    """
+    uwa = angle_values["uwa"]
+    gwa = angle_values["gwa"]
+    lwa = angle_values["lwa_worst"]
+
+    n = len(uwa)
+    result = {"n_scans": n}
+
+    # UWA
+    uwa_devs = np.abs(uwa - target_mrad)
+    worst_idx = int(np.argmax(uwa_devs))
+    result["uwa"] = {
+        "avg": float(np.mean(uwa)),
+        "worst": float(uwa[worst_idx]),
+        "last": float(uwa[-1]) if n > 0 else 0.0,
+        "worst_judge": "PASS" if uwa_devs[worst_idx] <= gwa_tol else "FAIL",
+    }
+
+    # GWA
+    valid_gwa = gwa[~np.isnan(gwa)]
+    if len(valid_gwa) > 0:
+        gwa_devs = np.abs(valid_gwa - target_mrad)
+        gwa_worst_idx = int(np.argmax(gwa_devs))
+        result["gwa"] = {
+            "avg": float(np.mean(valid_gwa)),
+            "worst": float(valid_gwa[gwa_worst_idx]),
+            "last": float(valid_gwa[-1]),
+            "worst_judge": "PASS" if gwa_devs[gwa_worst_idx] <= gwa_tol else "FAIL",
+        }
+    else:
+        result["gwa"] = None
+
+    # LWA
+    valid_lwa = lwa[~np.isnan(lwa)]
+    if len(valid_lwa) > 0:
+        lwa_devs = np.abs(valid_lwa - target_mrad)
+        lwa_worst_idx = int(np.argmax(lwa_devs))
+        result["lwa"] = {
+            "avg": float(np.mean(valid_lwa)),
+            "worst": float(valid_lwa[lwa_worst_idx]),
+            "last": float(valid_lwa[-1]),
+            "worst_judge": "PASS" if lwa_devs[lwa_worst_idx] <= lwa_tol else "FAIL",
+        }
+    else:
+        result["lwa"] = None
+
+    return result
+
+
 def judge_gwa(gwa_mrad: float, target_mrad: float, tolerance: float = 0.03) -> str:
     """GWA 판정: target +/- tolerance."""
     if abs(gwa_mrad - target_mrad) <= tolerance:

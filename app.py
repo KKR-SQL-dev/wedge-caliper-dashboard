@@ -14,7 +14,7 @@ from config import (
     is_sql_configured, load_masters,
 )
 from core.cut_detector import apply_offset_to_layout, calc_drift_offset, detect_thin_edges
-from core.dummy_data import generate_dummy_actual
+from core.dummy_data import generate_dummy_actual, generate_scan_series
 from core.mrad_calculator import (
     calc_gwa, calc_lwa, calc_multi_scan_angles, calc_uwa,
     judge_gwa, judge_lwa, summarize_angles,
@@ -362,47 +362,60 @@ if not is_flat_product:
 else:
     layout = raw_layout
 
-# ── 롤 버퍼 구축 (STEP E) ───────────────────────────────
+# ── 롤 버퍼 구축 + 멀티스캔 집계 (STEP D/E) ─────────────
 roll_buf = None
 roll_summary_left = None
 roll_summary_right = None
+_agg_scan_count = 0
 
-if is_live and not _use_flat_fallback and not is_flat_product:
-    roll_buf = fetch_current_roll_buffer(selected_name, max_scans=500)
-    if roll_buf and roll_buf.count >= 2:
-        # 시간 구간 필터 (사이드바)
-        with st.sidebar:
-            st.divider()
-            st.subheader("Aggregation")
-            st.caption(f"Roll: {roll_buf.count} scans")
-            _use_time_filter = st.checkbox("Time Filter", value=False, key="time_filter")
-            if _use_time_filter and roll_buf.start_time and roll_buf.end_time:
-                from datetime import time as dt_time
-                _t_start = st.time_input("From", dt_time(0, 0), key="agg_start")
-                _t_end = st.time_input("To", dt_time(23, 59), key="agg_end")
-                _filtered = roll_buf.get_time_filtered(
-                    start=roll_buf.start_time.replace(
-                        hour=_t_start.hour, minute=_t_start.minute, second=0,
-                    ),
-                    end=roll_buf.end_time.replace(
-                        hour=_t_end.hour, minute=_t_end.minute, second=59,
-                    ),
-                )
-                if _filtered:
-                    import numpy as _np
-                    _all_data = _np.array([s.actual_mil for s in _filtered])
-                    st.caption(f"Filtered: {len(_filtered)} scans")
+if not is_flat_product:
+    _show_left_agg = ct not in ("single_right",)
+    _show_right_agg = (
+        layout.get("right_start_mm") is not None
+        and ct not in ("single_left", "single_center")
+    )
+
+    # 멀티스캔 데이터 확보
+    _all_data = None
+    if is_live and not _use_flat_fallback:
+        roll_buf = fetch_current_roll_buffer(selected_name, max_scans=500)
+        if roll_buf and roll_buf.count >= 2:
+            with st.sidebar:
+                st.divider()
+                st.subheader("Aggregation")
+                st.caption(f"Roll: {roll_buf.count} scans")
+                _use_time_filter = st.checkbox("Time Filter", value=False, key="time_filter")
+                if _use_time_filter and roll_buf.start_time and roll_buf.end_time:
+                    from datetime import time as dt_time
+                    _t_start = st.time_input("From", dt_time(0, 0), key="agg_start")
+                    _t_end = st.time_input("To", dt_time(23, 59), key="agg_end")
+                    _filtered = roll_buf.get_time_filtered(
+                        start=roll_buf.start_time.replace(
+                            hour=_t_start.hour, minute=_t_start.minute, second=0,
+                        ),
+                        end=roll_buf.end_time.replace(
+                            hour=_t_end.hour, minute=_t_end.minute, second=59,
+                        ),
+                    )
+                    if _filtered:
+                        _all_data = np.array([s.actual_mil for s in _filtered])
+                        st.caption(f"Filtered: {len(_filtered)} scans")
+                    else:
+                        _all_data = roll_buf.get_all_data()
+                        st.warning("필터 결과 0건 → 전체 사용")
                 else:
                     _all_data = roll_buf.get_all_data()
-                    st.warning("필터 결과 0건 → 전체 사용")
-            else:
-                _all_data = roll_buf.get_all_data()
-        # 좌측 집계
-        _show_left_agg = ct not in ("single_right",)
-        _show_right_agg = (
-            layout.get("right_start_mm") is not None
-            and ct not in ("single_left", "single_center")
+    else:
+        # Test 모드: 더미 멀티스캔 생성
+        _dummy_scans = generate_scan_series(
+            target_mil, n_scans=20,
+            noise_std=noise_std, drift_rate=0.02, seed=seed,
         )
+        _all_data = np.array(_dummy_scans)
+
+    # 집계 계산
+    if _all_data is not None and len(_all_data) >= 2:
+        _agg_scan_count = len(_all_data)
         if _show_left_agg:
             _left_angles = calc_multi_scan_angles(
                 positions, _all_data, layout, product, "left",
@@ -649,71 +662,72 @@ with tab1:
     if _show_right:
         _show_side_metrics("Right", layout["right_end_mm"], "right")
 
-    # ── 롤 집계 판정 테이블 (STEP D/E) ──────────────────
-    if roll_buf and roll_buf.count >= 2 and not is_flat_product:
+    # ── 롤 집계 판정 테이블 (STEP D) ──────────────────────
+    def _render_judgment_table(side_label, summary):
+        """한쪽 제품의 판정 테이블: 행=지표, 열=Target/Avg/Worst/Last/판정."""
+        if summary is None:
+            return
+
+        rows = []
+        for key, label in [("uwa", "UWA"), ("gwa", "GWA"), ("lwa", "LWA")]:
+            s = summary[key]
+            if s is None:
+                rows.append({
+                    "Metric": label, "Target": f"{_wa_t:.4f}",
+                    "Average": "N/A", "Worst": "N/A", "Last": "N/A", "Judge": "-",
+                })
+            else:
+                rows.append({
+                    "Metric": label,
+                    "Target": f"{_wa_t:.4f}",
+                    "Average": f"{s['avg']:.4f}",
+                    "Worst": f"{s['worst']:.4f}",
+                    "Last": f"{s['last']:.4f}",
+                    "Judge": "NG" if s["worst_judge"] == "FAIL" else "OK",
+                })
+
+        df = pd.DataFrame(rows)
+
+        def _style_row(row):
+            """NG 행 전체 빨간 하이라이트, OK는 초록."""
+            if row["Judge"] == "NG":
+                return ["background-color: #ff4444; color: white; font-weight: bold"] * len(row)
+            if row["Judge"] == "OK":
+                return ["background-color: #2d5a2d; color: #88ff88"] * len(row)
+            return [""] * len(row)
+
+        styled = df.style.apply(_style_row, axis=1)
+        st.dataframe(styled, use_container_width=True, hide_index=True)
+
+    if (roll_summary_left or roll_summary_right) and not is_flat_product:
         st.divider()
+        # 헤더
         _rollno_label = ""
-        if roll_buf.scans and roll_buf.scans[0].rollno:
+        if roll_buf and roll_buf.scans and roll_buf.scans[0].rollno:
             _rollno_label = f" | ROLLNO: {roll_buf.scans[0].rollno}"
+        _time_range = ""
+        if roll_buf and roll_buf.start_time:
+            _time_range = f" ({roll_buf.start_time} ~ {roll_buf.end_time})"
+        _mode_label = "Live" if is_live else "Test"
         st.markdown(
-            f'**Roll Aggregation{_rollno_label}** — {roll_buf.count} scans '
-            f'({roll_buf.start_time} ~ {roll_buf.end_time})'
+            f'**Roll Judgment{_rollno_label}** — '
+            f'{_agg_scan_count} scans [{_mode_label}]{_time_range}'
         )
 
-        def _build_summary_row(side_label, summary):
-            if summary is None:
-                return None
-            row = {"Side": side_label, "Target": f"{_wa_t:.4f}", "Scans": summary["n_scans"]}
-            u = summary["uwa"]
-            row["UWA Avg"] = f"{u['avg']:.4f}"
-            row["UWA Worst"] = f"{u['worst']:.4f}"
-            row["UWA Last"] = f"{u['last']:.4f}"
-            row["UWA Judge"] = u["worst_judge"]
-            if summary["gwa"]:
-                g = summary["gwa"]
-                row["GWA Avg"] = f"{g['avg']:.4f}"
-                row["GWA Worst"] = f"{g['worst']:.4f}"
-                row["GWA Last"] = f"{g['last']:.4f}"
-                row["GWA Judge"] = g["worst_judge"]
-            else:
-                row["GWA Avg"] = row["GWA Worst"] = row["GWA Last"] = "N/A"
-                row["GWA Judge"] = "-"
-            if summary["lwa"]:
-                l = summary["lwa"]
-                row["LWA Avg"] = f"{l['avg']:.4f}"
-                row["LWA Worst"] = f"{l['worst']:.4f}"
-                row["LWA Last"] = f"{l['last']:.4f}"
-                row["LWA Judge"] = l["worst_judge"]
-            else:
-                row["LWA Avg"] = row["LWA Worst"] = row["LWA Last"] = "N/A"
-                row["LWA Judge"] = "-"
-            return row
-
-        agg_rows = []
-        if roll_summary_left:
-            r = _build_summary_row("Left", roll_summary_left)
-            if r:
-                agg_rows.append(r)
-        if roll_summary_right:
-            r = _build_summary_row("Right", roll_summary_right)
-            if r:
-                agg_rows.append(r)
-
-        if agg_rows:
-            df_agg = pd.DataFrame(agg_rows)
-            # NG 하이라이트
-            def _highlight_judge(val):
-                if val == "FAIL":
-                    return "background-color: #ff4444; color: white; font-weight: bold"
-                if val == "PASS":
-                    return "background-color: #44aa44; color: white"
-                return ""
-
-            judge_cols = [c for c in df_agg.columns if "Judge" in c]
-            styled = df_agg.style.map(_highlight_judge, subset=judge_cols)
-            st.dataframe(styled, use_container_width=True, hide_index=True)
-        else:
-            st.caption("집계 데이터 없음")
+        if roll_summary_left and roll_summary_right:
+            _jc1, _jc2 = st.columns(2)
+            with _jc1:
+                st.caption("**Left Product**")
+                _render_judgment_table("Left", roll_summary_left)
+            with _jc2:
+                st.caption("**Right Product**")
+                _render_judgment_table("Right", roll_summary_right)
+        elif roll_summary_left:
+            st.caption("**Left Product**")
+            _render_judgment_table("Left", roll_summary_left)
+        elif roll_summary_right:
+            st.caption("**Right Product**")
+            _render_judgment_table("Right", roll_summary_right)
 
 
 # ── 헬퍼: 한 컷 제품 차트 ────────────────────────────────

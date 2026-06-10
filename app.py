@@ -10,8 +10,9 @@ import streamlit as st
 
 from config import (
     BIN_AXIS_TICK_LABELS, BIN_AXIS_TICK_POSITIONS, BIN_PITCH_MM,
-    CENTER_TRIM_MM, DIE_FULL_WIDTH_MM, auto_refresh_masters, is_dual_cut,
-    is_sql_configured, load_masters,
+    CENTER_TRIM_MM, DIE_FULL_WIDTH_MM, auto_refresh_masters,
+    get_recipe_geometry, is_dual_cut, is_sql_configured, load_masters,
+    set_recipe_geometry,
 )
 from core.cut_detector import build_aligned_layout, calc_drift_offset, detect_thin_edges
 from core.dummy_data import generate_dummy_actual, generate_scan_series
@@ -185,29 +186,6 @@ with st.sidebar:
         help="데이터 Recipe로 자동 선택됨" if _auto_select else None,
     )
 
-    st.divider()
-    st.subheader("Cut Type Override")
-    from core.wedge_geometry import VALID_CUT_TYPES
-    cut_type_options = list(VALID_CUT_TYPES)
-    cut_type_labels = {
-        "auto": "Auto (폭 기준 자동)",
-        "dual": "2-Cut (좌+우)",
-        "single_left": "Single Left (우측 flat)",
-        "single_right": "Single Right (좌측 flat)",
-        "single_center": "Single Center",
-        "single_left_dual": "Single Left - Dual Shape",
-        "single_right_dual": "Single Right - Dual Shape",
-    }
-    mon_default_cut = masters[selected_name].get("cut_type", "auto") if selected_name in masters else "auto"
-    mon_cut_idx = cut_type_options.index(mon_default_cut) if mon_default_cut in cut_type_options else 0
-    mon_cut_type = st.selectbox(
-        "Cut Type",
-        cut_type_options,
-        index=mon_cut_idx,
-        format_func=lambda x: cut_type_labels.get(x, x),
-        key="mon_cut_type",
-    )
-
     if is_sample:
         st.divider()
         st.subheader("Sample Data")
@@ -275,7 +253,7 @@ if is_live or is_sample:
         unsafe_allow_html=True,
     )
 
-# ── 제품 로드 & 프로파일 생성 ─────────────────────────────
+# ── 제품 로드 ─────────────────────────────────────────────
 if _use_flat_fallback:
     # 마스터 미등록 → 플랫 대체 제품 생성
     _flat_cal = float(np.nanmedian(actual_mil)) if np.any(~np.isnan(actual_mil)) else 30.0
@@ -307,11 +285,142 @@ else:
         unsafe_allow_html=True,
     )
     m = dict(masters[selected_name])
-    m["cut_type"] = mon_cut_type  # 사이드바에서 선택한 cut type 적용
 
     # Recipe에 MRAD가 없으면 플랫 강제 (마스터에 wedge 있어도)
     if (is_live or is_sample) and _recipe_is_flat:
         m["wedge_angle_mrad"] = 0.0
+
+# ── 레시피별 제품 지오메트리 입력 ──────────────────────────
+_geo_key = selected_name if not _use_flat_fallback else (scan_recipe or "Unknown")
+_saved_geo = get_recipe_geometry(_geo_key)
+
+# 기본값: 저장된 지오메트리 > 마스터/폴백 값
+_geo_def = dict(m)
+if _saved_geo:
+    _geo_def.update(_saved_geo)
+
+from core.wedge_geometry import VALID_CUT_TYPES
+_ct_options = list(VALID_CUT_TYPES)
+_ct_labels = {
+    "auto": "Auto (폭 기준 자동)",
+    "dual": "2-Cut (좌+우)",
+    "single_left": "Single Left",
+    "single_right": "Single Right",
+    "single_center": "Single Center",
+    "single_left_dual": "Dual Shape (Left)",
+    "single_right_dual": "Dual Shape (Right)",
+}
+
+with st.sidebar:
+    st.divider()
+    st.subheader("Product Geometry")
+    st.caption(f"Recipe: **{_geo_key}**")
+    if _saved_geo:
+        st.caption("(저장된 지오메트리 적용 중)")
+
+    _def_ct = _geo_def.get("cut_type", "auto")
+    _ct_idx = _ct_options.index(_def_ct) if _def_ct in _ct_options else 0
+    _geo_ct = st.selectbox(
+        "Cut Type", _ct_options, index=_ct_idx,
+        format_func=lambda x: _ct_labels.get(x, x),
+        key="geo_cut_type",
+    )
+    _c1, _c2 = st.columns(2)
+    with _c1:
+        _geo_center_trim = st.number_input(
+            "Center Trim (mm)", 0.0, 200.0,
+            float(_geo_def.get("center_trim_mm", CENTER_TRIM_MM)),
+            step=1.0, format="%.1f", key="geo_ct_mm",
+        )
+    with _c2:
+        _geo_roll_width = st.number_input(
+            "Roll Width (mm)", 0.0, 3000.0,
+            float(_geo_def.get("roll_width_mm", 0)),
+            step=10.0, format="%.0f", key="geo_rw",
+        )
+    _c3, _c4 = st.columns(2)
+    with _c3:
+        _geo_flat_width = st.number_input(
+            "Flat Width (mm)", 0.0, 2000.0,
+            float(_geo_def.get("flat_width_mm", 0)),
+            step=10.0, format="%.0f", key="geo_fw",
+        )
+    with _c4:
+        _geo_wedge_angle = st.number_input(
+            "Wedge Angle (mrad)", 0.0, 2.0,
+            float(_geo_def.get("wedge_angle_mrad", 0)),
+            step=0.01, format="%.4f", key="geo_wa",
+        )
+
+    with st.expander("HUD / GWA / Cal", expanded=False):
+        _hc1, _hc2 = st.columns(2)
+        with _hc1:
+            _geo_thin_cal = st.number_input(
+                "Thin Edge (mil)", 0.0, 100.0,
+                float(_geo_def.get("thin_edge_cal_mil", 0)),
+                step=0.5, format="%.2f", key="geo_tc",
+            )
+        with _hc2:
+            pass  # spacer
+        _hc3, _hc4 = st.columns(2)
+        with _hc3:
+            _geo_hud_bot = st.number_input(
+                "HUD Bot (mm)", 0.0, 2000.0,
+                float(_geo_def.get("hud_bot_mm", 0) or 0),
+                step=10.0, format="%.0f", key="geo_hb",
+            )
+        with _hc4:
+            _geo_hud_top = st.number_input(
+                "HUD Top (mm)", 0.0, 2000.0,
+                float(_geo_def.get("hud_top_mm", 0) or 0),
+                step=10.0, format="%.0f", key="geo_ht",
+            )
+        _hc5, _hc6 = st.columns(2)
+        with _hc5:
+            _geo_gwa_bot = st.number_input(
+                "GWA Bot (mm)", 0.0, 2000.0,
+                float(_geo_def.get("gwa_bot_mm", 0) or 0),
+                step=10.0, format="%.0f", key="geo_gb",
+            )
+        with _hc6:
+            _geo_gwa_top = st.number_input(
+                "GWA Top (mm)", 0.0, 2000.0,
+                float(_geo_def.get("gwa_top_mm", 0) or 0),
+                step=10.0, format="%.0f", key="geo_gt",
+            )
+
+    if st.button("Save Geometry", key="save_geo", use_container_width=True):
+        _new_geo = {
+            "cut_type": _geo_ct,
+            "center_trim_mm": _geo_center_trim,
+            "roll_width_mm": _geo_roll_width,
+            "flat_width_mm": _geo_flat_width,
+            "wedge_angle_mrad": _geo_wedge_angle,
+            "thin_edge_cal_mil": _geo_thin_cal,
+            "hud_bot_mm": _geo_hud_bot or None,
+            "hud_top_mm": _geo_hud_top or None,
+            "gwa_bot_mm": _geo_gwa_bot or None,
+            "gwa_top_mm": _geo_gwa_top or None,
+        }
+        set_recipe_geometry(_geo_key, _new_geo)
+        st.success(f"Saved: {_geo_key}")
+        st.rerun()
+
+# ── 지오메트리 값을 제품 dict에 적용 ─────────────────────
+m["cut_type"] = _geo_ct
+m["center_trim_mm"] = _geo_center_trim
+if _geo_roll_width > 0:
+    m["roll_width_mm"] = _geo_roll_width
+if _geo_flat_width > 0:
+    m["flat_width_mm"] = _geo_flat_width
+if _geo_wedge_angle > 0:
+    m["wedge_angle_mrad"] = _geo_wedge_angle
+if _geo_thin_cal > 0:
+    m["thin_edge_cal_mil"] = _geo_thin_cal
+m["hud_bot_mm"] = _geo_hud_bot or None
+m["hud_top_mm"] = _geo_hud_top or None
+m["gwa_bot_mm"] = _geo_gwa_bot or None
+m["gwa_top_mm"] = _geo_gwa_top or None
 
 product = ProductMaster.from_dict(m)
 

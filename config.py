@@ -108,6 +108,7 @@ def is_dual_cut(roll_width_mm: float, center_trim_mm: float = CENTER_TRIM_MM) ->
 PROJECT_ROOT = Path(__file__).resolve().parent
 MASTER_PATH = PROJECT_ROOT / "data" / "product_master.json"
 SETTINGS_PATH = PROJECT_ROOT / "data" / "settings.json"
+RECIPE_GEOMETRY_PATH = PROJECT_ROOT / "data" / "recipe_geometry.json"
 DEFAULT_EXCEL_PATH = PROJECT_ROOT / "Wedge Raw test data.xlsx"
 
 
@@ -143,6 +144,33 @@ def set_excel_master_path(path: str | Path):
 
 
 # ── 마스터 데이터 I/O ────────────────────────────────────
+def load_recipe_geometry() -> dict:
+    """레시피별 지오메트리 오버라이드 로드."""
+    if RECIPE_GEOMETRY_PATH.exists():
+        with open(RECIPE_GEOMETRY_PATH, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return {}
+
+
+def save_recipe_geometry(data: dict):
+    """레시피별 지오메트리 오버라이드 저장."""
+    RECIPE_GEOMETRY_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with open(RECIPE_GEOMETRY_PATH, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
+
+
+def get_recipe_geometry(recipe_key: str) -> dict | None:
+    """특정 레시피의 지오메트리 오버라이드 반환. 없으면 None."""
+    return load_recipe_geometry().get(recipe_key)
+
+
+def set_recipe_geometry(recipe_key: str, geo: dict):
+    """특정 레시피의 지오메트리 오버라이드 저장."""
+    all_geo = load_recipe_geometry()
+    all_geo[recipe_key] = geo
+    save_recipe_geometry(all_geo)
+
+
 def load_masters() -> dict:
     """product_master.json에서 제품 마스터 로드."""
     if MASTER_PATH.exists():

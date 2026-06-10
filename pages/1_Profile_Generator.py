@@ -144,6 +144,8 @@ with st.sidebar:
         default_hud_top = float(m.get("hud_top_mm") or 0)
         default_gwa_bot = float(m.get("gwa_bot_mm") or 0)
         default_gwa_top = float(m.get("gwa_top_mm") or 0)
+        default_band_width = float(m.get("band_width_mm") or 0)
+        default_clear_width = float(m.get("clear_width_mm") or 0)
     else:
         default_name = "NEW_PRODUCT"
         default_wa = 0.64
@@ -157,6 +159,8 @@ with st.sidebar:
         default_hud_top = 0.0
         default_gwa_bot = 0.0
         default_gwa_top = 0.0
+        default_band_width = 0.0
+        default_clear_width = 0.0
 
     st.divider()
     st.subheader("제품 스펙 입력")
@@ -164,6 +168,8 @@ with st.sidebar:
     wedge_angle = st.number_input("Wedge Angle (mrad)", value=default_wa, step=0.01, format="%.4f")
     roll_width = st.number_input("Roll Width (mm)", value=default_rw, step=10.0)
     flat_width = st.number_input("Flat Width (mm)", value=default_fw, step=10.0)
+    band_width = st.number_input("Band Width (mm)", value=default_band_width, step=10.0, help="밴드 폭. 0이면 미적용.")
+    clear_width = st.number_input("Clear Width (mm)", value=default_clear_width, step=10.0, help="클리어 폭. 0이면 미적용.")
     thin_edge = st.number_input("Thin Edge Cal (mil)", value=default_te, step=0.1, format="%.2f")
     film_type = st.selectbox("Film Type", ["Clear", "Acoustic", "Tinted"], index=["Clear", "Acoustic", "Tinted"].index(default_type) if default_type in ["Clear", "Acoustic", "Tinted"] else 0)
 
@@ -414,7 +420,15 @@ col_a, col_b, col_c = st.columns(3)
 
 with col_a:
     if st.button("Save to Master JSON", type="primary"):
-        masters[name] = product.to_dict()
+        d = product.to_dict()
+        d["band_width_mm"] = band_width
+        d["clear_width_mm"] = clear_width
+        # 기존 메타데이터 보존 (line, status, pvb_type 등)
+        if name in masters:
+            for k in ("extr_line", "status", "pvb_type", "pattern", "band_color"):
+                if k in masters[name] and k not in d:
+                    d[k] = masters[name][k]
+        masters[name] = d
         save_masters(masters)
         st.success(f"'{name}' saved to product_master.json")
 

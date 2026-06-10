@@ -20,6 +20,7 @@ from core.mrad_calculator import (
     judge_gwa, judge_lwa, summarize_angles,
 )
 from core.profile_engine import generate_full_profile
+from core.recipe_matcher import match_recipe, parse_recipe
 from core.roll_aggregator import RollBuffer, ScanRecord, build_roll_buffer_from_scans, fetch_current_roll_buffer
 from core.sample_data import fetch_sample_latest, fetch_sample_recent, sample_available
 from core.sql_data import fetch_latest_scan
@@ -158,29 +159,14 @@ with st.sidebar:
 
     # Live/Sample 모드: Recipe로 사전 매칭하여 selectbox 기본값 설정
     _auto_matched_name = None
+    _match_msg = ""
     if is_live or is_sample:
         _pre_scan = fetch_latest_scan() if is_live else fetch_sample_latest()
         if _pre_scan:
-            _pre_recipe = _pre_scan[1]
-            _pre_parts = _pre_recipe.upper().split()
-            _pre_parsed = ""
-            for _pp in _pre_parts:
-                if re.match(r"^\d+\.?\d*MRAD$", _pp):
-                    break
-                _pre_parsed += _pp
-            if not _pre_parsed:
-                _pre_parsed = _pre_recipe.strip().upper()
-            # 매칭 시도
-            for _candidate in [_pre_parsed, _pre_recipe]:
-                if _candidate in masters:
-                    _auto_matched_name = _candidate
-                    break
-            if not _auto_matched_name:
-                _prefix_matches = [n for n in masters if n.upper().startswith(_pre_parsed)]
-                if not _prefix_matches:
-                    _prefix_matches = [n for n in masters if _pre_parsed in n.upper()]
-                if _prefix_matches:
-                    _auto_matched_name = _prefix_matches[0]
+            _pre_result = match_recipe(_pre_scan[1], list(masters.keys()))
+            if _pre_result:
+                _auto_matched_name = _pre_result.master_key
+                _match_msg = _pre_result.message
 
     # selectbox index 결정
     _select_idx = 0
@@ -236,31 +222,6 @@ scan_recipe = ""
 scan_rollid = ""
 scan_rollno = ""
 
-def _parse_recipe(raw_recipe: str) -> str:
-    """Recipe 문자열 파싱: "W2232 ALT 3CUT 0.34MRAD" → "W2232ALT".
-
-    제외 패턴: N+CUT (3CUT, 2CUT 등), N+MRAD (0.34MRAD 등)
-    """
-    parts = raw_recipe.upper().split()
-    parsed = ""
-    for p in parts:
-        if re.match(r"^\d+\.?\d*MRAD$", p):
-            break
-        if re.match(r"^\d+CUT$", p):
-            continue  # 3CUT, 2CUT 등 컷 정보 제외
-        parsed += p
-    return parsed or raw_recipe.strip()
-
-def _match_recipe(parsed: str, raw: str) -> str | None:
-    """파싱된 Recipe로 마스터 매칭. 매칭 안 되면 None."""
-    for candidate in [parsed, raw]:
-        if candidate in masters:
-            return candidate
-    prefix = [n for n in masters if n.upper().startswith(parsed)]
-    if not prefix:
-        prefix = [n for n in masters if parsed in n.upper()]
-    return prefix[0] if prefix else None
-
 if is_live or is_sample:
     # 데이터 소스에서 최신 스캔 가져오기
     scan_result = fetch_latest_scan() if is_live else fetch_sample_latest()
@@ -270,34 +231,36 @@ if is_live or is_sample:
         st.stop()
 
     scan_time, scan_recipe, scan_rollid, scan_rollno, actual_mil = scan_result
-    _parsed_recipe = _parse_recipe(scan_recipe)
+    _sql_parsed = parse_recipe(scan_recipe)
 
     # Recipe에 "MRAD" 없으면 플랫 제품으로 자동 인식
-    _recipe_is_flat = "MRAD" not in scan_recipe.upper()
+    _recipe_is_flat = _sql_parsed.mrad is None
 
-    # 마스터 자동 매칭
-    _matched = _match_recipe(_parsed_recipe, scan_recipe)
-    if _matched:
-        selected_name = _matched
-        # 마스터에 있어도 Recipe에 MRAD 없으면 플랫 강제
-        if _recipe_is_flat:
-            pass  # is_flat_product은 아래에서 wedge_angle로 판정 — 여기서는 매칭만
+    # 마스터 자동 매칭 (정규화 + 제품코드 기반)
+    _match_result = match_recipe(scan_recipe, list(masters.keys()))
+    if _match_result:
+        selected_name = _match_result.master_key
     else:
         _use_flat_fallback = True
-        st.info(
-            f"Recipe **'{scan_recipe}'** (파싱: {_parsed_recipe}) → 마스터 미등록. "
-            f"{'플랫 제품' if _recipe_is_flat else 'Flat Fallback'}으로 표시합니다."
-        )
 
+    # 헤더 표시
     _mode_label = "Live" if is_live else "Sample"
+    if _use_flat_fallback:
+        _match_display = '<span style="color:#FF8A65;">미등록 (Flat Fallback)</span>'
+    elif _match_result and _match_result.confidence == "fuzzy":
+        _match_display = (
+            f'<span style="color:#FFD54F;">{selected_name}</span> '
+            f'<span style="font-size:0.8em;">({_match_result.message})</span>'
+        )
+    else:
+        _match_display = f'<span style="color:#4FC3F7;">{selected_name}</span>'
+
     st.markdown(
         f'<div style="font-size:1.8rem; font-weight:bold;">'
         f'{_mode_label} | Scan: {scan_time} | '
         f'Roll: {scan_rollno or scan_rollid or "-"} | '
-        f'Recipe: {scan_recipe} → '
-        + (f'<span style="color:#4FC3F7;">{selected_name}</span>' if not _use_flat_fallback
-           else '<span style="color:#FF8A65;">미등록 (Flat Fallback)</span>')
-        + '</div>',
+        f'Recipe: {scan_recipe} → {_match_display}'
+        f'</div>',
         unsafe_allow_html=True,
     )
 

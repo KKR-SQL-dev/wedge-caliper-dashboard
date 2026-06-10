@@ -20,7 +20,8 @@ from core.mrad_calculator import (
     judge_gwa, judge_lwa, summarize_angles,
 )
 from core.profile_engine import generate_full_profile
-from core.roll_aggregator import RollBuffer, ScanRecord, fetch_current_roll_buffer
+from core.roll_aggregator import RollBuffer, ScanRecord, build_roll_buffer_from_scans, fetch_current_roll_buffer
+from core.sample_data import fetch_sample_latest, fetch_sample_recent, sample_available
 from core.sql_data import fetch_latest_scan
 from core.wedge_geometry import ProductMaster
 
@@ -104,18 +105,23 @@ with st.sidebar:
     st.divider()
     st.subheader("Data Source")
     _sql_ok = is_sql_configured()
+    _sample_ok = sample_available()
     if not _sql_ok:
-        st.caption("SQL 미설정 → Test Mode only")
-        st.caption("Settings 페이지에서 DB 접속정보 입력")
+        if _sample_ok:
+            st.caption("SQL 미설정 → Test Mode (샘플 CSV)")
+        else:
+            st.caption("SQL 미설정 & 샘플 없음")
+    _src_options = ["Live (SQL)", "Test (Sample)"]
     data_source = st.radio(
         "데이터 소스",
-        ["Live (SQL)", "Test (Dummy)"],
+        _src_options,
         index=0 if _sql_ok else 1,
         key="data_source",
         horizontal=True,
-        disabled=not _sql_ok if not _sql_ok else False,
+        disabled=not _sql_ok,
     )
     is_live = data_source == "Live (SQL)" and _sql_ok
+    is_sample = data_source == "Test (Sample)"
 
     if is_live:
         auto_refresh = st.checkbox("Auto Refresh", value=False, key="auto_refresh")
@@ -150,10 +156,10 @@ with st.sidebar:
         tag = "2-Cut" if is_dual_cut(rw, ct_mm) else "Single"
         return f"{name} ({tag})"
 
-    # Live 모드: SQL Recipe로 사전 매칭하여 selectbox 기본값 설정
-    _live_matched_name = None
-    if is_live:
-        _pre_scan = fetch_latest_scan()
+    # Live/Sample 모드: Recipe로 사전 매칭하여 selectbox 기본값 설정
+    _auto_matched_name = None
+    if is_live or is_sample:
+        _pre_scan = fetch_latest_scan() if is_live else fetch_sample_latest()
         if _pre_scan:
             _pre_recipe = _pre_scan[1]
             _pre_parts = _pre_recipe.upper().split()
@@ -167,26 +173,27 @@ with st.sidebar:
             # 매칭 시도
             for _candidate in [_pre_parsed, _pre_recipe]:
                 if _candidate in masters:
-                    _live_matched_name = _candidate
+                    _auto_matched_name = _candidate
                     break
-            if not _live_matched_name:
+            if not _auto_matched_name:
                 _prefix_matches = [n for n in masters if n.upper().startswith(_pre_parsed)]
                 if not _prefix_matches:
                     _prefix_matches = [n for n in masters if _pre_parsed in n.upper()]
                 if _prefix_matches:
-                    _live_matched_name = _prefix_matches[0]
+                    _auto_matched_name = _prefix_matches[0]
 
     # selectbox index 결정
     _select_idx = 0
-    if _live_matched_name and _live_matched_name in matched:
-        _select_idx = matched.index(_live_matched_name)
+    if _auto_matched_name and _auto_matched_name in matched:
+        _select_idx = matched.index(_auto_matched_name)
 
+    _auto_select = (is_live or is_sample) and _auto_matched_name is not None
     selected_name = st.selectbox(
         "Recipe (제품명)", matched,
         index=_select_idx,
         format_func=_cut_label,
-        disabled=is_live and _live_matched_name is not None,
-        help="Live 모드에서는 SQL Recipe로 자동 선택됩니다." if is_live else None,
+        disabled=_auto_select,
+        help="데이터 Recipe로 자동 선택됨" if _auto_select else None,
     )
 
     st.divider()
@@ -212,76 +219,81 @@ with st.sidebar:
         key="mon_cut_type",
     )
 
-    if not is_live:
+    if is_sample:
         st.divider()
-        st.subheader("Dummy Data Settings")
-        st.caption("실측 데이터 시뮬레이션 파라미터")
-        noise_std = st.slider("Noise Std (mil)", 0.0, 1.0, 0.25, 0.05)
-        offset = st.slider("Global Offset (mil)", -2.0, 2.0, 0.0, 0.1)
-        bump_on = st.checkbox("Add Local Bump", value=False)
-        bump_bin = st.number_input("Bump Center (bin)", 1, 449, 200, disabled=not bump_on)
-        bump_amp = st.number_input("Bump Amplitude (mil)", -3.0, 3.0, 1.0, 0.1, disabled=not bump_on)
-        seed = st.number_input("Random Seed", 0, 9999, 42)
+        st.subheader("Sample Data")
+        st.caption("data/sample-real.csv 사용")
 
     st.divider()
     st.subheader("Spec Tolerances")
     gwa_tol = st.number_input("GWA Tolerance (mrad)", value=0.03, step=0.01, format="%.3f")
     lwa_tol = st.number_input("LWA Tolerance (mrad)", value=0.15, step=0.01, format="%.3f")
 
-# ── 데이터 로드 (Live / Dummy) ─────────────────────────────
-_use_flat_fallback = False  # Recipe 미매칭 시 플랫 대체 플래그
+# ── 데이터 로드 (Live / Sample) ───────────────────────────
+_use_flat_fallback = False
+scan_time = None
+scan_recipe = ""
+scan_rollid = ""
+scan_rollno = ""
 
-if is_live:
-    scan_result = fetch_latest_scan()
+def _parse_recipe(raw_recipe: str) -> str:
+    """Recipe 문자열 파싱: "W2232 ALT 3CUT 0.34MRAD" → "W2232ALT".
+
+    제외 패턴: N+CUT (3CUT, 2CUT 등), N+MRAD (0.34MRAD 등)
+    """
+    parts = raw_recipe.upper().split()
+    parsed = ""
+    for p in parts:
+        if re.match(r"^\d+\.?\d*MRAD$", p):
+            break
+        if re.match(r"^\d+CUT$", p):
+            continue  # 3CUT, 2CUT 등 컷 정보 제외
+        parsed += p
+    return parsed or raw_recipe.strip()
+
+def _match_recipe(parsed: str, raw: str) -> str | None:
+    """파싱된 Recipe로 마스터 매칭. 매칭 안 되면 None."""
+    for candidate in [parsed, raw]:
+        if candidate in masters:
+            return candidate
+    prefix = [n for n in masters if n.upper().startswith(parsed)]
+    if not prefix:
+        prefix = [n for n in masters if parsed in n.upper()]
+    return prefix[0] if prefix else None
+
+if is_live or is_sample:
+    # 데이터 소스에서 최신 스캔 가져오기
+    scan_result = fetch_latest_scan() if is_live else fetch_sample_latest()
     if scan_result is None:
-        st.error("SQL Server 연결 실패 또는 데이터가 없습니다. Dummy 모드로 전환하세요.")
+        _src_label = "SQL Server" if is_live else "샘플 CSV"
+        st.error(f"{_src_label} 데이터가 없습니다.")
         st.stop()
 
     scan_time, scan_recipe, scan_rollid, scan_rollno, actual_mil = scan_result
+    _parsed_recipe = _parse_recipe(scan_recipe)
 
-    # Recipe 파싱: "W2238 AC 0.40MRAD" → "W2238AC"
-    _recipe_parts = scan_recipe.upper().split()
-    _parsed_recipe = ""
-    for _part in _recipe_parts:
-        # 숫자+MRAD 같은 스펙 부분은 제외
-        if re.match(r"^\d+\.?\d*MRAD$", _part):
-            break
-        _parsed_recipe += _part
-    if not _parsed_recipe:
-        _parsed_recipe = scan_recipe.strip()
-
-    # Recipe로 마스터 자동 매칭
-    if _parsed_recipe in masters:
-        selected_name = _parsed_recipe
-    elif scan_recipe in masters:
-        selected_name = scan_recipe
+    # 마스터 자동 매칭
+    _matched = _match_recipe(_parsed_recipe, scan_recipe)
+    if _matched:
+        selected_name = _matched
     else:
-        # 파싱된 코드로 prefix 매칭 시도
-        recipe_matches = [n for n in masters if n.upper().startswith(_parsed_recipe)]
-        if not recipe_matches:
-            # 원본으로 부분 매칭 시도
-            recipe_matches = [n for n in masters if _parsed_recipe in n.upper()]
-        if recipe_matches:
-            selected_name = recipe_matches[0]
-        else:
-            _use_flat_fallback = True
-            st.info(
-                f"SQL Recipe **'{scan_recipe}'** (파싱: {_parsed_recipe}) → 마스터 미등록. "
-                f"플랫 제품(0 mrad)으로 표시합니다."
-            )
+        _use_flat_fallback = True
+        st.info(
+            f"Recipe **'{scan_recipe}'** (파싱: {_parsed_recipe}) → 마스터 미등록. "
+            f"플랫 제품(0 mrad)으로 표시합니다."
+        )
 
+    _mode_label = "Live" if is_live else "Sample"
     st.markdown(
         f'<div style="font-size:1.8rem; font-weight:bold;">'
-        f'Live | Scan: {scan_time} | '
+        f'{_mode_label} | Scan: {scan_time} | '
         f'Roll: {scan_rollno or scan_rollid or "-"} | '
         f'Recipe: {scan_recipe} → '
         + (f'<span style="color:#4FC3F7;">{selected_name}</span>' if not _use_flat_fallback
-           else '<span style="color:#FF8A65;">Flat Fallback</span>')
+           else '<span style="color:#FF8A65;">미등록 (Flat Fallback)</span>')
         + '</div>',
         unsafe_allow_html=True,
     )
-else:
-    scan_time = None
 
 # ── 제품 로드 & 프로파일 생성 ─────────────────────────────
 if _use_flat_fallback:
@@ -328,16 +340,7 @@ positions = df_target["Position_mm"].values
 target_mil = df_target["Target_mil"].values
 bin_nos = df_target["Bin"].values
 
-# ── 실측 데이터 ──────────────────────────────────────────
-if not is_live:
-    actual_mil = generate_dummy_actual(
-        target_mil,
-        noise_std=noise_std,
-        offset=offset,
-        bump_center_bin=(bump_bin - 1) if bump_on else None,
-        bump_amplitude=bump_amp if bump_on else 0,
-        seed=seed,
-    )
+# actual_mil은 Live/Sample 모드 모두 위에서 이미 로드됨
 
 raw_layout = product.layout()
 ct = product.resolved_cut_type
@@ -394,8 +397,15 @@ if not is_flat_product:
 
     # 멀티스캔 데이터 확보
     _all_data = None
-    if is_live and not _use_flat_fallback:
-        roll_buf = fetch_current_roll_buffer(selected_name, max_scans=500)
+    if (is_live or is_sample) and not _use_flat_fallback:
+        if is_live:
+            roll_buf = fetch_current_roll_buffer(selected_name, max_scans=500)
+        else:
+            # Sample 모드: CSV에서 멀티스캔 → 롤 버퍼
+            _sample_scans = fetch_sample_recent(n=500)
+            if _sample_scans:
+                roll_buf = build_roll_buffer_from_scans(_sample_scans, selected_name)
+
         if roll_buf and roll_buf.count >= 2:
             with st.sidebar:
                 st.divider()
@@ -422,13 +432,6 @@ if not is_flat_product:
                         st.warning("필터 결과 0건 → 전체 사용")
                 else:
                     _all_data = roll_buf.get_all_data()
-    else:
-        # Test 모드: 더미 멀티스캔 생성
-        _dummy_scans = generate_scan_series(
-            target_mil, n_scans=20,
-            noise_std=noise_std, drift_rate=0.02, seed=seed,
-        )
-        _all_data = np.array(_dummy_scans)
 
     # 집계 계산
     if _all_data is not None and len(_all_data) >= 2:

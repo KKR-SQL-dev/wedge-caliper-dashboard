@@ -152,7 +152,7 @@ for rollno, scans in sorted_rolls:
 df = pd.DataFrame(rows)
 
 # 표시 컬럼 정리
-display_cols = ["ROLLNO", "Recipe", "Matched", "Start", "End", "Scans"]
+display_cols = ["ROLLNO", "ROLLID", "Recipe", "Matched", "Start", "End", "Scans"]
 for c in ["UWA Avg", "UWA Worst", "UWA Judge", "GWA Avg", "GWA Worst", "GWA Judge",
           "LWA Avg", "LWA Worst", "LWA Judge", "Overall"]:
     if c in df.columns:

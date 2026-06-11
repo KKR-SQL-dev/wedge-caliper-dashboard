@@ -270,7 +270,7 @@ if is_live or is_sample:
     st.markdown(
         f'<div style="font-size:1.8rem; font-weight:bold;">'
         f'{_mode_label} | Scan: {scan_time} | '
-        f'Roll: {scan_rollno or scan_rollid or "-"} | '
+        f'Roll: {scan_rollno or "-"}{" · " + scan_rollid if scan_rollid else ""} | '
         f'Recipe: {scan_recipe} → {_match_display}'
         f'</div>',
         unsafe_allow_html=True,
@@ -288,7 +288,7 @@ if _use_flat_fallback:
         "thin_edge_cal_mil": _flat_cal,
         "cut_type": "single_center",
     }
-    _roll_tag = f' | Roll: {scan_rollno}' if scan_rollno else ''
+    _roll_tag = (f' | Roll: {scan_rollno}{"·" + scan_rollid if scan_rollid else ""}') if scan_rollno else ''
     st.markdown(
         f'<div style="font-size:1.8rem; font-weight:bold;">'
         f'<span style="color:#FF8A65;">{m["name"]}</span> | Flat Product (0 mrad){_roll_tag} | '
@@ -298,7 +298,7 @@ if _use_flat_fallback:
 else:
     # ── 선택된 제품 메타데이터 표시 ─────────────────────────
     meta = masters[selected_name]
-    _roll_tag = f' | Roll: {scan_rollno}' if scan_rollno else ''
+    _roll_tag = (f' | Roll: {scan_rollno}{"·" + scan_rollid if scan_rollid else ""}') if scan_rollno else ''
     st.markdown(
         f'<div style="font-size:1.8rem; font-weight:bold;">'
         f'<span style="color:#4FC3F7;">{selected_name}</span>{_roll_tag} | '

@@ -22,8 +22,8 @@ _COL_NAMES = ["Time", "Recipe", "ROLLID", "ROLLNO"] + [f"Data{i}" for i in range
 
 
 def list_sample_files() -> list[Path]:
-    """data/ 디렉토리의 sample-*.csv 파일 목록."""
-    return sorted(_DATA_DIR.glob("sample-*.csv"))
+    """data/ 디렉토리의 모든 .csv 파일 목록 (자동 스캔)."""
+    return sorted(_DATA_DIR.glob("*.csv"))
 
 
 def _load_csv(csv_path: Path | None = None) -> pd.DataFrame:

@@ -1,55 +1,4 @@
 {
-  "W2264AC": {
-    "name": "W2264AC",
-    "wedge_angle_mrad": 0.64,
-    "roll_width_mm": 1300.0,
-    "flat_width_mm": 300.0,
-    "thin_edge_cal_mil": 31.4961,
-    "film_type": "Clear",
-    "hud_bot_mm": null,
-    "hud_top_mm": null,
-    "gwa_bot_mm": null,
-    "gwa_top_mm": null,
-    "status": "Obsolete",
-    "extr_line": "L9",
-    "pvb_type": "Acoustic",
-    "pattern": "E2",
-    "band_color": "Clear"
-  },
-  "W2264AD": {
-    "name": "W2264AD",
-    "wedge_angle_mrad": 0.64,
-    "roll_width_mm": 960.0,
-    "flat_width_mm": 300.0,
-    "thin_edge_cal_mil": 31.4961,
-    "film_type": "Clear",
-    "hud_bot_mm": 262.0,
-    "hud_top_mm": 502.0,
-    "gwa_bot_mm": 120.0,
-    "gwa_top_mm": 580.0,
-    "status": "Obsolete",
-    "extr_line": "L9",
-    "pvb_type": "Acoustic",
-    "pattern": "E2",
-    "band_color": "Clear"
-  },
-  "W2264AE": {
-    "name": "W2264AE",
-    "wedge_angle_mrad": 0.64,
-    "roll_width_mm": 1100.0,
-    "flat_width_mm": 300.0,
-    "thin_edge_cal_mil": 31.4961,
-    "film_type": "Clear",
-    "hud_bot_mm": 200.0,
-    "hud_top_mm": 600.0,
-    "gwa_bot_mm": 150.0,
-    "gwa_top_mm": 600.0,
-    "status": "Obsolete",
-    "extr_line": "L9",
-    "pvb_type": "Acoustic",
-    "pattern": "E2",
-    "band_color": "Clear"
-  },
   "W2227AEH": {
     "name": "W2227AEH",
     "wedge_angle_mrad": 0.27,
@@ -61,11 +10,13 @@
     "hud_top_mm": 450.0,
     "gwa_bot_mm": 100.0,
     "gwa_top_mm": 500.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0133
   },
   "W2251ALH": {
     "name": "W2251ALH",
@@ -78,11 +29,13 @@
     "hud_top_mm": 500.0,
     "gwa_bot_mm": 170.0,
     "gwa_top_mm": 570.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2539
   },
   "W2251AMH": {
     "name": "W2251AMH",
@@ -95,11 +48,13 @@
     "hud_top_mm": 500.0,
     "gwa_bot_mm": 170.0,
     "gwa_top_mm": 570.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2488000000000001
   },
   "W2262AE": {
     "name": "W2262AE",
@@ -112,11 +67,13 @@
     "hud_top_mm": 440.0,
     "gwa_bot_mm": 180.0,
     "gwa_top_mm": 580.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.234
   },
   "W2214AC": {
     "name": "W2214AC",
@@ -129,11 +86,13 @@
     "hud_top_mm": 740.0,
     "gwa_bot_mm": 280.0,
     "gwa_top_mm": 740.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9218000000000001
   },
   "W2239AG": {
     "name": "W2239AG",
@@ -146,11 +105,13 @@
     "hud_top_mm": 705.0,
     "gwa_bot_mm": 255.0,
     "gwa_top_mm": 705.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1276000000000002
   },
   "W2239AB": {
     "name": "W2239AB",
@@ -163,11 +124,32 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L8 & L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.112
+  },
+  "W2236AF": {
+    "name": "W2236AF",
+    "wedge_angle_mrad": 0.36,
+    "roll_width_mm": 1150.0,
+    "flat_width_mm": 300.0,
+    "thin_edge_cal_mil": 31.4961,
+    "film_type": "Clear",
+    "hud_bot_mm": 300.0,
+    "hud_top_mm": 700.0,
+    "gwa_bot_mm": 300.0,
+    "gwa_top_mm": 700.0,
+    "center_trim_mm": 25.4,
+    "status": "Developmental",
+    "extr_line": "L9",
+    "pvb_type": "Acoustic",
+    "pattern": "E2",
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.106
   },
   "W2244AK": {
     "name": "W2244AK",
@@ -180,11 +162,13 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0948
   },
   "W2260AI": {
     "name": "W2260AI",
@@ -197,11 +181,13 @@
     "hud_top_mm": 520.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1840000000000002
   },
   "W2228AH": {
     "name": "W2228AH",
@@ -214,11 +200,13 @@
     "hud_top_mm": 700.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 700.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0324
   },
   "W2214AD": {
     "name": "W2214AD",
@@ -231,11 +219,89 @@
     "hud_top_mm": 760.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 760.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9246000000000001
+  },
+  "W2218AD": {
+    "name": "W2218AD",
+    "wedge_angle_mrad": 0.18,
+    "roll_width_mm": 1150.0,
+    "flat_width_mm": 270.0,
+    "thin_edge_cal_mil": 31.4961,
+    "film_type": "Clear",
+    "hud_bot_mm": 250.0,
+    "hud_top_mm": 750.0,
+    "gwa_bot_mm": 200.0,
+    "gwa_top_mm": 750.0,
+    "center_trim_mm": 25.4,
+    "status": "Developmental",
+    "extr_line": "L9",
+    "pvb_type": "Acoustic",
+    "pattern": "E2",
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9584
+  },
+  "W2224AD": {
+    "name": "W2224AD",
+    "wedge_angle_mrad": 0.24,
+    "roll_width_mm": 1050.0,
+    "flat_width_mm": 170.0,
+    "thin_edge_cal_mil": 31.4961,
+    "film_type": "Clear",
+    "hud_bot_mm": 300.0,
+    "hud_top_mm": 750.0,
+    "gwa_bot_mm": 300.0,
+    "gwa_top_mm": 750.0,
+    "center_trim_mm": 25.4,
+    "status": "Developmental",
+    "extr_line": "L9",
+    "pvb_type": "Acoustic",
+    "pattern": "E2",
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0112
+  },
+  "W2233AC": {
+    "name": "W2233AC",
+    "wedge_angle_mrad": 0.33,
+    "roll_width_mm": 1030.0,
+    "flat_width_mm": 300.0,
+    "thin_edge_cal_mil": 31.4961,
+    "film_type": "Clear",
+    "hud_bot_mm": 200.0,
+    "hud_top_mm": 600.0,
+    "gwa_bot_mm": 200.0,
+    "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
+    "status": "Developmental",
+    "extr_line": "L9",
+    "pvb_type": "Acoustic",
+    "pattern": "E2",
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0409000000000002
+  },
+  "W2233AK": {
+    "name": "W2233AK",
+    "wedge_angle_mrad": 0.33,
+    "roll_width_mm": 1130.0,
+    "flat_width_mm": 250.0,
+    "thin_edge_cal_mil": 31.4961,
+    "film_type": "Clear",
+    "hud_bot_mm": 200.0,
+    "hud_top_mm": 750.0,
+    "gwa_bot_mm": 200.0,
+    "gwa_top_mm": 750.0,
+    "center_trim_mm": 25.4,
+    "status": "Developmental",
+    "extr_line": "L9",
+    "pvb_type": "Acoustic",
+    "pattern": "E2",
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0904
   },
   "W2239AEH": {
     "name": "W2239AEH",
@@ -248,11 +314,32 @@
     "hud_top_mm": 622.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 650.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1237000000000001
+  },
+  "W2264AC": {
+    "name": "W2264AC",
+    "wedge_angle_mrad": 0.64,
+    "roll_width_mm": 1300.0,
+    "flat_width_mm": 300.0,
+    "thin_edge_cal_mil": 31.4961,
+    "film_type": "Clear",
+    "hud_bot_mm": null,
+    "hud_top_mm": null,
+    "gwa_bot_mm": null,
+    "gwa_top_mm": null,
+    "center_trim_mm": 25.4,
+    "status": "Obsolete",
+    "extr_line": "L9",
+    "pvb_type": "Acoustic",
+    "pattern": "E2",
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.44
   },
   "W2225AA": {
     "name": "W2225AA",
@@ -265,11 +352,13 @@
     "hud_top_mm": null,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 700.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.65
   },
   "W1260AA": {
     "name": "W1260AA",
@@ -282,11 +371,13 @@
     "hud_top_mm": null,
     "gwa_bot_mm": null,
     "gwa_top_mm": null,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.088
   },
   "W2260AA": {
     "name": "W2260AA",
@@ -299,11 +390,13 @@
     "hud_top_mm": 650.0,
     "gwa_bot_mm": 300.0,
     "gwa_top_mm": 700.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.088
   },
   "W2237AH": {
     "name": "W2237AH",
@@ -316,11 +409,13 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 110.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.096
   },
   "W2228AF": {
     "name": "W2228AF",
@@ -333,11 +428,13 @@
     "hud_top_mm": 533.0,
     "gwa_bot_mm": 100.0,
     "gwa_top_mm": 533.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0156
   },
   "W2229AL": {
     "name": "W2229AL",
@@ -350,11 +447,13 @@
     "hud_top_mm": 590.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.032
   },
   "W2227AM": {
     "name": "W2227AM",
@@ -367,11 +466,13 @@
     "hud_top_mm": 800.0,
     "gwa_bot_mm": 230.0,
     "gwa_top_mm": 800.0,
-    "status": "Developmental",
+    "center_trim_mm": 25.4,
+    "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0511
   },
   "W2227AOT": {
     "name": "W2227AOT",
@@ -384,11 +485,13 @@
     "hud_top_mm": 850.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 850.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0646
   },
   "W2227AN": {
     "name": "W2227AN",
@@ -401,11 +504,13 @@
     "hud_top_mm": 850.0,
     "gwa_bot_mm": 230.0,
     "gwa_top_mm": 850.0,
-    "status": "Developmental",
+    "center_trim_mm": 25.4,
+    "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0646
   },
   "W2227APT": {
     "name": "W2227APT",
@@ -418,11 +523,32 @@
     "hud_top_mm": 890.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 890.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0754000000000001
+  },
+  "W2247AIT": {
+    "name": "W2247AIT",
+    "wedge_angle_mrad": 0.47,
+    "roll_width_mm": 920.0,
+    "flat_width_mm": 160.0,
+    "thin_edge_cal_mil": 0.0,
+    "film_type": "Clear",
+    "hud_bot_mm": 100.0,
+    "hud_top_mm": 630.0,
+    "gwa_bot_mm": 100.0,
+    "gwa_top_mm": 630.0,
+    "center_trim_mm": 25.4,
+    "status": "Developmental",
+    "extr_line": "L9",
+    "pvb_type": "Acoustic",
+    "pattern": "E2",
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.35719999999999996
   },
   "W2270AA": {
     "name": "W2270AA",
@@ -435,11 +561,13 @@
     "hud_top_mm": 538.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.304
   },
   "W2246AC": {
     "name": "W2246AC",
@@ -452,11 +580,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.26
   },
   "W2250AJ": {
     "name": "W2250AJ",
@@ -469,11 +599,13 @@
     "hud_top_mm": 560.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1400000000000001
   },
   "W2254AD": {
     "name": "W2254AD",
@@ -486,11 +618,13 @@
     "hud_top_mm": 580.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.178
   },
   "W2220AA": {
     "name": "W2220AA",
@@ -503,11 +637,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9520000000000001
   },
   "W2254AE": {
     "name": "W2254AE",
@@ -520,11 +656,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.205
   },
   "W2258AA": {
     "name": "W2258AA",
@@ -537,11 +675,13 @@
     "hud_top_mm": 430.0,
     "gwa_bot_mm": 210.0,
     "gwa_top_mm": 610.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2234
   },
   "W2258AC": {
     "name": "W2258AC",
@@ -554,11 +694,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2349999999999999
   },
   "W2251AJT": {
     "name": "W2251AJT",
@@ -571,11 +713,13 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1519000000000001
   },
   "W2254AI": {
     "name": "W2254AI",
@@ -588,11 +732,13 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 550.0,
-    "status": "Obsolete",
+    "center_trim_mm": 25.4,
+    "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1726
   },
   "W2233ADT": {
     "name": "W2233ADT",
@@ -605,11 +751,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0706
   },
   "W2222AGT": {
     "name": "W2222AGT",
@@ -622,11 +770,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9804
   },
   "W5026ABT": {
     "name": "W5026ABT",
@@ -639,11 +789,32 @@
     "hud_top_mm": 700.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 700.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Standard",
     "pattern": "R3",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9758
+  },
+  "W2240AX": {
+    "name": "W2240AX",
+    "wedge_angle_mrad": 0.4,
+    "roll_width_mm": 1190.0,
+    "flat_width_mm": 150.0,
+    "thin_edge_cal_mil": 31.4961,
+    "film_type": "Clear",
+    "hud_bot_mm": 710.0,
+    "hud_top_mm": 910.0,
+    "gwa_bot_mm": 510.0,
+    "gwa_top_mm": 910.0,
+    "center_trim_mm": 25.4,
+    "status": "Developmental",
+    "extr_line": "L9",
+    "pvb_type": "Standard",
+    "pattern": "E2",
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2160000000000002
   },
   "W2262AD": {
     "name": "W2262AD",
@@ -656,11 +827,13 @@
     "hud_top_mm": 480.0,
     "gwa_bot_mm": 160.0,
     "gwa_top_mm": 560.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2526000000000002
   },
   "W2264AGT": {
     "name": "W2264AGT",
@@ -673,11 +846,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2672
   },
   "W2220ABT": {
     "name": "W2220ABT",
@@ -690,11 +865,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.98
   },
   "W2230AAT": {
     "name": "W2230AAT",
@@ -707,11 +884,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.07
   },
   "W2235ABT": {
     "name": "W2235ABT",
@@ -724,11 +903,13 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0415
   },
   "W2235ACT": {
     "name": "W2235ACT",
@@ -741,11 +922,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.115
   },
   "W2240AIT": {
     "name": "W2240AIT",
@@ -758,11 +941,13 @@
     "hud_top_mm": 500.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.06
   },
   "W2240AJT": {
     "name": "W2240AJT",
@@ -775,11 +960,13 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.076
   },
   "W2240ALT": {
     "name": "W2240ALT",
@@ -792,11 +979,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1600000000000001
   },
   "W2244AET": {
     "name": "W2244AET",
@@ -809,11 +998,13 @@
     "hud_top_mm": 570.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1036000000000001
   },
   "W2244AL": {
     "name": "W2244AL",
@@ -826,11 +1017,13 @@
     "hud_top_mm": 570.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1256
   },
   "W2244AFT": {
     "name": "W2244AFT",
@@ -843,11 +1036,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1344
   },
   "W2244AGT": {
     "name": "W2244AGT",
@@ -860,11 +1055,13 @@
     "hud_top_mm": 500.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0904
   },
   "W2244AHT": {
     "name": "W2244AHT",
@@ -877,11 +1074,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.174
   },
   "W2248ADT": {
     "name": "W2248ADT",
@@ -894,11 +1093,13 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1360000000000001
   },
   "W2252AHT": {
     "name": "W2252AHT",
@@ -911,11 +1112,13 @@
     "hud_top_mm": 480.0,
     "gwa_bot_mm": 80.0,
     "gwa_top_mm": 500.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.112
   },
   "W2252AIT": {
     "name": "W2252AIT",
@@ -928,11 +1131,13 @@
     "hud_top_mm": 580.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1640000000000001
   },
   "W2252AR": {
     "name": "W2252AR",
@@ -945,11 +1150,13 @@
     "hud_top_mm": 580.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.19
   },
   "W2252AJT": {
     "name": "W2252AJT",
@@ -962,11 +1169,13 @@
     "hud_top_mm": 580.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1796
   },
   "W2252AKT": {
     "name": "W2252AKT",
@@ -979,11 +1188,13 @@
     "hud_top_mm": 580.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2004000000000001
   },
   "W2252AMT": {
     "name": "W2252AMT",
@@ -996,11 +1207,13 @@
     "hud_top_mm": 500.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.138
   },
   "W2259ABT": {
     "name": "W2259ABT",
@@ -1013,11 +1226,13 @@
     "hud_top_mm": 490.0,
     "gwa_bot_mm": 90.0,
     "gwa_top_mm": 500.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1599
   },
   "W2259ACT": {
     "name": "W2259ACT",
@@ -1030,11 +1245,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.3014999999999999
   },
   "W2259ADT": {
     "name": "W2259ADT",
@@ -1047,11 +1264,13 @@
     "hud_top_mm": 500.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1835
   },
   "W2259AET": {
     "name": "W2259AET",
@@ -1064,11 +1283,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.3133
   },
   "W2259AFT": {
     "name": "W2259AFT",
@@ -1081,11 +1302,13 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.213
   },
   "W2259AA": {
     "name": "W2259AA",
@@ -1098,11 +1321,13 @@
     "hud_top_mm": 630.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 630.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L8 & L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2425000000000002
   },
   "W2265AAT": {
     "name": "W2265AAT",
@@ -1115,11 +1340,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.307
   },
   "W2265ABT": {
     "name": "W2265ABT",
@@ -1132,11 +1359,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.3850000000000002
   },
   "W2268AAT": {
     "name": "W2268AAT",
@@ -1149,11 +1378,13 @@
     "hud_top_mm": 580.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.276
   },
   "W2268AD": {
     "name": "W2268AD",
@@ -1166,11 +1397,13 @@
     "hud_top_mm": 580.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.31
   },
   "W2268ABT": {
     "name": "W2268ABT",
@@ -1183,11 +1416,13 @@
     "hud_top_mm": 580.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.3780000000000001
   },
   "W2222AA": {
     "name": "W2222AA",
@@ -1200,11 +1435,13 @@
     "hud_top_mm": 629.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 650.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9870000000000001
   },
   "W2230AC": {
     "name": "W2230AC",
@@ -1217,11 +1454,13 @@
     "hud_top_mm": 650.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 650.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.07
   },
   "W2233AFT": {
     "name": "W2233AFT",
@@ -1234,11 +1473,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0838
   },
   "W2232AHT": {
     "name": "W2232AHT",
@@ -1251,11 +1492,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0752000000000002
   },
   "W2235AD": {
     "name": "W2235AD",
@@ -1268,11 +1511,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.101
   },
   "W2240AKT": {
     "name": "W2240AKT",
@@ -1285,11 +1530,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.12
   },
   "W2223AB": {
     "name": "W2223AB",
@@ -1302,11 +1549,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9794
   },
   "W2239AHT": {
     "name": "W2239AHT",
@@ -1319,11 +1568,13 @@
     "hud_top_mm": 650.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 650.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1042
   },
   "W2228ADT": {
     "name": "W2228ADT",
@@ -1336,11 +1587,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.024
   },
   "W2236ADT": {
     "name": "W2236ADT",
@@ -1353,11 +1606,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.07
   },
   "W2237AB": {
     "name": "W2237AB",
@@ -1370,11 +1625,13 @@
     "hud_top_mm": 428.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0849
   },
   "W2221AET": {
     "name": "W2221AET",
@@ -1387,11 +1644,13 @@
     "hud_top_mm": null,
     "gwa_bot_mm": 540.0,
     "gwa_top_mm": 940.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0226
   },
   "W2229AC": {
     "name": "W2229AC",
@@ -1404,11 +1663,13 @@
     "hud_top_mm": null,
     "gwa_bot_mm": 540.0,
     "gwa_top_mm": 940.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1103
   },
   "W2250AKT": {
     "name": "W2250AKT",
@@ -1421,11 +1682,13 @@
     "hud_top_mm": 356.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1600000000000001
   },
   "W2250AI": {
     "name": "W2250AI",
@@ -1438,11 +1701,13 @@
     "hud_top_mm": 356.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.17
   },
   "W2219AET": {
     "name": "W2219AET",
@@ -1455,11 +1720,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9520000000000001
   },
   "W2227AF": {
     "name": "W2227AF",
@@ -1472,11 +1739,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0079
   },
   "W2222ABT": {
     "name": "W2222ABT",
@@ -1489,11 +1758,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9870000000000001
   },
   "W2230ADT": {
     "name": "W2230ADT",
@@ -1506,11 +1777,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0370000000000001
   },
   "W2247AB": {
     "name": "W2247AB",
@@ -1523,11 +1796,13 @@
     "hud_top_mm": 375.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1102
   },
   "W2247AC": {
     "name": "W2247AC",
@@ -1540,11 +1815,13 @@
     "hud_top_mm": 500.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1102
   },
   "W2250AOT": {
     "name": "W2250AOT",
@@ -1557,11 +1834,13 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.155
   },
   "W2252APT": {
     "name": "W2252APT",
@@ -1574,11 +1853,13 @@
     "hud_top_mm": 540.0,
     "gwa_bot_mm": 140.0,
     "gwa_top_mm": 540.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1692
   },
   "W2252AOT": {
     "name": "W2252AOT",
@@ -1591,11 +1872,13 @@
     "hud_top_mm": 540.0,
     "gwa_bot_mm": 140.0,
     "gwa_top_mm": 540.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1432
   },
   "W2229AB": {
     "name": "W2229AB",
@@ -1608,11 +1891,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.032
   },
   "W2248AB": {
     "name": "W2248AB",
@@ -1625,11 +1910,13 @@
     "hud_top_mm": 459.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1648
   },
   "W2249AHT": {
     "name": "W2249AHT",
@@ -1642,11 +1929,13 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1528
   },
   "W2232AET": {
     "name": "W2232AET",
@@ -1659,11 +1948,13 @@
     "hud_top_mm": 448.0,
     "gwa_bot_mm": 160.0,
     "gwa_top_mm": 560.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0816000000000001
   },
   "W2232AC": {
     "name": "W2232AC",
@@ -1676,11 +1967,13 @@
     "hud_top_mm": 448.0,
     "gwa_bot_mm": 160.0,
     "gwa_top_mm": 560.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.072
   },
   "W2229AFT": {
     "name": "W2229AFT",
@@ -1693,11 +1986,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0262
   },
   "W2232AFT": {
     "name": "W2232AFT",
@@ -1710,11 +2005,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0625
   },
   "W2229AJT": {
     "name": "W2229AJT",
@@ -1727,11 +2024,13 @@
     "hud_top_mm": 750.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 750.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0552000000000001
   },
   "W2240AT": {
     "name": "W2240AT",
@@ -1744,11 +2043,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1320000000000001
   },
   "W2250AQ": {
     "name": "W2250AQ",
@@ -1761,11 +2062,13 @@
     "hud_top_mm": 700.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 700.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.3050000000000002
   },
   "W2249AGT": {
     "name": "W2249AGT",
@@ -1778,11 +2081,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2214
   },
   "W2251AHT": {
     "name": "W2251AHT",
@@ -1795,11 +2100,13 @@
     "hud_top_mm": 700.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 700.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2386000000000001
   },
   "W2250ART": {
     "name": "W2250ART",
@@ -1812,11 +2119,13 @@
     "hud_top_mm": 650.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 650.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.23
   },
   "W2250AU": {
     "name": "W2250AU",
@@ -1829,11 +2138,13 @@
     "hud_top_mm": 650.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 650.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.22
   },
   "W2225AE": {
     "name": "W2225AE",
@@ -1846,11 +2157,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0025
   },
   "W2225AFT": {
     "name": "W2225AFT",
@@ -1863,11 +2176,13 @@
     "hud_top_mm": 700.0,
     "gwa_bot_mm": 250.0,
     "gwa_top_mm": 700.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0150000000000001
   },
   "W2225AHT": {
     "name": "W2225AHT",
@@ -1880,11 +2195,13 @@
     "hud_top_mm": 830.0,
     "gwa_bot_mm": 330.0,
     "gwa_top_mm": 830.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.04
   },
   "W2256AET": {
     "name": "W2256AET",
@@ -1897,11 +2214,13 @@
     "hud_top_mm": 580.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1976
   },
   "W2256AC": {
     "name": "W2256AC",
@@ -1914,11 +2233,13 @@
     "hud_top_mm": 580.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1920000000000002
   },
   "W2257ADT": {
     "name": "W2257ADT",
@@ -1931,11 +2252,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2104
   },
   "W2258AHT": {
     "name": "W2258AHT",
@@ -1948,11 +2271,13 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.206
   },
   "W2255AA": {
     "name": "W2255AA",
@@ -1965,11 +2290,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2125000000000001
   },
   "W2260AHT": {
     "name": "W2260AHT",
@@ -1982,11 +2309,13 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.226
   },
   "W2260ACT": {
     "name": "W2260ACT",
@@ -1999,11 +2328,13 @@
     "hud_top_mm": 430.0,
     "gwa_bot_mm": 210.0,
     "gwa_top_mm": 610.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.238
   },
   "W2260AF": {
     "name": "W2260AF",
@@ -2016,11 +2347,13 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.22
   },
   "W2260AD": {
     "name": "W2260AD",
@@ -2033,11 +2366,13 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 100.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.202
   },
   "W2241AC": {
     "name": "W2241AC",
@@ -2050,11 +2385,13 @@
     "hud_top_mm": 530.0,
     "gwa_bot_mm": 100.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L8 & L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0788
   },
   "W2236AC": {
     "name": "W2236AC",
@@ -2067,11 +2404,13 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.052
   },
   "W2258AB": {
     "name": "W2258AB",
@@ -2084,11 +2423,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2408000000000001
   },
   "W2232AJ": {
     "name": "W2232AJ",
@@ -2101,11 +2442,13 @@
     "hud_top_mm": 750.0,
     "gwa_bot_mm": 250.0,
     "gwa_top_mm": 750.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0816000000000001
   },
   "W2252AQT": {
     "name": "W2252AQT",
@@ -2118,11 +2461,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.242
   },
   "W2256AA": {
     "name": "W2256AA",
@@ -2135,11 +2480,13 @@
     "hud_top_mm": 424.0,
     "gwa_bot_mm": 160.0,
     "gwa_top_mm": 560.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L8 & L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2200000000000002
   },
   "W2256AGT": {
     "name": "W2256AGT",
@@ -2152,11 +2499,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2200000000000002
   },
   "W2240AOT": {
     "name": "W2240AOT",
@@ -2169,11 +2518,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1
   },
   "W2264AF": {
     "name": "W2264AF",
@@ -2186,11 +2537,13 @@
     "hud_top_mm": 560.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2352
   },
   "W2235AKT": {
     "name": "W2235AKT",
@@ -2203,11 +2556,13 @@
     "hud_top_mm": 650.0,
     "gwa_bot_mm": 250.0,
     "gwa_top_mm": 650.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.15
   },
   "W2233ACT": {
     "name": "W2233ACT",
@@ -2220,11 +2575,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0409000000000002
   },
   "W2256AFT": {
     "name": "W2256AFT",
@@ -2237,11 +2594,13 @@
     "hud_top_mm": 540.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1696
   },
   "W2247AET": {
     "name": "W2247AET",
@@ -2254,11 +2613,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1524999999999999
   },
   "W2256AB": {
     "name": "W2256AB",
@@ -2271,11 +2632,13 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1808
   },
   "W2258AG": {
     "name": "W2258AG",
@@ -2288,11 +2651,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2349999999999999
   },
   "W2258AD": {
     "name": "W2258AD",
@@ -2305,11 +2670,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2466
   },
   "W2260AKT": {
     "name": "W2260AKT",
@@ -2322,11 +2689,13 @@
     "hud_top_mm": 700.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 700.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.298
   },
   "W2266AA": {
     "name": "W2266AA",
@@ -2339,11 +2708,13 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2554
   },
   "W2223ADT": {
     "name": "W2223ADT",
@@ -2356,11 +2727,13 @@
     "hud_top_mm": 650.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 650.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0093
   },
   "W2258AJT": {
     "name": "W2258AJT",
@@ -2373,11 +2746,13 @@
     "hud_top_mm": 700.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 700.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2814
   },
   "W2256AJT": {
     "name": "W2256AJT",
@@ -2390,11 +2765,13 @@
     "hud_top_mm": 700.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 700.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2648000000000001
   },
   "W2230AFT": {
     "name": "W2230AFT",
@@ -2407,11 +2784,13 @@
     "hud_top_mm": 700.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 700.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.049
   },
   "W2232AKT": {
     "name": "W2232AKT",
@@ -2424,11 +2803,13 @@
     "hud_top_mm": 800.0,
     "gwa_bot_mm": 300.0,
     "gwa_top_mm": 800.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1616
   },
   "W2235AI": {
     "name": "W2235AI",
@@ -2441,11 +2822,13 @@
     "hud_top_mm": 750.0,
     "gwa_bot_mm": 300.0,
     "gwa_top_mm": 750.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1255
   },
   "W2235AJ": {
     "name": "W2235AJ",
@@ -2458,11 +2841,13 @@
     "hud_top_mm": 800.0,
     "gwa_bot_mm": 300.0,
     "gwa_top_mm": 800.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1955
   },
   "W2246AFT": {
     "name": "W2246AFT",
@@ -2475,11 +2860,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1588
   },
   "W2246AB": {
     "name": "W2246AB",
@@ -2492,11 +2879,13 @@
     "hud_top_mm": 580.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.122
   },
   "W2262AHT": {
     "name": "W2262AHT",
@@ -2509,11 +2898,13 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2402
   },
   "W2262AIT": {
     "name": "W2262AIT",
@@ -2526,11 +2917,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2712
   },
   "W2240AU": {
     "name": "W2240AU",
@@ -2543,11 +2936,13 @@
     "hud_top_mm": 700.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 700.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1680000000000001
   },
   "W2240AG": {
     "name": "W2240AG",
@@ -2560,11 +2955,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 650.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1720000000000002
   },
   "W2249ALT": {
     "name": "W2249ALT",
@@ -2577,11 +2974,13 @@
     "hud_top_mm": 700.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 700.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2067
   },
   "W2249AE": {
     "name": "W2249AE",
@@ -2594,11 +2993,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2165
   },
   "W2229AG": {
     "name": "W2229AG",
@@ -2611,11 +3012,13 @@
     "hud_top_mm": 700.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 700.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0407
   },
   "W2221AD": {
     "name": "W2221AD",
@@ -2628,11 +3031,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9743
   },
   "W2227AK": {
     "name": "W2227AK",
@@ -2645,11 +3050,13 @@
     "hud_top_mm": 700.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 700.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0241
   },
   "W2234AAT": {
     "name": "W2234AAT",
@@ -2662,11 +3069,13 @@
     "hud_top_mm": 530.0,
     "gwa_bot_mm": 180.0,
     "gwa_top_mm": 580.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0278
   },
   "W2265AET": {
     "name": "W2265AET",
@@ -2679,11 +3088,13 @@
     "hud_top_mm": 530.0,
     "gwa_bot_mm": 180.0,
     "gwa_top_mm": 580.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2355
   },
   "W2245AB": {
     "name": "W2245AB",
@@ -2696,11 +3107,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1465
   },
   "W2240AF": {
     "name": "W2240AF",
@@ -2713,11 +3126,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 650.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1320000000000001
   },
   "W2219AA": {
     "name": "W2219AA",
@@ -2730,11 +3145,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 650.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.99
   },
   "W2218AAT": {
     "name": "W2218AAT",
@@ -2747,11 +3164,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9656
   },
   "W2225ACT": {
     "name": "W2225ACT",
@@ -2764,11 +3183,32 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.98
+  },
+  "W2264AE": {
+    "name": "W2264AE",
+    "wedge_angle_mrad": 0.64,
+    "roll_width_mm": 1100.0,
+    "flat_width_mm": 300.0,
+    "thin_edge_cal_mil": 31.4961,
+    "film_type": "Clear",
+    "hud_bot_mm": 200.0,
+    "hud_top_mm": 600.0,
+    "gwa_bot_mm": 150.0,
+    "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
+    "status": "Obsolete",
+    "extr_line": "L9",
+    "pvb_type": "Acoustic",
+    "pattern": "E2",
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.312
   },
   "W2258AET": {
     "name": "W2258AET",
@@ -2781,11 +3221,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.264
   },
   "W2260AB": {
     "name": "W2260AB",
@@ -2798,11 +3240,13 @@
     "hud_top_mm": 375.0,
     "gwa_bot_mm": 100.0,
     "gwa_top_mm": 500.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.166
   },
   "W2236AB": {
     "name": "W2236AB",
@@ -2815,11 +3259,13 @@
     "hud_top_mm": 375.0,
     "gwa_bot_mm": 100.0,
     "gwa_top_mm": 500.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0412000000000001
   },
   "W2262AF": {
     "name": "W2262AF",
@@ -2832,11 +3278,13 @@
     "hud_top_mm": 520.0,
     "gwa_bot_mm": 100.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1968
   },
   "W2250APT": {
     "name": "W2250APT",
@@ -2849,11 +3297,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.185
   },
   "W2229AAT": {
     "name": "W2229AAT",
@@ -2866,11 +3316,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0465
   },
   "W2233ABT": {
     "name": "W2233ABT",
@@ -2883,11 +3335,13 @@
     "hud_top_mm": 375.0,
     "gwa_bot_mm": 100.0,
     "gwa_top_mm": 500.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0013
   },
   "W2240AP": {
     "name": "W2240AP",
@@ -2900,11 +3354,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.22
   },
   "W2242AA": {
     "name": "W2242AA",
@@ -2917,11 +3373,13 @@
     "hud_top_mm": 700.0,
     "gwa_bot_mm": 300.0,
     "gwa_top_mm": 700.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.241
   },
   "W2248AGT": {
     "name": "W2248AGT",
@@ -2934,11 +3392,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1504
   },
   "W2232ADT": {
     "name": "W2232ADT",
@@ -2951,11 +3411,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0912000000000002
   },
   "W2230ABT": {
     "name": "W2230ABT",
@@ -2968,11 +3430,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0250000000000001
   },
   "W2222ACT": {
     "name": "W2222ACT",
@@ -2985,11 +3449,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9804
   },
   "W2227AAT": {
     "name": "W2227AAT",
@@ -3002,11 +3468,13 @@
     "hud_top_mm": 500.0,
     "gwa_bot_mm": 100.0,
     "gwa_top_mm": 500.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9701000000000001
   },
   "W2228AET": {
     "name": "W2228AET",
@@ -3019,11 +3487,13 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9904000000000001
   },
   "W2228AC": {
     "name": "W2228AC",
@@ -3036,11 +3506,13 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9904000000000001
   },
   "W2235AFT": {
     "name": "W2235AFT",
@@ -3053,11 +3525,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0625
   },
   "W2251ADT": {
     "name": "W2251ADT",
@@ -3070,11 +3544,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1825
   },
   "W2253AB": {
     "name": "W2253AB",
@@ -3087,11 +3563,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.224
   },
   "W2227AQT": {
     "name": "W2227AQT",
@@ -3104,11 +3582,13 @@
     "hud_top_mm": 700.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 700.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0268000000000002
   },
   "W2225AB": {
     "name": "W2225AB",
@@ -3121,11 +3601,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.05
   },
   "W2244AJ": {
     "name": "W2244AJ",
@@ -3138,11 +3620,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1388
   },
   "W2247ADT": {
     "name": "W2247ADT",
@@ -3155,11 +3639,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1572
   },
   "W2249AF": {
     "name": "W2249AF",
@@ -3172,11 +3658,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 650.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.241
   },
   "W2251AB": {
     "name": "W2251AB",
@@ -3189,11 +3677,13 @@
     "hud_top_mm": 546.0,
     "gwa_bot_mm": 192.0,
     "gwa_top_mm": 592.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1927
   },
   "W2251AC": {
     "name": "W2251AC",
@@ -3206,11 +3696,13 @@
     "hud_top_mm": 546.0,
     "gwa_bot_mm": 192.0,
     "gwa_top_mm": 592.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1927
   },
   "W2232ALT": {
     "name": "W2232ALT",
@@ -3223,11 +3715,13 @@
     "hud_top_mm": 500.0,
     "gwa_bot_mm": 100.0,
     "gwa_top_mm": 500.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0016
   },
   "W2222ADT": {
     "name": "W2222ADT",
@@ -3240,11 +3734,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9936
   },
   "W2231ACT": {
     "name": "W2231ACT",
@@ -3257,11 +3753,32 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0232
+  },
+  "W2231ADT": {
+    "name": "W2231ADT",
+    "wedge_angle_mrad": 0.31,
+    "roll_width_mm": 1070.0,
+    "flat_width_mm": 240.0,
+    "thin_edge_cal_mil": 31.4961,
+    "film_type": "Clear",
+    "hud_bot_mm": 200.0,
+    "hud_top_mm": 700.0,
+    "gwa_bot_mm": 200.0,
+    "gwa_top_mm": 700.0,
+    "center_trim_mm": 25.4,
+    "status": "Developmental",
+    "extr_line": "L9",
+    "pvb_type": "Acoustic",
+    "pattern": "E2",
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0573000000000001
   },
   "W2232AIT": {
     "name": "W2232AIT",
@@ -3274,14 +3791,16 @@
     "hud_top_mm": 700.0,
     "gwa_bot_mm": 250.0,
     "gwa_top_mm": 700.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0688
   },
-  "W2224AC": {
-    "name": "W2224AC",
+  "W2224ACT": {
+    "name": "W2224ACT",
     "wedge_angle_mrad": 0.24,
     "roll_width_mm": 900.0,
     "flat_width_mm": 170.0,
@@ -3291,11 +3810,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 100.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9752000000000001
   },
   "W2255AF": {
     "name": "W2255AF",
@@ -3308,14 +3829,16 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.185
   },
-  "W2247AH": {
-    "name": "W2247AH",
+  "W2247AHT": {
+    "name": "W2247AHT",
     "wedge_angle_mrad": 0.47,
     "roll_width_mm": 970.0,
     "flat_width_mm": 240.0,
@@ -3325,11 +3848,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1431
   },
   "W2232AGT": {
     "name": "W2232AGT",
@@ -3342,11 +3867,13 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0272000000000001
   },
   "W2238ABT": {
     "name": "W2238ABT",
@@ -3359,11 +3886,13 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0622
   },
   "W2240ART": {
     "name": "W2240ART",
@@ -3376,11 +3905,13 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.076
   },
   "W2232AMT": {
     "name": "W2232AMT",
@@ -3393,11 +3924,13 @@
     "hud_top_mm": 650.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 650.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0496
   },
   "W2246AGT": {
     "name": "W2246AGT",
@@ -3410,11 +3943,13 @@
     "hud_top_mm": 650.0,
     "gwa_bot_mm": 250.0,
     "gwa_top_mm": 650.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1588
   },
   "W2225AJT": {
     "name": "W2225AJT",
@@ -3427,11 +3962,13 @@
     "hud_top_mm": 750.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 750.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.02
   },
   "W2246AIT": {
     "name": "W2246AIT",
@@ -3444,11 +3981,13 @@
     "hud_top_mm": 650.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 650.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1588
   },
   "W2219AC": {
     "name": "W2219AC",
@@ -3461,11 +4000,13 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9387000000000001
   },
   "W2226AD": {
     "name": "W2226AD",
@@ -3478,11 +4019,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.008
   },
   "W2228AAT": {
     "name": "W2228AAT",
@@ -3495,11 +4038,13 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9876
   },
   "W2240AWT": {
     "name": "W2240AWT",
@@ -3512,11 +4057,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.092
   },
   "W2240AS": {
     "name": "W2240AS",
@@ -3529,11 +4076,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1520000000000001
   },
   "W2239AD": {
     "name": "W2239AD",
@@ -3546,11 +4095,13 @@
     "hud_top_mm": 755.0,
     "gwa_bot_mm": 355.0,
     "gwa_top_mm": 755.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1432
   },
   "W2241AF": {
     "name": "W2241AF",
@@ -3563,11 +4114,13 @@
     "hud_top_mm": 755.0,
     "gwa_bot_mm": 355.0,
     "gwa_top_mm": 755.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1608
   },
   "W2246AE": {
     "name": "W2246AE",
@@ -3580,11 +4133,13 @@
     "hud_top_mm": 650.0,
     "gwa_bot_mm": 305.0,
     "gwa_top_mm": 705.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2232
   },
   "W2250AS": {
     "name": "W2250AS",
@@ -3597,11 +4152,13 @@
     "hud_top_mm": 620.0,
     "gwa_bot_mm": 275.0,
     "gwa_top_mm": 675.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.245
   },
   "W2258AF": {
     "name": "W2258AF",
@@ -3614,11 +4171,13 @@
     "hud_top_mm": 725.0,
     "gwa_bot_mm": 325.0,
     "gwa_top_mm": 725.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2930000000000001
   },
   "W2260AG": {
     "name": "W2260AG",
@@ -3631,11 +4190,13 @@
     "hud_top_mm": 725.0,
     "gwa_bot_mm": 325.0,
     "gwa_top_mm": 725.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.31
   },
   "W2217AB": {
     "name": "W2217AB",
@@ -3648,11 +4209,13 @@
     "hud_top_mm": 870.0,
     "gwa_bot_mm": 470.0,
     "gwa_top_mm": 870.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9683
   },
   "W2217AC": {
     "name": "W2217AC",
@@ -3665,11 +4228,13 @@
     "hud_top_mm": 870.0,
     "gwa_bot_mm": 470.0,
     "gwa_top_mm": 870.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9683
   },
   "W2241AG": {
     "name": "W2241AG",
@@ -3682,11 +4247,13 @@
     "hud_top_mm": 790.0,
     "gwa_bot_mm": 380.0,
     "gwa_top_mm": 790.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1731
   },
   "W2212AB": {
     "name": "W2212AB",
@@ -3699,11 +4266,13 @@
     "hud_top_mm": 855.0,
     "gwa_bot_mm": 455.0,
     "gwa_top_mm": 855.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9176000000000001
   },
   "W2245AF": {
     "name": "W2245AF",
@@ -3716,11 +4285,13 @@
     "hud_top_mm": 640.0,
     "gwa_bot_mm": 240.0,
     "gwa_top_mm": 640.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1465
   },
   "W2240AH": {
     "name": "W2240AH",
@@ -3733,11 +4304,13 @@
     "hud_top_mm": 730.0,
     "gwa_bot_mm": 320.0,
     "gwa_top_mm": 730.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1400000000000001
   },
   "W2240AN": {
     "name": "W2240AN",
@@ -3750,11 +4323,13 @@
     "hud_top_mm": 790.0,
     "gwa_bot_mm": 380.0,
     "gwa_top_mm": 790.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1640000000000001
   },
   "W2251AF": {
     "name": "W2251AF",
@@ -3767,11 +4342,13 @@
     "hud_top_mm": 730.0,
     "gwa_bot_mm": 320.0,
     "gwa_top_mm": 730.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2335
   },
   "W2251AG": {
     "name": "W2251AG",
@@ -3784,11 +4361,13 @@
     "hud_top_mm": 790.0,
     "gwa_bot_mm": 380.0,
     "gwa_top_mm": 790.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2641
   },
   "W2240AC": {
     "name": "W2240AC",
@@ -3801,11 +4380,13 @@
     "hud_top_mm": 705.0,
     "gwa_bot_mm": 305.0,
     "gwa_top_mm": 705.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1320000000000001
   },
   "W2240AD": {
     "name": "W2240AD",
@@ -3818,11 +4399,13 @@
     "hud_top_mm": 710.0,
     "gwa_bot_mm": 310.0,
     "gwa_top_mm": 710.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L8 & L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1320000000000001
   },
   "W2242AB": {
     "name": "W2242AB",
@@ -3835,11 +4418,13 @@
     "hud_top_mm": 710.0,
     "gwa_bot_mm": 320.0,
     "gwa_top_mm": 720.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1486
   },
   "W2245AC": {
     "name": "W2245AC",
@@ -3852,11 +4437,13 @@
     "hud_top_mm": 620.0,
     "gwa_bot_mm": 265.0,
     "gwa_top_mm": 665.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1645
   },
   "W2249AK": {
     "name": "W2249AK",
@@ -3869,11 +4456,13 @@
     "hud_top_mm": 675.0,
     "gwa_bot_mm": 275.0,
     "gwa_top_mm": 675.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1969
   },
   "W2251AI": {
     "name": "W2251AI",
@@ -3886,11 +4475,13 @@
     "hud_top_mm": 620.0,
     "gwa_bot_mm": 265.0,
     "gwa_top_mm": 665.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2131
   },
   "W2256AI": {
     "name": "W2256AI",
@@ -3903,11 +4494,13 @@
     "hud_top_mm": 620.0,
     "gwa_bot_mm": 265.0,
     "gwa_top_mm": 665.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2536
   },
   "W2233AH": {
     "name": "W2233AH",
@@ -3920,11 +4513,13 @@
     "hud_top_mm": 730.0,
     "gwa_bot_mm": 365.0,
     "gwa_top_mm": 765.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1036000000000001
   },
   "W2233AG": {
     "name": "W2233AG",
@@ -3937,11 +4532,13 @@
     "hud_top_mm": 720.0,
     "gwa_bot_mm": 365.0,
     "gwa_top_mm": 765.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.097
   },
   "W2233AE": {
     "name": "W2233AE",
@@ -3954,11 +4551,13 @@
     "hud_top_mm": 680.0,
     "gwa_bot_mm": 325.0,
     "gwa_top_mm": 725.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0838
   },
   "W2238AA": {
     "name": "W2238AA",
@@ -3971,11 +4570,13 @@
     "hud_top_mm": 680.0,
     "gwa_bot_mm": 325.0,
     "gwa_top_mm": 725.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1268
   },
   "W2243AB": {
     "name": "W2243AB",
@@ -3988,11 +4589,13 @@
     "hud_top_mm": 670.0,
     "gwa_bot_mm": 315.0,
     "gwa_top_mm": 715.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1655
   },
   "W2252AL": {
     "name": "W2252AL",
@@ -4005,11 +4608,13 @@
     "hud_top_mm": 765.0,
     "gwa_bot_mm": 365.0,
     "gwa_top_mm": 765.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2628
   },
   "W2254AG": {
     "name": "W2254AG",
@@ -4022,11 +4627,13 @@
     "hud_top_mm": 765.0,
     "gwa_bot_mm": 365.0,
     "gwa_top_mm": 765.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2806000000000002
   },
   "W2263AA": {
     "name": "W2263AA",
@@ -4039,11 +4646,13 @@
     "hud_top_mm": 765.0,
     "gwa_bot_mm": 365.0,
     "gwa_top_mm": 765.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.3607
   },
   "W2257AF": {
     "name": "W2257AF",
@@ -4056,11 +4665,13 @@
     "hud_top_mm": 560.0,
     "gwa_bot_mm": 260.0,
     "gwa_top_mm": 660.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2389000000000001
   },
   "W2260AL": {
     "name": "W2260AL",
@@ -4073,11 +4684,13 @@
     "hud_top_mm": 660.0,
     "gwa_bot_mm": 260.0,
     "gwa_top_mm": 660.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R & E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.274
   },
   "W2263AB": {
     "name": "W2263AB",
@@ -4090,11 +4703,13 @@
     "hud_top_mm": 560.0,
     "gwa_bot_mm": 260.0,
     "gwa_top_mm": 660.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2851
   },
   "W2255AB": {
     "name": "W2255AB",
@@ -4107,11 +4722,13 @@
     "hud_top_mm": 620.0,
     "gwa_bot_mm": 250.0,
     "gwa_top_mm": 650.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.207
   },
   "W2257AE": {
     "name": "W2257AE",
@@ -4124,11 +4741,13 @@
     "hud_top_mm": 620.0,
     "gwa_bot_mm": 250.0,
     "gwa_top_mm": 650.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2218
   },
   "W2262AG": {
     "name": "W2262AG",
@@ -4141,11 +4760,13 @@
     "hud_top_mm": 620.0,
     "gwa_bot_mm": 250.0,
     "gwa_top_mm": 650.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2588
   },
   "W2267AB": {
     "name": "W2267AB",
@@ -4158,11 +4779,13 @@
     "hud_top_mm": 620.0,
     "gwa_bot_mm": 250.0,
     "gwa_top_mm": 650.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2958
   },
   "W2255AG": {
     "name": "W2255AG",
@@ -4175,11 +4798,13 @@
     "hud_top_mm": 680.0,
     "gwa_bot_mm": 360.0,
     "gwa_top_mm": 760.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2675
   },
   "W2249AI": {
     "name": "W2249AI",
@@ -4192,11 +4817,13 @@
     "hud_top_mm": 620.0,
     "gwa_bot_mm": 285.0,
     "gwa_top_mm": 685.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1773
   },
   "W2248AI": {
     "name": "W2248AI",
@@ -4209,11 +4836,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L8 & L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1984
   },
   "W2257AB": {
     "name": "W2257AB",
@@ -4226,11 +4855,13 @@
     "hud_top_mm": 491.0,
     "gwa_bot_mm": 273.0,
     "gwa_top_mm": 673.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2617
   },
   "W2254AC": {
     "name": "W2254AC",
@@ -4243,11 +4874,32 @@
     "hud_top_mm": 491.0,
     "gwa_bot_mm": 273.0,
     "gwa_top_mm": 673.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2374
+  },
+  "W2220AF": {
+    "name": "W2220AF",
+    "wedge_angle_mrad": 0.2,
+    "roll_width_mm": 1100.0,
+    "flat_width_mm": 300.0,
+    "thin_edge_cal_mil": 31.4961,
+    "film_type": "Clear",
+    "hud_bot_mm": 100.0,
+    "hud_top_mm": 600.0,
+    "gwa_bot_mm": 100.0,
+    "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
+    "status": "Developmental",
+    "extr_line": "L9",
+    "pvb_type": "Acoustic",
+    "pattern": "E2",
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9600000000000001
   },
   "W2248AF": {
     "name": "W2248AF",
@@ -4260,11 +4912,13 @@
     "hud_top_mm": 491.0,
     "gwa_bot_mm": 273.0,
     "gwa_top_mm": 673.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1888
   },
   "W2239AF": {
     "name": "W2239AF",
@@ -4277,11 +4931,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1198000000000001
   },
   "W2238AC": {
     "name": "W2238AC",
@@ -4294,11 +4950,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
-    "pattern": "E2",
-    "band_color": "Clear"
+    "pattern": "R & E2",
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1116000000000001
   },
   "W2243AC": {
     "name": "W2243AC",
@@ -4311,11 +4969,13 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R & E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1956
   },
   "W2243ACH": {
     "name": "W2243ACH",
@@ -4328,11 +4988,13 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1956
   },
   "W2248AHH": {
     "name": "W2248AHH",
@@ -4345,11 +5007,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2176
   },
   "W2237AF": {
     "name": "W2237AF",
@@ -4362,11 +5026,13 @@
     "hud_top_mm": 800.0,
     "gwa_bot_mm": 350.0,
     "gwa_top_mm": 800.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2977
   },
   "W2237AG": {
     "name": "W2237AG",
@@ -4379,11 +5045,13 @@
     "hud_top_mm": 800.0,
     "gwa_bot_mm": 350.0,
     "gwa_top_mm": 800.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
-    "pattern": "E2",
-    "band_color": "Clear"
+    "pattern": "R & E2",
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.3177
   },
   "W2237ADH": {
     "name": "W2237ADH",
@@ -4396,11 +5064,13 @@
     "hud_top_mm": 800.0,
     "gwa_bot_mm": 350.0,
     "gwa_top_mm": 800.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2292
   },
   "W2237AAH": {
     "name": "W2237AAH",
@@ -4413,11 +5083,13 @@
     "hud_top_mm": 800.0,
     "gwa_bot_mm": 350.0,
     "gwa_top_mm": 800.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2033
   },
   "W2237ACH": {
     "name": "W2237ACH",
@@ -4430,11 +5102,13 @@
     "hud_top_mm": 770.0,
     "gwa_bot_mm": 320.0,
     "gwa_top_mm": 770.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1922000000000001
   },
   "W2237AEH": {
     "name": "W2237AEH",
@@ -4447,11 +5121,13 @@
     "hud_top_mm": 800.0,
     "gwa_bot_mm": 350.0,
     "gwa_top_mm": 800.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2847
   },
   "W2240AM": {
     "name": "W2240AM",
@@ -4464,11 +5140,13 @@
     "hud_top_mm": 800.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 800.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L8 & L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1680000000000001
   },
   "W2240AV": {
     "name": "W2240AV",
@@ -4481,11 +5159,13 @@
     "hud_top_mm": 800.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 800.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1720000000000002
   },
   "W2256AD": {
     "name": "W2256AD",
@@ -4498,11 +5178,13 @@
     "hud_top_mm": 800.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 800.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L8 & L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.3152000000000001
   },
   "W2256AK": {
     "name": "W2256AK",
@@ -4515,11 +5197,13 @@
     "hud_top_mm": 800.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 800.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.3208000000000002
   },
   "W2244AI": {
     "name": "W2244AI",
@@ -4532,11 +5216,13 @@
     "hud_top_mm": 800.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 800.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L8 & L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2048
   },
   "W2244AO": {
     "name": "W2244AO",
@@ -4549,11 +5235,13 @@
     "hud_top_mm": 800.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 800.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2092
   },
   "W2248AE": {
     "name": "W2248AE",
@@ -4566,11 +5254,13 @@
     "hud_top_mm": 800.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 800.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2416
   },
   "W2248AL": {
     "name": "W2248AL",
@@ -4583,11 +5273,13 @@
     "hud_top_mm": 800.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 800.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2464
   },
   "W2248AM": {
     "name": "W2248AM",
@@ -4600,11 +5292,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2224
   },
   "W2348AA": {
     "name": "W2348AA",
@@ -4617,11 +5311,15 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2224,
+    "band_width_mm": 120.0,
+    "clear_width_mm": 1060.0
   },
   "W2362AA": {
     "name": "W2362AA",
@@ -4634,11 +5332,15 @@
     "hud_top_mm": 560.0,
     "gwa_bot_mm": 160.0,
     "gwa_top_mm": 560.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Blue"
+    "band_color": "Blue",
+    "max_cal_mm_ref": 1.2216,
+    "band_width_mm": 180.0,
+    "clear_width_mm": 740.0
   },
   "W2264AH": {
     "name": "W2264AH",
@@ -4651,11 +5353,13 @@
     "hud_top_mm": 800.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 800.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.3888
   },
   "W2252AF": {
     "name": "W2252AF",
@@ -4668,11 +5372,13 @@
     "hud_top_mm": 800.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 800.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2784
   },
   "W2252AN": {
     "name": "W2252AN",
@@ -4685,11 +5391,13 @@
     "hud_top_mm": 800.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 800.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L8 & L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2784
   },
   "W2252AS": {
     "name": "W2252AS",
@@ -4702,11 +5410,13 @@
     "hud_top_mm": 800.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 800.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2836
   },
   "W2342AB": {
     "name": "W2342AB",
@@ -4719,11 +5429,15 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Blue"
+    "band_color": "Blue",
+    "max_cal_mm_ref": 1.157,
+    "band_width_mm": 180.0,
+    "clear_width_mm": 970.0
   },
   "W2344AA": {
     "name": "W2344AA",
@@ -4736,11 +5450,15 @@
     "hud_top_mm": 640.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 640.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Blue"
+    "band_color": "Blue",
+    "max_cal_mm_ref": 1.1388,
+    "band_width_mm": 170.0,
+    "clear_width_mm": 800.0
   },
   "W2241AI": {
     "name": "W2241AI",
@@ -4753,11 +5471,13 @@
     "hud_top_mm": 650.0,
     "gwa_bot_mm": 250.0,
     "gwa_top_mm": 650.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1280000000000001
   },
   "W2249AJ": {
     "name": "W2249AJ",
@@ -4770,11 +5490,13 @@
     "hud_top_mm": 440.0,
     "gwa_bot_mm": 180.0,
     "gwa_top_mm": 580.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1920000000000002
   },
   "W2241AK": {
     "name": "W2241AK",
@@ -4787,11 +5509,13 @@
     "hud_top_mm": 560.0,
     "gwa_bot_mm": 210.0,
     "gwa_top_mm": 610.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L8 & L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.087
   },
   "W2245AG": {
     "name": "W2245AG",
@@ -4804,11 +5528,13 @@
     "hud_top_mm": 635.0,
     "gwa_bot_mm": 235.0,
     "gwa_top_mm": 635.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1600000000000001
   },
   "W2262AC": {
     "name": "W2262AC",
@@ -4821,11 +5547,32 @@
     "hud_top_mm": 480.0,
     "gwa_bot_mm": 110.0,
     "gwa_top_mm": 510.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1906
+  },
+  "W2264AD": {
+    "name": "W2264AD",
+    "wedge_angle_mrad": 0.64,
+    "roll_width_mm": 960.0,
+    "flat_width_mm": 300.0,
+    "thin_edge_cal_mil": 31.4961,
+    "film_type": "Clear",
+    "hud_bot_mm": 262.0,
+    "hud_top_mm": 502.0,
+    "gwa_bot_mm": 120.0,
+    "gwa_top_mm": 580.0,
+    "center_trim_mm": 25.4,
+    "status": "Obsolete",
+    "extr_line": "L9",
+    "pvb_type": "Acoustic",
+    "pattern": "E2",
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2224
   },
   "W2272AB": {
     "name": "W2272AB",
@@ -4838,11 +5585,13 @@
     "hud_top_mm": 494.0,
     "gwa_bot_mm": 120.0,
     "gwa_top_mm": 580.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2752000000000001
   },
   "W2272AE": {
     "name": "W2272AE",
@@ -4855,11 +5604,13 @@
     "hud_top_mm": 494.0,
     "gwa_bot_mm": 120.0,
     "gwa_top_mm": 570.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2752000000000001
   },
   "W2254AK": {
     "name": "W2254AK",
@@ -4872,11 +5623,13 @@
     "hud_top_mm": 585.0,
     "gwa_bot_mm": 185.0,
     "gwa_top_mm": 585.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1888
   },
   "W2225AG": {
     "name": "W2225AG",
@@ -4889,11 +5642,13 @@
     "hud_top_mm": 854.0,
     "gwa_bot_mm": 230.0,
     "gwa_top_mm": 860.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L8 & L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0475
   },
   "W2254AJ": {
     "name": "W2254AJ",
@@ -4906,11 +5661,13 @@
     "hud_top_mm": 580.0,
     "gwa_bot_mm": 250.0,
     "gwa_top_mm": 650.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L8 & L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1996
   },
   "W2267AC": {
     "name": "W2267AC",
@@ -4923,11 +5680,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L8 & L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.336
   },
   "W2260AJ": {
     "name": "W2260AJ",
@@ -4940,11 +5699,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L8 & L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.28
   },
   "W2251AE": {
     "name": "W2251AE",
@@ -4957,11 +5718,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L8 & L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1876000000000002
   },
   "W2241AA": {
     "name": "W2241AA",
@@ -4974,11 +5737,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L8 & L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1157
   },
   "W2231AA": {
     "name": "W2231AA",
@@ -4991,11 +5756,32 @@
     "hud_top_mm": 810.0,
     "gwa_bot_mm": 195.0,
     "gwa_top_mm": 810.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L8 & L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0914000000000001
+  },
+  "W2231AE": {
+    "name": "W2231AE",
+    "wedge_angle_mrad": 0.31,
+    "roll_width_mm": 1140.0,
+    "flat_width_mm": 180.0,
+    "thin_edge_cal_mil": 31.4961,
+    "film_type": "Clear",
+    "hud_bot_mm": 210.0,
+    "hud_top_mm": 830.0,
+    "gwa_bot_mm": 210.0,
+    "gwa_top_mm": 830.0,
+    "center_trim_mm": 25.4,
+    "status": "Developmental",
+    "extr_line": "L9",
+    "pvb_type": "Acoustic",
+    "pattern": "E2",
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0976
   },
   "W2339AA": {
     "name": "W2339AA",
@@ -5008,11 +5794,15 @@
     "hud_top_mm": 543.0,
     "gwa_bot_mm": 190.0,
     "gwa_top_mm": 590.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Blue"
+    "band_color": "Blue",
+    "max_cal_mm_ref": 1.0691000000000002,
+    "band_width_mm": 120.0,
+    "clear_width_mm": 870.0
   },
   "W2241AJ": {
     "name": "W2241AJ",
@@ -5025,11 +5815,13 @@
     "hud_top_mm": 670.0,
     "gwa_bot_mm": 190.0,
     "gwa_top_mm": 670.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1362
   },
   "W2241AL": {
     "name": "W2241AL",
@@ -5042,11 +5834,13 @@
     "hud_top_mm": 680.0,
     "gwa_bot_mm": 180.0,
     "gwa_top_mm": 680.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1444
   },
   "W2241AM": {
     "name": "W2241AM",
@@ -5059,11 +5853,13 @@
     "hud_top_mm": 680.0,
     "gwa_bot_mm": 180.0,
     "gwa_top_mm": 680.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1402999999999999
   },
   "W2243AD": {
     "name": "W2243AD",
@@ -5076,11 +5872,13 @@
     "hud_top_mm": 670.0,
     "gwa_bot_mm": 190.0,
     "gwa_top_mm": 670.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1569
   },
   "W2244AN": {
     "name": "W2244AN",
@@ -5093,11 +5891,13 @@
     "hud_top_mm": 635.0,
     "gwa_bot_mm": 235.0,
     "gwa_top_mm": 635.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1608
   },
   "W2265AD": {
     "name": "W2265AD",
@@ -5110,11 +5910,13 @@
     "hud_top_mm": 492.0,
     "gwa_bot_mm": 154.0,
     "gwa_top_mm": 554.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2485000000000002
   },
   "W2261AA": {
     "name": "W2261AA",
@@ -5127,11 +5929,13 @@
     "hud_top_mm": 492.0,
     "gwa_bot_mm": 154.0,
     "gwa_top_mm": 554.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2208999999999999
   },
   "W2354AA": {
     "name": "W2354AA",
@@ -5144,11 +5948,15 @@
     "hud_top_mm": 540.0,
     "gwa_bot_mm": 140.0,
     "gwa_top_mm": 540.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Blue"
+    "band_color": "Blue",
+    "max_cal_mm_ref": 1.1672,
+    "band_width_mm": 120.0,
+    "clear_width_mm": 860.0
   },
   "W2354AB": {
     "name": "W2354AB",
@@ -5161,11 +5969,15 @@
     "hud_top_mm": 540.0,
     "gwa_bot_mm": 140.0,
     "gwa_top_mm": 540.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Blue"
+    "band_color": "Blue",
+    "max_cal_mm_ref": 1.1726,
+    "band_width_mm": 120.0,
+    "clear_width_mm": 870.0
   },
   "W2254AB": {
     "name": "W2254AB",
@@ -5178,11 +5990,13 @@
     "hud_top_mm": 540.0,
     "gwa_bot_mm": 140.0,
     "gwa_top_mm": 540.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1726
   },
   "W2357AA": {
     "name": "W2357AA",
@@ -5195,11 +6009,15 @@
     "hud_top_mm": 540.0,
     "gwa_bot_mm": 140.0,
     "gwa_top_mm": 540.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Blue"
+    "band_color": "Blue",
+    "max_cal_mm_ref": 1.1933,
+    "band_width_mm": 120.0,
+    "clear_width_mm": 870.0
   },
   "W2257AC": {
     "name": "W2257AC",
@@ -5212,11 +6030,13 @@
     "hud_top_mm": 540.0,
     "gwa_bot_mm": 140.0,
     "gwa_top_mm": 540.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1933
   },
   "W2358AA": {
     "name": "W2358AA",
@@ -5229,11 +6049,15 @@
     "hud_top_mm": 540.0,
     "gwa_bot_mm": 140.0,
     "gwa_top_mm": 540.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Blue"
+    "band_color": "Blue",
+    "max_cal_mm_ref": 1.2002000000000002,
+    "band_width_mm": 120.0,
+    "clear_width_mm": 870.0
   },
   "W2258AI": {
     "name": "W2258AI",
@@ -5246,11 +6070,13 @@
     "hud_top_mm": 540.0,
     "gwa_bot_mm": 140.0,
     "gwa_top_mm": 540.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2002000000000002
   },
   "W2255AE": {
     "name": "W2255AE",
@@ -5263,11 +6089,13 @@
     "hud_top_mm": 564.0,
     "gwa_bot_mm": 175.0,
     "gwa_top_mm": 585.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.207
   },
   "W2212AA": {
     "name": "W2212AA",
@@ -5280,11 +6108,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L8 & L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9104
   },
   "W2249AD": {
     "name": "W2249AD",
@@ -5297,11 +6127,13 @@
     "hud_top_mm": 680.0,
     "gwa_bot_mm": 190.0,
     "gwa_top_mm": 680.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2018
   },
   "W2253AA": {
     "name": "W2253AA",
@@ -5314,11 +6146,13 @@
     "hud_top_mm": 590.0,
     "gwa_bot_mm": 190.0,
     "gwa_top_mm": 590.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1816
   },
   "W2343AA": {
     "name": "W2343AA",
@@ -5331,11 +6165,15 @@
     "hud_top_mm": 580.0,
     "gwa_bot_mm": 160.0,
     "gwa_top_mm": 580.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Blue"
+    "band_color": "Blue",
+    "max_cal_mm_ref": 1.101,
+    "band_width_mm": 160.0,
+    "clear_width_mm": 840.0
   },
   "W2349AA": {
     "name": "W2349AA",
@@ -5348,11 +6186,15 @@
     "hud_top_mm": 580.0,
     "gwa_bot_mm": 160.0,
     "gwa_top_mm": 580.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Blue"
+    "band_color": "Blue",
+    "max_cal_mm_ref": 1.1479,
+    "band_width_mm": 160.0,
+    "clear_width_mm": 850.0
   },
   "W2241AE": {
     "name": "W2241AE",
@@ -5365,62 +6207,13 @@
     "hud_top_mm": 590.0,
     "gwa_bot_mm": 180.0,
     "gwa_top_mm": 590.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "R",
-    "band_color": "Clear"
-  },
-  "W2216AC": {
-    "name": "W2216AC",
-    "wedge_angle_mrad": 0.16,
-    "roll_width_mm": 1070.0,
-    "flat_width_mm": 250.0,
-    "thin_edge_cal_mil": 31.4961,
-    "film_type": "Clear",
-    "hud_bot_mm": 170.0,
-    "hud_top_mm": 570.0,
-    "gwa_bot_mm": 170.0,
-    "gwa_top_mm": 570.0,
-    "status": "Developmental",
-    "extr_line": "L9",
-    "pvb_type": "Acoustic",
-    "pattern": "E2",
-    "band_color": "Clear"
-  },
-  "W2226AB": {
-    "name": "W2226AB",
-    "wedge_angle_mrad": 0.26,
-    "roll_width_mm": 1000.0,
-    "flat_width_mm": 250.0,
-    "thin_edge_cal_mil": 31.4961,
-    "film_type": "Clear",
-    "hud_bot_mm": 200.0,
-    "hud_top_mm": 600.0,
-    "gwa_bot_mm": 200.0,
-    "gwa_top_mm": 600.0,
-    "status": "Developmental",
-    "extr_line": "L9",
-    "pvb_type": "Acoustic",
-    "pattern": "E2",
-    "band_color": "Clear"
-  },
-  "W2235AE": {
-    "name": "W2235AE",
-    "wedge_angle_mrad": 0.35,
-    "roll_width_mm": 1190.0,
-    "flat_width_mm": 300.0,
-    "thin_edge_cal_mil": 31.4961,
-    "film_type": "Clear",
-    "hud_bot_mm": 150.0,
-    "hud_top_mm": 550.0,
-    "gwa_bot_mm": 150.0,
-    "gwa_top_mm": 550.0,
-    "status": "Developmental",
-    "extr_line": "L9",
-    "pvb_type": "Acoustic",
-    "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1034
   },
   "W2216AA": {
     "name": "W2216AA",
@@ -5433,11 +6226,13 @@
     "hud_top_mm": 760.0,
     "gwa_bot_mm": 160.0,
     "gwa_top_mm": 760.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9728000000000001
   },
   "W2227AJ": {
     "name": "W2227AJ",
@@ -5450,11 +6245,13 @@
     "hud_top_mm": 700.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 800.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0430000000000001
   },
   "W2227AG": {
     "name": "W2227AG",
@@ -5467,11 +6264,13 @@
     "hud_top_mm": 700.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 820.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0457
   },
   "W2227AI": {
     "name": "W2227AI",
@@ -5484,11 +6283,13 @@
     "hud_top_mm": 700.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 820.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0538
   },
   "W2216AE": {
     "name": "W2216AE",
@@ -5501,11 +6302,13 @@
     "hud_top_mm": 650.0,
     "gwa_bot_mm": 250.0,
     "gwa_top_mm": 650.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.936
   },
   "W2216AB": {
     "name": "W2216AB",
@@ -5518,11 +6321,13 @@
     "hud_top_mm": 650.0,
     "gwa_bot_mm": 250.0,
     "gwa_top_mm": 650.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9456
   },
   "W2216AD": {
     "name": "W2216AD",
@@ -5535,11 +6340,13 @@
     "hud_top_mm": 650.0,
     "gwa_bot_mm": 250.0,
     "gwa_top_mm": 650.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9424
   },
   "W2241AH": {
     "name": "W2241AH",
@@ -5552,11 +6359,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1402999999999999
   },
   "W2228AG": {
     "name": "W2228AG",
@@ -5569,11 +6378,89 @@
     "hud_top_mm": 720.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 720.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L8 & L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.038
+  },
+  "W2225AM": {
+    "name": "W2225AM",
+    "wedge_angle_mrad": 0.25,
+    "roll_width_mm": 1130.0,
+    "flat_width_mm": 100.0,
+    "thin_edge_cal_mil": 31.4961,
+    "film_type": "Clear",
+    "hud_bot_mm": null,
+    "hud_top_mm": null,
+    "gwa_bot_mm": 500.0,
+    "gwa_top_mm": 900.0,
+    "center_trim_mm": 25.4,
+    "status": "Developmental",
+    "extr_line": "L9",
+    "pvb_type": "Acoustic",
+    "pattern": "E2",
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0575
+  },
+  "W2225AN": {
+    "name": "W2225AN",
+    "wedge_angle_mrad": 0.25,
+    "roll_width_mm": 1090.0,
+    "flat_width_mm": 100.0,
+    "thin_edge_cal_mil": 31.4961,
+    "film_type": "Clear",
+    "hud_bot_mm": null,
+    "hud_top_mm": null,
+    "gwa_bot_mm": 500.0,
+    "gwa_top_mm": 900.0,
+    "center_trim_mm": 25.4,
+    "status": "Developmental",
+    "extr_line": "L9",
+    "pvb_type": "Acoustic",
+    "pattern": "E2",
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0475
+  },
+  "W2239AI": {
+    "name": "W2239AI",
+    "wedge_angle_mrad": 0.39,
+    "roll_width_mm": 1130.0,
+    "flat_width_mm": 100.0,
+    "thin_edge_cal_mil": 31.4961,
+    "film_type": "Clear",
+    "hud_bot_mm": null,
+    "hud_top_mm": null,
+    "gwa_bot_mm": 500.0,
+    "gwa_top_mm": 900.0,
+    "center_trim_mm": 25.4,
+    "status": "Developmental",
+    "extr_line": "L9",
+    "pvb_type": "Acoustic",
+    "pattern": "E2",
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2017
+  },
+  "W2242AC": {
+    "name": "W2242AC",
+    "wedge_angle_mrad": 0.42,
+    "roll_width_mm": 1130.0,
+    "flat_width_mm": 100.0,
+    "thin_edge_cal_mil": 31.4961,
+    "film_type": "Clear",
+    "hud_bot_mm": null,
+    "hud_top_mm": null,
+    "gwa_bot_mm": 500.0,
+    "gwa_top_mm": 900.0,
+    "center_trim_mm": 25.4,
+    "status": "Developmental",
+    "extr_line": "L9",
+    "pvb_type": "Acoustic",
+    "pattern": "E2",
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2326000000000001
   },
   "W2224AB": {
     "name": "W2224AB",
@@ -5586,11 +6473,13 @@
     "hud_top_mm": 700.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 700.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.04
   },
   "W2223AC": {
     "name": "W2223AC",
@@ -5603,11 +6492,13 @@
     "hud_top_mm": 700.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 700.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.053
   },
   "W2229AH": {
     "name": "W2229AH",
@@ -5620,11 +6511,13 @@
     "hud_top_mm": 700.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 700.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1132
   },
   "W2229AK": {
     "name": "W2229AK",
@@ -5637,11 +6530,13 @@
     "hud_top_mm": 700.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 700.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1161
   },
   "W2232AN": {
     "name": "W2232AN",
@@ -5654,11 +6549,13 @@
     "hud_top_mm": 720.0,
     "gwa_bot_mm": 100.0,
     "gwa_top_mm": 720.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1488
   },
   "W2225AD": {
     "name": "W2225AD",
@@ -5671,11 +6568,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0
   },
   "W2227AH": {
     "name": "W2227AH",
@@ -5688,11 +6587,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.016
   },
   "W2233AI": {
     "name": "W2233AI",
@@ -5705,11 +6606,32 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0508000000000002
+  },
+  "W2232AO": {
+    "name": "W2232AO",
+    "wedge_angle_mrad": 0.32,
+    "roll_width_mm": 1240.0,
+    "flat_width_mm": 220.0,
+    "thin_edge_cal_mil": 31.4961,
+    "film_type": "Clear",
+    "hud_bot_mm": 200.0,
+    "hud_top_mm": 700.0,
+    "gwa_bot_mm": 200.0,
+    "gwa_top_mm": 930.0,
+    "center_trim_mm": 25.4,
+    "status": "Developmental",
+    "extr_line": "L9",
+    "pvb_type": "Acoustic",
+    "pattern": "E2",
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1264
   },
   "W2250AW": {
     "name": "W2250AW",
@@ -5722,11 +6644,13 @@
     "hud_top_mm": 530.0,
     "gwa_bot_mm": 170.0,
     "gwa_top_mm": 570.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L8 & L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1300000000000001
   },
   "W2243AE": {
     "name": "W2243AE",
@@ -5739,11 +6663,13 @@
     "hud_top_mm": 570.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L8 & L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.101
   },
   "W2246AH": {
     "name": "W2246AH",
@@ -5756,11 +6682,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 210.0,
     "gwa_top_mm": 610.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L8 & L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.145
   },
   "W2221AC": {
     "name": "W2221AC",
@@ -5773,11 +6701,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9617
   },
   "W2220AC": {
     "name": "W2220AC",
@@ -5790,11 +6720,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9500000000000001
   },
   "W2225AK": {
     "name": "W2225AK",
@@ -5807,11 +6739,13 @@
     "hud_top_mm": 720.0,
     "gwa_bot_mm": 100.0,
     "gwa_top_mm": 720.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0125
   },
   "W2225AL": {
     "name": "W2225AL",
@@ -5824,11 +6758,13 @@
     "hud_top_mm": 720.0,
     "gwa_bot_mm": 100.0,
     "gwa_top_mm": 720.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0125
   },
   "W2228AI": {
     "name": "W2228AI",
@@ -5841,11 +6777,13 @@
     "hud_top_mm": 720.0,
     "gwa_bot_mm": 100.0,
     "gwa_top_mm": 720.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.038
   },
   "W2221AF": {
     "name": "W2221AF",
@@ -5858,11 +6796,13 @@
     "hud_top_mm": 700.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 700.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9743
   },
   "W2221AG": {
     "name": "W2221AG",
@@ -5875,11 +6815,13 @@
     "hud_top_mm": 700.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 700.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.9743
   },
   "W2229AD": {
     "name": "W2229AD",
@@ -5892,11 +6834,13 @@
     "hud_top_mm": 650.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 650.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0552000000000001
   },
   "W2229AE": {
     "name": "W2229AE",
@@ -5909,11 +6853,13 @@
     "hud_top_mm": 650.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 650.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0436
   },
   "W2229AI": {
     "name": "W2229AI",
@@ -5926,11 +6872,13 @@
     "hud_top_mm": 650.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 650.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0349
   },
   "W2266AB": {
     "name": "W2266AB",
@@ -5943,11 +6891,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.3148
   },
   "W2231AB": {
     "name": "W2231AB",
@@ -5960,11 +6910,13 @@
     "hud_top_mm": 700.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 700.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1565
   },
   "W2235AG": {
     "name": "W2235AG",
@@ -5977,11 +6929,13 @@
     "hud_top_mm": 700.0,
     "gwa_bot_mm": 20.0,
     "gwa_top_mm": 700.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2025000000000001
   },
   "W2230AE": {
     "name": "W2230AE",
@@ -5994,11 +6948,13 @@
     "hud_top_mm": 613.0,
     "gwa_bot_mm": 280.0,
     "gwa_top_mm": 700.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.04
   },
   "W2233AJ": {
     "name": "W2233AJ",
@@ -6011,11 +6967,13 @@
     "hud_top_mm": 613.0,
     "gwa_bot_mm": 280.0,
     "gwa_top_mm": 700.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.064
   },
   "W2223AE": {
     "name": "W2223AE",
@@ -6028,11 +6986,13 @@
     "hud_top_mm": 850.0,
     "gwa_bot_mm": 250.0,
     "gwa_top_mm": 850.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0484
   },
   "W2222AH": {
     "name": "W2222AH",
@@ -6045,11 +7005,13 @@
     "hud_top_mm": 850.0,
     "gwa_bot_mm": 250.0,
     "gwa_top_mm": 850.0,
-    "status": "Developmental",
+    "center_trim_mm": 25.4,
+    "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0376
   },
   "W2262AB": {
     "name": "W2262AB",
@@ -6062,11 +7024,13 @@
     "hud_top_mm": 660.0,
     "gwa_bot_mm": 160.0,
     "gwa_top_mm": 660.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2836
   },
   "W2252AT": {
     "name": "W2252AT",
@@ -6079,11 +7043,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.242
   },
   "W2257AH": {
     "name": "W2257AH",
@@ -6096,11 +7062,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2845
   },
   "W2272AF": {
     "name": "W2272AF",
@@ -6113,11 +7081,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.412
   },
   "W2353AA": {
     "name": "W2353AA",
@@ -6130,11 +7100,15 @@
     "hud_top_mm": 560.0,
     "gwa_bot_mm": 160.0,
     "gwa_top_mm": 560.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Blue"
+    "band_color": "Blue",
+    "max_cal_mm_ref": 1.1604,
+    "band_width_mm": 180.0,
+    "clear_width_mm": 760.0
   },
   "W2257AA": {
     "name": "W2257AA",
@@ -6147,11 +7121,13 @@
     "hud_top_mm": 560.0,
     "gwa_bot_mm": 170.0,
     "gwa_top_mm": 570.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.256
   },
   "W2236AE": {
     "name": "W2236AE",
@@ -6164,11 +7140,13 @@
     "hud_top_mm": 640.0,
     "gwa_bot_mm": 220.0,
     "gwa_top_mm": 640.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L8 & L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0772
   },
   "W2250AC": {
     "name": "W2250AC",
@@ -6181,11 +7159,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 80.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1600000000000001
   },
   "W2350AD": {
     "name": "W2350AD",
@@ -6198,11 +7178,15 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Blue"
+    "band_color": "Blue",
+    "max_cal_mm_ref": 1.225,
+    "band_width_mm": 180.0,
+    "clear_width_mm": 970.0
   },
   "W2250AM": {
     "name": "W2250AM",
@@ -6215,11 +7199,13 @@
     "hud_top_mm": 500.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1500000000000001
   },
   "W2250AN": {
     "name": "W2250AN",
@@ -6232,11 +7218,13 @@
     "hud_top_mm": 500.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1300000000000001
   },
   "W2350AB": {
     "name": "W2350AB",
@@ -6249,11 +7237,15 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Blue"
+    "band_color": "Blue",
+    "max_cal_mm_ref": 1.1400000000000001,
+    "band_width_mm": 160.0,
+    "clear_width_mm": 820.0
   },
   "W2250AF": {
     "name": "W2250AF",
@@ -6266,11 +7258,13 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.155
   },
   "W2250AG": {
     "name": "W2250AG",
@@ -6283,11 +7277,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.175
   },
   "W2250AH": {
     "name": "W2250AH",
@@ -6300,11 +7296,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2000000000000002
   },
   "W2250AL": {
     "name": "W2250AL",
@@ -6317,11 +7315,13 @@
     "hud_top_mm": 500.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 550.0,
+    "center_trim_mm": 25.4,
     "status": "Commercial",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1300000000000001
   },
   "W2350AE": {
     "name": "W2350AE",
@@ -6334,11 +7334,15 @@
     "hud_top_mm": 500.0,
     "gwa_bot_mm": 100.0,
     "gwa_top_mm": 500.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Blue"
+    "band_color": "Blue",
+    "max_cal_mm_ref": 1.115,
+    "band_width_mm": 150.0,
+    "clear_width_mm": 730.0
   },
   "W2250AB": {
     "name": "W2250AB",
@@ -6351,11 +7355,13 @@
     "hud_top_mm": 546.0,
     "gwa_bot_mm": 80.0,
     "gwa_top_mm": 546.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.135
   },
   "W2250AD": {
     "name": "W2250AD",
@@ -6368,11 +7374,13 @@
     "hud_top_mm": 576.0,
     "gwa_bot_mm": 80.0,
     "gwa_top_mm": 576.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1500000000000001
   },
   "W2250AE": {
     "name": "W2250AE",
@@ -6385,11 +7393,13 @@
     "hud_top_mm": 540.0,
     "gwa_bot_mm": 140.0,
     "gwa_top_mm": 580.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1300000000000001
   },
   "W2228AB": {
     "name": "W2228AB",
@@ -6402,11 +7412,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.01
   },
   "W2268AC": {
     "name": "W2268AC",
@@ -6419,11 +7431,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.31
   },
   "W2224AA": {
     "name": "W2224AA",
@@ -6436,11 +7450,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 0.98
   },
   "W2264AI": {
     "name": "W2264AI",
@@ -6453,11 +7469,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.28
   },
   "W2226AC": {
     "name": "W2226AC",
@@ -6470,11 +7488,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.008
   },
   "W2270AB": {
     "name": "W2270AB",
@@ -6487,11 +7507,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.311
   },
   "W2227AB": {
     "name": "W2227AB",
@@ -6504,11 +7526,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0025
   },
   "W2227AC": {
     "name": "W2227AC",
@@ -6521,11 +7545,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.0025
   },
   "W2246AD": {
     "name": "W2246AD",
@@ -6538,11 +7564,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1588
   },
   "W2247AF": {
     "name": "W2247AF",
@@ -6555,11 +7583,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.1524999999999999
   },
   "W2262AJ": {
     "name": "W2262AJ",
@@ -6572,11 +7602,13 @@
     "hud_top_mm": 600.0,
     "gwa_bot_mm": 200.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Obsolete",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Clear"
+    "band_color": "Clear",
+    "max_cal_mm_ref": 1.2650000000000001
   },
   "W2340AC": {
     "name": "W2340AC",
@@ -6589,11 +7621,15 @@
     "hud_top_mm": 590.0,
     "gwa_bot_mm": 80.0,
     "gwa_top_mm": 630.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Blue"
+    "band_color": "Blue",
+    "max_cal_mm_ref": 1.084,
+    "band_width_mm": 180.0,
+    "clear_width_mm": 830.0
   },
   "W2342AA": {
     "name": "W2342AA",
@@ -6606,11 +7642,15 @@
     "hud_top_mm": 590.0,
     "gwa_bot_mm": 80.0,
     "gwa_top_mm": 630.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Blue"
+    "band_color": "Blue",
+    "max_cal_mm_ref": 1.0982,
+    "band_width_mm": 180.0,
+    "clear_width_mm": 830.0
   },
   "W2350AA": {
     "name": "W2350AA",
@@ -6623,11 +7663,15 @@
     "hud_top_mm": 606.0,
     "gwa_bot_mm": 80.0,
     "gwa_top_mm": 606.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Blue"
+    "band_color": "Blue",
+    "max_cal_mm_ref": 1.165,
+    "band_width_mm": 200.0,
+    "clear_width_mm": 810.0
   },
   "W2350AC": {
     "name": "W2350AC",
@@ -6640,10 +7684,14 @@
     "hud_top_mm": 550.0,
     "gwa_bot_mm": 150.0,
     "gwa_top_mm": 600.0,
+    "center_trim_mm": 25.4,
     "status": "Developmental",
     "extr_line": "L9",
     "pvb_type": "Acoustic",
     "pattern": "E2",
-    "band_color": "Blue"
+    "band_color": "Blue",
+    "max_cal_mm_ref": 1.155,
+    "band_width_mm": 200.0,
+    "clear_width_mm": 810.0
   }
 }

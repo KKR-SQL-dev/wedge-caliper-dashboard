@@ -109,7 +109,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent
 MASTER_PATH = PROJECT_ROOT / "data" / "product_master.json"
 SETTINGS_PATH = PROJECT_ROOT / "data" / "settings.json"
 RECIPE_GEO_PATH = PROJECT_ROOT / "data" / "recipe_geometry.json"
-DEFAULT_EXCEL_PATH = PROJECT_ROOT / "Wedge Raw test data.xlsx"
+DEFAULT_EXCEL_PATH = PROJECT_ROOT / "data" / "Wedge products and development.xlsx"
 
 
 # ── 레시피별 지오메트리 오버라이드 ────────────────────────

@@ -695,10 +695,12 @@ with tab1:
         hovertemplate="Bin %{customdata} | %{x:.1f}mm<br>%{y:.2f} mil<extra>Actual</extra>",
     ))
 
-    # 차이 하이라이트
-    diff = np.abs(actual_mil - target_mil)
+    # 차이 하이라이트 (NaN 구간 완전 제외)
+    _both_valid = ~np.isnan(actual_mil) & ~np.isnan(target_mil)
+    diff = np.full_like(actual_mil, np.nan)
+    diff[_both_valid] = np.abs(actual_mil[_both_valid] - target_mil[_both_valid])
     threshold = 1.0  # mil
-    exceedance = diff > threshold
+    exceedance = _both_valid & (diff > threshold)
     if np.any(exceedance):
         exceed_pos = positions[exceedance]
         exceed_val = actual_mil[exceedance]
@@ -788,10 +790,29 @@ with tab1:
     _bin_pos = [(b - 1) * BIN_PITCH_MM for b in _bin_ticks]
     _bin_lbl = [str(b) for b in _bin_ticks]
 
+    # Y축: 실측 유효값 + 타겟 제품 영역 범위 기준 (edge 연장 저점 제외)
+    _y_vals = []
+    _act_valid = actual_mil[~np.isnan(actual_mil)]
+    if len(_act_valid) > 0:
+        _y_vals.extend([float(_act_valid.min()), float(_act_valid.max())])
+    # 타겟은 제품 영역(layout) 안의 값만 사용
+    _tgt_mask = (positions >= layout["left_start_mm"]) & (positions <= layout.get("right_end_mm", layout["left_end_mm"]))
+    _tgt_in = target_mil[_tgt_mask & ~np.isnan(target_mil)]
+    if len(_tgt_in) > 0:
+        _y_vals.extend([float(_tgt_in.min()), float(_tgt_in.max())])
+    if _y_vals:
+        _y_lo = min(_y_vals)
+        _y_hi = max(_y_vals)
+        _y_pad = (_y_hi - _y_lo) * 0.08
+        _y_range = [_y_lo - _y_pad, _y_hi + _y_pad]
+    else:
+        _y_range = None
+
     fig.update_layout(
         title=f"Full Profile: {product.name} ({'Flat' if is_flat_product else product.cut_label}) [target: {_target_source}]",
         xaxis_title="Position (mm)",
         yaxis_title="Caliper (mil)",
+        yaxis_range=_y_range,
         height=500, hovermode="closest",
         margin=dict(t=60, b=40, l=50, r=30),
         legend=dict(yanchor="top", y=0.99, xanchor="right", x=0.99),

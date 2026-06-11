@@ -204,54 +204,56 @@ def auto_refresh_masters():
         refresh_masters(get_excel_master_path(), MASTER_PATH)
 
 
-# ── 사이드바 포탈 링크 + 커스텀 네비게이션 ─────────────────
+# ── 사이드바 포탈 링크 ────────────────────────────────────
 PORTAL_URL = "http://192.168.107.6:3501"
 
-_NAV_PAGES = [
-    ("/", "Monitoring Dashboard"),
-    ("/Profile_Generator", "Profile Generator"),
-    ("/Settings", "Settings"),
-    ("/Roll_History", "Roll History"),
-]
-
 def render_sidebar_portal():
-    """사이드바 최상단에 포탈 링크 + 페이지 네비게이션을 렌더링."""
+    """사이드바 최상단(네비게이션 위)에 쿠라레 메인포탈 링크를 렌더링.
+
+    Streamlit 자동 네비(App, Profile Generator …)는 그대로 유지하고,
+    CSS position:fixed 로 포탈 링크를 사이드바 영역 최상단에 고정 배치한다.
+    """
     import streamlit as st
 
-    # 자동 생성 네비게이션 숨기기
     st.markdown(
-        '<style>[data-testid="stSidebarNav"]{display:none!important;}</style>',
-        unsafe_allow_html=True,
-    )
+        f'''
+        <style>
+        /* ── 포탈 링크: 사이드바 영역 최상단 고정 ── */
+        #kuraray-portal {{
+            position: fixed;
+            top: 0; left: 0;
+            width: 21rem;          /* Streamlit 기본 사이드바 폭 */
+            z-index: 999999;
+            background: #F8FAFC;   /* secondaryBackgroundColor */
+            border-bottom: 1px solid #e2e8f0;
+        }}
+        #kuraray-portal a {{
+            display: flex; align-items: center; gap: 10px;
+            padding: 14px 20px;
+            text-decoration: none; color: #1e293b;
+            font-size: 15px; font-weight: 500;
+        }}
+        #kuraray-portal a:hover {{ background: #e2e8f0; }}
 
-    # 포탈 링크 + 페이지 네비 HTML
-    nav_links = "".join(
-        f'<a href="{url}" style="display:block;padding:6px 20px 6px 24px;'
-        f'text-decoration:none;color:#374151;font-size:14px;'
-        f'border-radius:4px;margin:1px 8px;"'
-        f' onmouseover="this.style.background=\'#e2e8f0\'"'
-        f' onmouseout="this.style.background=\'transparent\'">{label}</a>'
-        for url, label in _NAV_PAGES
-    )
+        /* 사이드바 콘텐츠를 아래로 밀어서 포탈과 겹치지 않게 */
+        section[data-testid="stSidebar"] > div > div > div {{
+            margin-top: 52px !important;
+        }}
+        </style>
 
-    st.sidebar.markdown(
-        f'''<div style="margin:-1rem -1rem 0.5rem -1rem;">
-            <a href="{PORTAL_URL}" target="_self"
-               style="display:flex;align-items:center;gap:10px;padding:14px 20px;
-                      text-decoration:none;color:#1e293b;
-                      border-bottom:1px solid #e2e8f0;"
-               onmouseover="this.style.background='#e2e8f0'"
-               onmouseout="this.style.background='transparent'">
+        <div id="kuraray-portal">
+            <a href="{PORTAL_URL}" target="_self">
                 <svg width="20" height="20" viewBox="0 0 24 24"
                      fill="none" stroke="#0ea5e9" stroke-width="2"
                      stroke-linecap="round" stroke-linejoin="round">
                     <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/>
-                    <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1
+                          2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2
+                          2H5a2 2 0 0 1-2-2z"/>
                 </svg>
-                <span style="font-size:15px;font-weight:500;">쿠라레 메인 포탈</span>
+                <span>쿠라레 메인 포탈</span>
             </a>
-            <div style="padding:8px 0;">{nav_links}</div>
-            <div style="border-bottom:1px solid #e2e8f0;margin:0 12px;"></div>
-        </div>''',
+        </div>
+        ''',
         unsafe_allow_html=True,
     )

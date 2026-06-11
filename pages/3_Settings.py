@@ -8,10 +8,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from config import (
     MASTER_PATH, get_excel_master_path, is_sql_configured, load_masters,
-    load_settings, save_settings, set_excel_master_path,
+    load_settings, render_sidebar_portal, save_settings, set_excel_master_path,
 )
 from core.excel_importer import refresh_masters
 
+render_sidebar_portal()
 st.header("Settings")
 
 # ── SQL Server 접속 설정 ─────────────────────────────────

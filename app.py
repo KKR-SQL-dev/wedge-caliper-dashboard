@@ -12,7 +12,7 @@ from config import (
     BIN_AXIS_TICK_LABELS, BIN_AXIS_TICK_POSITIONS, BIN_PITCH_MM,
     CENTER_TRIM_MM, DIE_FULL_WIDTH_MM, auto_refresh_masters,
     get_recipe_geo, is_dual_cut, is_sql_configured, load_masters,
-    save_recipe_geo,
+    render_sidebar_portal, save_recipe_geo,
 )
 from core.cut_detector import (
     apply_offset_to_layout, build_aligned_layout, calc_drift_offset,
@@ -64,7 +64,9 @@ if not masters:
     st.warning("제품 마스터가 없습니다. Profile Generator에서 먼저 제품을 등록하세요.")
     st.stop()
 
-# ── 사이드바: 필터 + 제품 선택 + 더미 데이터 파라미터 ────
+# ── 사이드바: 포탈 링크 + 필터 + 제품 선택 + 더미 데이터 파라미터 ────
+render_sidebar_portal()
+
 with st.sidebar:
     st.subheader("Filter")
 

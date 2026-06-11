@@ -202,3 +202,28 @@ def auto_refresh_masters():
     if should_refresh_masters():
         from core.excel_importer import refresh_masters
         refresh_masters(get_excel_master_path(), MASTER_PATH)
+
+
+# ── 사이드바 포탈 링크 ────────────────────────────────────
+PORTAL_URL = "http://192.168.107.6:3501"
+
+def render_sidebar_portal():
+    """사이드바 최상단에 쿠라레 메인포탈 링크를 렌더링."""
+    import streamlit as st
+    st.sidebar.markdown(
+        f'''<a href="{PORTAL_URL}" target="_self"
+            style="display:flex;align-items:center;gap:10px;
+                   padding:12px 16px;margin:-1rem -1rem 0 -1rem;
+                   text-decoration:none;color:#1e293b;
+                   border-bottom:1px solid #e2e8f0;
+                   transition:background .15s;">
+            <svg width="20" height="20" viewBox="0 0 24 24"
+                 fill="none" stroke="#0ea5e9" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/>
+                <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            </svg>
+            <span style="font-size:15px;font-weight:500;">쿠라레 메인 포탈</span>
+        </a>''',
+        unsafe_allow_html=True,
+    )

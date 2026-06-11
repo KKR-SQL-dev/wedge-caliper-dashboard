@@ -12,7 +12,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from config import (
     BIN_PITCH_MM, NUM_BINS, auto_refresh_masters, is_sql_configured,
-    load_masters,
+    load_masters, render_sidebar_portal,
 )
 from core.mrad_calculator import calc_multi_scan_angles, summarize_angles
 from core.profile_engine import generate_full_profile
@@ -25,6 +25,7 @@ auto_refresh_masters()
 masters = load_masters()
 master_keys = list(masters.keys())
 
+render_sidebar_portal()
 st.caption("**Roll History**")
 
 if not masters:

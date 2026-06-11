@@ -12,7 +12,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from config import (
     BIN_AXIS_TICK_LABELS, BIN_AXIS_TICK_POSITIONS, BIN_PITCH_MM,
     CENTER_TRIM_MM, DIE_FULL_WIDTH_MM, MASTER_PATH, PROJECT_ROOT,
-    auto_refresh_masters, get_excel_master_path, is_dual_cut, load_masters, save_masters,
+    auto_refresh_masters, get_excel_master_path, is_dual_cut, load_masters,
+    render_sidebar_portal, save_masters,
 )
 from core.excel_importer import refresh_masters
 from core.profile_engine import generate_full_profile
@@ -25,6 +26,7 @@ GENERATED_DIR.mkdir(parents=True, exist_ok=True)
 auto_refresh_masters()
 
 # ── 페이지 설정 ──────────────────────────────────────────
+render_sidebar_portal()
 st.header("Profile Generator")
 st.caption("제품 스펙을 입력하면 449 bin 타겟 프로파일을 자동 생성합니다.")
 

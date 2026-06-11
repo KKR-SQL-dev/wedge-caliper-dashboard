@@ -108,7 +108,36 @@ def is_dual_cut(roll_width_mm: float, center_trim_mm: float = CENTER_TRIM_MM) ->
 PROJECT_ROOT = Path(__file__).resolve().parent
 MASTER_PATH = PROJECT_ROOT / "data" / "product_master.json"
 SETTINGS_PATH = PROJECT_ROOT / "data" / "settings.json"
+RECIPE_GEO_PATH = PROJECT_ROOT / "data" / "recipe_geometry.json"
 DEFAULT_EXCEL_PATH = PROJECT_ROOT / "Wedge Raw test data.xlsx"
+
+
+# ── 레시피별 지오메트리 오버라이드 ────────────────────────
+def load_recipe_geo() -> dict:
+    """recipe_geometry.json 전체 로드. 없으면 빈 dict."""
+    if RECIPE_GEO_PATH.exists():
+        with open(RECIPE_GEO_PATH, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return {}
+
+
+def get_recipe_geo(key: str) -> dict:
+    """특정 레시피의 저장된 지오메트리 반환. 없으면 빈 dict."""
+    return load_recipe_geo().get(key, {})
+
+
+def save_recipe_geo(key: str, geo: dict):
+    """특정 레시피의 지오메트리를 저장. 빈 값은 제거."""
+    all_geo = load_recipe_geo()
+    # 값이 있는 항목만 저장 (빈/0/None은 제거 → 자동값 사용)
+    cleaned = {k: v for k, v in geo.items() if v is not None and v != 0 and v != ""}
+    if cleaned:
+        all_geo[key] = cleaned
+    elif key in all_geo:
+        del all_geo[key]
+    RECIPE_GEO_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with open(RECIPE_GEO_PATH, "w", encoding="utf-8") as f:
+        json.dump(all_geo, f, indent=2, ensure_ascii=False)
 
 
 def load_settings() -> dict:

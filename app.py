@@ -10,8 +10,9 @@ import streamlit as st
 
 from config import (
     BIN_AXIS_TICK_LABELS, BIN_AXIS_TICK_POSITIONS, BIN_PITCH_MM,
-    CENTER_TRIM_MM, DIE_FULL_WIDTH_MM, auto_refresh_masters, is_dual_cut,
-    is_sql_configured, load_masters,
+    CENTER_TRIM_MM, DIE_FULL_WIDTH_MM, auto_refresh_masters,
+    get_recipe_geo, is_dual_cut, is_sql_configured, load_masters,
+    save_recipe_geo,
 )
 from core.cut_detector import apply_offset_to_layout, calc_drift_offset, detect_thin_edges
 from core.dummy_data import generate_dummy_actual, generate_scan_series
@@ -27,7 +28,7 @@ from core.sample_data import (
     sample_available, set_sample_csv,
 )
 from core.sql_data import fetch_latest_scan
-from core.wedge_geometry import ProductMaster
+from core.wedge_geometry import ProductMaster, VALID_CUT_TYPES
 
 st.set_page_config(
     page_title="L9 Wedge Caliper Monitor",
@@ -312,6 +313,80 @@ else:
     # Recipe에 MRAD가 없으면 플랫 강제 (마스터에 wedge 있어도)
     if (is_live or is_sample) and _recipe_is_flat:
         m["wedge_angle_mrad"] = 0.0
+
+# ── 옵션: 레시피별 지오메트리 오버라이드 (저장된 값만 적용) ──
+_geo_key = selected_name if not _use_flat_fallback else (scan_recipe or "Unknown")
+_saved_geo = get_recipe_geo(_geo_key)
+
+# 저장된 값이 있는 항목만 m에 덮어씀. 없으면 자동값(m) 100% 유지.
+_GEO_FIELDS = [
+    "cut_type", "center_trim_mm", "roll_width_mm", "flat_width_mm",
+    "wedge_angle_mrad", "thin_edge_cal_mil",
+    "hud_bot_mm", "hud_top_mm", "gwa_bot_mm", "gwa_top_mm",
+]
+for _gf in _GEO_FIELDS:
+    if _gf in _saved_geo and _saved_geo[_gf] is not None:
+        m[_gf] = _saved_geo[_gf]
+
+# 사이드바: 지오메트리 미세조정 (접힌 expander, 옵션)
+with st.sidebar:
+    with st.expander("Geometry Override", expanded=bool(_saved_geo)):
+        st.caption(f"Recipe: **{_geo_key}**")
+        _ov_ct = st.selectbox(
+            "Cut Type",
+            ["(auto)"] + list(VALID_CUT_TYPES),
+            index=(list(VALID_CUT_TYPES).index(_saved_geo["cut_type"]) + 1)
+            if "cut_type" in _saved_geo else 0,
+            key="ov_ct",
+        )
+        _c1, _c2 = st.columns(2)
+        _ov_ctrim = _c1.number_input(
+            "Center Trim mm", 0.0, 200.0,
+            float(_saved_geo.get("center_trim_mm", 0)),
+            step=1.0, format="%.1f", key="ov_ctrim",
+        )
+        _ov_rw = _c2.number_input(
+            "Roll Width mm", 0.0, 3000.0,
+            float(_saved_geo.get("roll_width_mm", 0)),
+            step=10.0, format="%.0f", key="ov_rw",
+        )
+        _c3, _c4 = st.columns(2)
+        _ov_fw = _c3.number_input(
+            "Flat Width mm", 0.0, 2000.0,
+            float(_saved_geo.get("flat_width_mm", 0)),
+            step=10.0, format="%.0f", key="ov_fw",
+        )
+        _ov_wa = _c4.number_input(
+            "Wedge mrad", 0.0, 2.0,
+            float(_saved_geo.get("wedge_angle_mrad", 0)),
+            step=0.01, format="%.4f", key="ov_wa",
+        )
+        if st.button("Save", key="ov_save", use_container_width=True):
+            _new = {}
+            if _ov_ct != "(auto)":
+                _new["cut_type"] = _ov_ct
+            if _ov_ctrim > 0:
+                _new["center_trim_mm"] = _ov_ctrim
+            if _ov_rw > 0:
+                _new["roll_width_mm"] = _ov_rw
+            if _ov_fw > 0:
+                _new["flat_width_mm"] = _ov_fw
+            if _ov_wa > 0:
+                _new["wedge_angle_mrad"] = _ov_wa
+            save_recipe_geo(_geo_key, _new)
+            st.rerun()
+
+    # 실시간 입력값도 m에 반영 (Save 전 미리보기)
+    if _ov_ct != "(auto)":
+        m["cut_type"] = _ov_ct
+    if _ov_ctrim > 0:
+        m["center_trim_mm"] = _ov_ctrim
+    if _ov_rw > 0:
+        m["roll_width_mm"] = _ov_rw
+    if _ov_fw > 0:
+        m["flat_width_mm"] = _ov_fw
+    if _ov_wa > 0:
+        m["wedge_angle_mrad"] = _ov_wa
 
 product = ProductMaster.from_dict(m)
 

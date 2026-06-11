@@ -13,7 +13,7 @@ from config import (
     CENTER_TRIM_MM, DIE_FULL_WIDTH_MM, auto_refresh_masters, is_dual_cut,
     is_sql_configured, load_masters,
 )
-from core.cut_detector import build_aligned_layout, calc_drift_offset, detect_thin_edges
+from core.cut_detector import apply_offset_to_layout, calc_drift_offset, detect_thin_edges
 from core.dummy_data import generate_dummy_actual, generate_scan_series
 from core.mrad_calculator import (
     calc_gwa, calc_lwa, calc_multi_scan_angles, calc_uwa,
@@ -318,12 +318,27 @@ product = ProductMaster.from_dict(m)
 # 웨지 각도 0인 경우 (마스터 등록 플랫 제품 포함) → 플랫 처리
 is_flat_product = product.wedge_angle_mrad == 0.0
 
+df_target = generate_full_profile(product)
+
+positions = df_target["Position_mm"].values
+target_mil = df_target["Target_mil"].values
+bin_nos = df_target["Bin"].values
+
+# 플랫 제품: 타겟을 수평선(목표두께)으로 설정
+if is_flat_product:
+    _flat_target_cal = product.thin_edge_cal_mil  # 마스터 목표두께
+    if _flat_target_cal <= 0:
+        # 마스터에 목표두께 없으면 실측 median 폴백
+        _flat_target_cal = float(np.nanmedian(actual_mil)) if np.any(~np.isnan(actual_mil)) else 30.0
+    target_mil = np.full_like(positions, _flat_target_cal)
+
+# actual_mil은 Live/Sample 모드 모두 위에서 이미 로드됨
+
 raw_layout = product.layout()
 ct = product.resolved_cut_type
 
-# ── 슬로프 기준 정렬 + 타겟 프로파일 생성 ────────────────
+# ── 컷지점 검출 + 드리프트 보정 (STEP C) ────────────────
 if not is_flat_product:
-    # 실측 thin edge 검출 + 오프셋 계산
     detected = detect_thin_edges(actual_mil, raw_layout)
     drift = calc_drift_offset(raw_layout, detected)
 
@@ -360,50 +375,24 @@ if not is_flat_product:
             help="타겟 전체를 위/아래로 이동 (mil)",
         )
 
-    # 슬로프 기준 정렬: thin edge만 이동, 내부 경계(center trim) 고정
-    # → 플랫 폭이 실측에 맞게 자동 조정됨
-    layout = build_aligned_layout(raw_layout, detected, manual_left, manual_right)
+    layout = apply_offset_to_layout(raw_layout, drift, manual_left, manual_right)
 
-    # 정렬된 layout으로 타겟 프로파일 재생성 (슬로프 각도·두께 유지, 위치+플랫폭만 변경)
-    df_target = generate_full_profile(product, layout=layout)
-    target_mil = df_target["Target_mil"].values
+    # 타겟 프로파일을 보정된 layout에 맞춰 재정렬 (bin shift + mil offset)
+    _total_left_shift = drift["left_offset_bins"] + manual_left
+    if _total_left_shift != 0:
+        target_mil = np.roll(target_mil, _total_left_shift)
+        # 롤 후 빈 구간은 NaN
+        if _total_left_shift > 0:
+            target_mil[:_total_left_shift] = np.nan
+        else:
+            target_mil[_total_left_shift:] = np.nan
 
-    # 수직 오프셋
     if manual_mil_offset != 0.0:
         _valid_target = ~np.isnan(target_mil)
         target_mil[_valid_target] += manual_mil_offset
 
-    # 정렬 결과: 플랫 폭 변화 표시
-    with st.sidebar:
-        _aligned_lw = layout["left_end_mm"] - layout["left_start_mm"]
-        _orig_lw = raw_layout["left_end_mm"] - raw_layout["left_start_mm"]
-        _aligned_lf = max(0, _aligned_lw - product.wedge_portion_mm)
-        _orig_lf = max(0, _orig_lw - product.wedge_portion_mm)
-        st.caption(
-            f"Left flat: **{_aligned_lf:.0f}**mm (spec {_orig_lf:.0f}mm, "
-            f"Δ{_aligned_lf - _orig_lf:+.0f})"
-        )
-        if "right_start_mm" in layout and layout.get("right_start_mm") is not None:
-            _aligned_rw = layout["right_end_mm"] - layout["right_start_mm"]
-            _orig_rw = raw_layout["right_end_mm"] - raw_layout["right_start_mm"]
-            _aligned_rf = max(0, _aligned_rw - product.wedge_portion_mm)
-            _orig_rf = max(0, _orig_rw - product.wedge_portion_mm)
-            st.caption(
-                f"Right flat: **{_aligned_rf:.0f}**mm (spec {_orig_rf:.0f}mm, "
-                f"Δ{_aligned_rf - _orig_rf:+.0f})"
-            )
-
 else:
     layout = raw_layout
-    df_target = generate_full_profile(product)
-    target_mil = df_target["Target_mil"].values
-    _flat_target_cal = product.thin_edge_cal_mil
-    if _flat_target_cal <= 0:
-        _flat_target_cal = float(np.nanmedian(actual_mil)) if np.any(~np.isnan(actual_mil)) else 30.0
-    target_mil = np.full_like(df_target["Position_mm"].values, _flat_target_cal)
-
-positions = df_target["Position_mm"].values
-bin_nos = df_target["Bin"].values
 
 # ── 롤 버퍼 구축 + 멀티스캔 집계 (STEP D/E) ─────────────
 roll_buf = None

@@ -409,6 +409,19 @@ if is_flat_product:
 
 # actual_mil은 Live/Sample 모드 모두 위에서 이미 로드됨
 
+# ── 데클(NaN/edge) 동적 검출 ─────────────────────────────
+# 양쪽 끝 NaN 구간을 자동으로 찾아 유효 측정 구간만 사용
+_valid_mask = ~np.isnan(actual_mil)
+_valid_bins = np.where(_valid_mask)[0]
+if len(_valid_bins) > 0:
+    _meas_start_bin = int(_valid_bins[0])    # 첫 유효 bin
+    _meas_end_bin = int(_valid_bins[-1])     # 마지막 유효 bin
+    _meas_start_mm = positions[_meas_start_bin]
+    _meas_end_mm = positions[_meas_end_bin]
+else:
+    _meas_start_bin, _meas_end_bin = 0, 448
+    _meas_start_mm, _meas_end_mm = 0.0, positions[-1]
+
 raw_layout = product.layout()
 ct = product.resolved_cut_type
 
@@ -722,17 +735,25 @@ with tab1:
     st.markdown(f"**Angle Target : {_wa_t:.4f} mrad**")
 
     if is_flat_product:
-        # 플랫 제품: 편차(variation) 판정
+        # 플랫 제품: 데클 제외 유효 구간
         _valid = ~np.isnan(actual_mil)
         _valid_cal = actual_mil[_valid]
+        _valid_pos = positions[_valid]
         if len(_valid_cal) > 0:
+            st.markdown(
+                f"**Flat Product** | Target: {_flat_target_cal:.2f} mil | "
+                f"Measured: bin {_meas_start_bin+1}~{_meas_end_bin+1} "
+                f"({_meas_start_mm:.0f}~{_meas_end_mm:.0f}mm, "
+                f"decal {_meas_start_bin}/{448 - _meas_end_bin} bins)"
+            )
+
+            # ── ① Caliper Variation ──
+            st.caption("**① Caliper Variation** (두께 균일도)")
             _flat_mean = float(np.nanmean(_valid_cal))
             _flat_std = float(np.nanstd(_valid_cal))
             _flat_range = float(np.nanmax(_valid_cal) - np.nanmin(_valid_cal))
             _flat_max_dev = float(np.max(np.abs(_valid_cal - _flat_target_cal)))
             _flat_judge = "OK" if _flat_max_dev <= lwa_tol * 25.4 else "NG"
-
-            st.markdown(f"**Flat Product** | Target: {_flat_target_cal:.2f} mil")
             c1, c2, c3, c4 = st.columns(4)
             c1.metric("Mean", f"{_flat_mean:.2f} mil")
             c2.metric("Std Dev", f"{_flat_std:.3f} mil")
@@ -740,6 +761,37 @@ with tab1:
             c4.metric("Max Dev", f"{_flat_max_dev:.2f} mil",
                       _flat_judge,
                       delta_color="normal" if _flat_judge == "OK" else "inverse")
+
+            # ── ② Angle Variation ── (전체 측정구간, 타겟 0 mrad)
+            st.caption("**② Angle Variation** (평탄도, target 0 mrad)")
+            # UWA: 전체 측정구간 기울기
+            _flat_uwa = calc_uwa(positions, actual_mil, _meas_start_mm, _meas_end_mm)
+            _flat_uwa_j = "PASS" if _flat_uwa <= gwa_tol else "FAIL"
+            # LWA: ±40mm 슬라이딩 윈도우, 전체 구간
+            _flat_lwa_pos, _flat_lwa_val = calc_lwa(
+                positions, actual_mil,
+                0.0,  # hud_bot = 0 (전체)
+                _meas_end_mm - _meas_start_mm,  # hud_top = 전체 폭
+                _meas_start_mm,  # thin_edge = 측정 시작점
+                "left",
+            )
+            c1, c2, c3 = st.columns(3)
+            c1.metric("UWA (전체)", f"{_flat_uwa:.4f} mrad",
+                      f"{_flat_uwa_j} (spec ±{gwa_tol})",
+                      delta_color="normal" if _flat_uwa_j == "PASS" else "inverse")
+            if len(_flat_lwa_val) > 0:
+                _flat_lwa_max = float(np.max(np.abs(_flat_lwa_val)))
+                _flat_lwa_j = "PASS" if _flat_lwa_max <= lwa_tol else "FAIL"
+                _flat_lwa_fail = int(np.sum(np.abs(_flat_lwa_val) > lwa_tol))
+                c2.metric("LWA Max", f"{_flat_lwa_max:.4f} mrad",
+                          f"{_flat_lwa_j} (spec ±{lwa_tol})",
+                          delta_color="normal" if _flat_lwa_j == "PASS" else "inverse")
+                c3.metric("LWA Range",
+                          f"{float(_flat_lwa_val.min()):.4f} ~ {float(_flat_lwa_val.max()):.4f}",
+                          f"{_flat_lwa_fail} pts out" if _flat_lwa_fail > 0 else "All OK")
+            else:
+                c2.metric("LWA", "N/A", "데이터 부족")
+                c3.metric("LWA Range", "N/A", "")
         else:
             st.info("플랫 제품 – 유효 데이터 없음")
 
@@ -1094,7 +1146,68 @@ with tab3:
 # ══════════════════════════════════════════════════════════
 with tab4:
     if is_flat_product:
-        st.info("플랫 제품 (Wedge Angle = 0 mrad) – LWA 분석 대상이 아닙니다.")
+        # ── 플랫 제품: Angle Variation 차트 (전체 측정구간, 타겟 0 mrad) ──
+        if len(_valid_bins) > 0:
+            _flat_lwa_pos2, _flat_lwa_val2 = calc_lwa(
+                positions, actual_mil,
+                0.0, _meas_end_mm - _meas_start_mm,
+                _meas_start_mm, "left",
+            )
+            if len(_flat_lwa_val2) > 0:
+                fig_flat_lwa = go.Figure()
+                # Spec band (±lwa_tol around 0)
+                fig_flat_lwa.add_trace(go.Scatter(
+                    x=np.concatenate([_flat_lwa_pos2, _flat_lwa_pos2[::-1]]),
+                    y=np.concatenate([np.full_like(_flat_lwa_pos2, lwa_tol),
+                                     np.full_like(_flat_lwa_pos2, -lwa_tol)]),
+                    fill="toself", fillcolor="rgba(0,200,0,0.15)",
+                    line=dict(width=0), name="Spec Range", hoverinfo="skip",
+                ))
+                # Target = 0
+                fig_flat_lwa.add_hline(y=0, line=dict(color="cyan", width=2, dash="dash"),
+                                      annotation_text="Target 0 mrad")
+                # Spec limits
+                fig_flat_lwa.add_hline(y=lwa_tol, line=dict(color="yellow", width=1, dash="dot"))
+                fig_flat_lwa.add_hline(y=-lwa_tol, line=dict(color="yellow", width=1, dash="dot"))
+                # LWA line
+                fig_flat_lwa.add_trace(go.Scatter(
+                    x=_flat_lwa_pos2, y=_flat_lwa_val2,
+                    mode="lines", name="LWA (local slope)",
+                    line=dict(color="lime", width=2),
+                    hovertemplate="%{x:.0f}mm<br>LWA: %{y:.4f} mrad<extra></extra>",
+                ))
+                # Out-of-spec markers
+                _oos = np.abs(_flat_lwa_val2) > lwa_tol
+                if np.any(_oos):
+                    fig_flat_lwa.add_trace(go.Scatter(
+                        x=_flat_lwa_pos2[_oos], y=_flat_lwa_val2[_oos],
+                        mode="markers", name=f"Out ({int(np.sum(_oos))} pts)",
+                        marker=dict(color="red", size=8),
+                    ))
+                _max_y = max(float(np.max(np.abs(_flat_lwa_val2))) * 1.3, lwa_tol * 3)
+                fig_flat_lwa.update_layout(
+                    title="Flat Angle Variation (LWA, ±40mm window, target 0 mrad)",
+                    xaxis_title="Position (mm)", yaxis_title="Local Slope (mrad)",
+                    yaxis_range=[-_max_y, _max_y],
+                    height=450, hovermode="closest",
+                    margin=dict(t=50, b=40, l=50, r=30),
+                )
+                st.plotly_chart(fig_flat_lwa, use_container_width=True)
+
+                # 판정 요약
+                _fl_max = float(np.max(np.abs(_flat_lwa_val2)))
+                _fl_fail = int(np.sum(np.abs(_flat_lwa_val2) > lwa_tol))
+                _fl_j = "PASS" if _fl_fail == 0 else "FAIL"
+                c1, c2, c3 = st.columns(3)
+                c1.metric("Max |slope|", f"{_fl_max:.4f} mrad",
+                          f"{_fl_j} (spec ±{lwa_tol})",
+                          delta_color="normal" if _fl_j == "PASS" else "inverse")
+                c2.metric("Range", f"{float(_flat_lwa_val2.min()):.4f} ~ {float(_flat_lwa_val2.max()):.4f}")
+                c3.metric("Out-of-Spec", f"{_fl_fail} / {len(_flat_lwa_val2)} pts")
+            else:
+                st.info("LWA 계산에 필요한 데이터가 부족합니다.")
+        else:
+            st.info("유효 측정 데이터 없음")
     elif not (product.hud_bot_mm and product.hud_top_mm):
         st.info("HUD 영역이 정의되지 않은 제품입니다.")
     else:

@@ -208,22 +208,41 @@ def auto_refresh_masters():
 PORTAL_URL = "http://192.168.107.6:3501"
 
 def render_sidebar_portal():
-    """사이드바 최상단에 쿠라레 메인포탈 링크를 렌더링."""
+    """사이드바 최상단(네비게이션 위)에 쿠라레 메인포탈 링크를 렌더링."""
     import streamlit as st
-    st.sidebar.markdown(
-        f'''<a href="{PORTAL_URL}" target="_self"
-            style="display:flex;align-items:center;gap:10px;
-                   padding:12px 16px;margin:-1rem -1rem 0 -1rem;
-                   text-decoration:none;color:#1e293b;
-                   border-bottom:1px solid #e2e8f0;
-                   transition:background .15s;">
-            <svg width="20" height="20" viewBox="0 0 24 24"
-                 fill="none" stroke="#0ea5e9" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round">
-                <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/>
-                <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-            </svg>
-            <span style="font-size:15px;font-weight:500;">쿠라레 메인 포탈</span>
-        </a>''',
-        unsafe_allow_html=True,
-    )
+    import streamlit.components.v1 as components
+
+    with st.sidebar:
+        components.html("""
+        <script>
+        (function(){
+            var pd = window.parent.document;
+            var old = pd.getElementById('kuraray-portal');
+            if(old) old.remove();
+
+            var nav = pd.querySelector('[data-testid="stSidebarNav"]');
+            var container = nav ? nav.parentElement
+                               : pd.querySelector('[data-testid="stSidebarContent"]');
+            if(!container) return;
+
+            var div = pd.createElement('div');
+            div.id = 'kuraray-portal';
+            div.style.cssText = 'border-bottom:1px solid #e2e8f0;';
+            div.innerHTML =
+                '<a href="""" + PORTAL_URL + """" target="_self" '
+                + 'style="display:flex;align-items:center;gap:10px;padding:12px 20px;'
+                + 'text-decoration:none;color:#1e293b;" '
+                + 'onmouseover="this.style.background=\'#f8fafc\'" '
+                + 'onmouseout="this.style.background=\'transparent\'">'
+                + '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" '
+                + 'stroke="#0ea5e9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
+                + '<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/>'
+                + '<path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>'
+                + '</svg>'
+                + '<span style="font-size:15px;font-weight:500;">쿠라레 메인 포탈</span></a>';
+
+            if(nav) container.insertBefore(div, nav);
+            else container.insertBefore(div, container.firstChild);
+        })();
+        </script>
+        """, height=0)

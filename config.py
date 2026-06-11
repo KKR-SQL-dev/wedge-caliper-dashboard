@@ -216,8 +216,8 @@ def render_sidebar_portal():
     <style>
     [data-testid="stSidebarNav"] { display: none !important; }
     .kp-portal { display:flex; align-items:center; gap:10px;
-                 padding:14px 20px; text-decoration:none; color:#1e293b;
-                 border-bottom:1px solid #e2e8f0; }
+                 padding:14px 20px; text-decoration:none !important;
+                 color:#4b5563; }
     .kp-portal:hover { background:#e2e8f0; }
     .kp-portal span { font-size:15px; font-weight:500; }
     .kp-nav { padding:8px 0; border-bottom:1px solid #e2e8f0; }

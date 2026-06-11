@@ -14,7 +14,10 @@ from config import (
     get_recipe_geo, is_dual_cut, is_sql_configured, load_masters,
     save_recipe_geo,
 )
-from core.cut_detector import apply_offset_to_layout, calc_drift_offset, detect_thin_edges
+from core.cut_detector import (
+    apply_offset_to_layout, build_aligned_layout, calc_drift_offset,
+    detect_thin_edges,
+)
 from core.dummy_data import generate_dummy_actual, generate_scan_series
 from core.mrad_calculator import (
     calc_gwa, calc_lwa, calc_multi_scan_angles, calc_uwa,
@@ -463,21 +466,49 @@ if not is_flat_product:
             help="타겟 전체를 위/아래로 이동 (mil)",
         )
 
-    layout = apply_offset_to_layout(raw_layout, drift, manual_left, manual_right)
+        # 정렬 모드 선택
+        _align_mode = st.radio(
+            "Align Mode", ["Simple Shift", "Slope-Anchored"],
+            index=0, key="align_mode", horizontal=True,
+            help="Simple=평행이동, Slope-Anchored=슬로프 앵커+플랫폭 가변",
+        )
 
-    # 타겟 프로파일을 보정된 layout에 맞춰 재정렬 (bin shift + mil offset)
-    _total_left_shift = drift["left_offset_bins"] + manual_left
-    if _total_left_shift != 0:
-        target_mil = np.roll(target_mil, _total_left_shift)
-        # 롤 후 빈 구간은 NaN
-        if _total_left_shift > 0:
-            target_mil[:_total_left_shift] = np.nan
-        else:
-            target_mil[_total_left_shift:] = np.nan
-
-    if manual_mil_offset != 0.0:
-        _valid_target = ~np.isnan(target_mil)
-        target_mil[_valid_target] += manual_mil_offset
+    if _align_mode == "Slope-Anchored":
+        # 슬로프 앵커 정렬: thin edge만 이동, 내부 경계 고정 → 플랫 폭 자동 조정
+        layout = build_aligned_layout(raw_layout, detected, manual_left, manual_right)
+        # 정렬된 layout으로 타겟 프로파일 재생성
+        df_target = generate_full_profile(product, layout=layout)
+        target_mil = df_target["Target_mil"].values
+        # 수직 오프셋
+        if manual_mil_offset != 0.0:
+            _valid_target = ~np.isnan(target_mil)
+            target_mil[_valid_target] += manual_mil_offset
+        # 플랫 폭 변화 표시
+        with st.sidebar:
+            _al = layout["left_end_mm"] - layout["left_start_mm"]
+            _ol = raw_layout["left_end_mm"] - raw_layout["left_start_mm"]
+            _af = max(0, _al - product.wedge_portion_mm)
+            _of = max(0, _ol - product.wedge_portion_mm)
+            st.caption(f"L flat: **{_af:.0f}**mm (spec {_of:.0f}, Δ{_af-_of:+.0f})")
+            if "right_start_mm" in layout and layout.get("right_start_mm") is not None:
+                _ar = layout["right_end_mm"] - layout["right_start_mm"]
+                _or_ = raw_layout["right_end_mm"] - raw_layout["right_start_mm"]
+                _arf = max(0, _ar - product.wedge_portion_mm)
+                _orf = max(0, _or_ - product.wedge_portion_mm)
+                st.caption(f"R flat: **{_arf:.0f}**mm (spec {_orf:.0f}, Δ{_arf-_orf:+.0f})")
+    else:
+        # 기존: 평행이동 (np.roll)
+        layout = apply_offset_to_layout(raw_layout, drift, manual_left, manual_right)
+        _total_left_shift = drift["left_offset_bins"] + manual_left
+        if _total_left_shift != 0:
+            target_mil = np.roll(target_mil, _total_left_shift)
+            if _total_left_shift > 0:
+                target_mil[:_total_left_shift] = np.nan
+            else:
+                target_mil[_total_left_shift:] = np.nan
+        if manual_mil_offset != 0.0:
+            _valid_target = ~np.isnan(target_mil)
+            target_mil[_valid_target] += manual_mil_offset
 
 else:
     layout = raw_layout

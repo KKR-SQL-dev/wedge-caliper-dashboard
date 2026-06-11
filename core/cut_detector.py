@@ -113,6 +113,48 @@ def calc_drift_offset(
     return result
 
 
+def build_aligned_layout(
+    raw_layout: dict,
+    detected: dict,
+    manual_left_adj: int = 0,
+    manual_right_adj: int = 0,
+) -> dict:
+    """슬로프 앵커 정렬: thin edge만 이동, 내부 경계(center trim) 고정.
+
+    기존 apply_offset_to_layout은 양쪽 경계를 동일하게 이동(= 평행이동)하므로
+    플랫 폭이 변하지 않음. 이 함수는 thin edge 쪽만 이동하여
+    플랫 폭이 자동으로 조정됨.
+
+    - dual: left_start(thin) 이동, left_end 고정 / right_end(thin) 이동, right_start 고정
+    - single_center: left_start(thin) 이동, left_end 고정
+    - single_left: left_start(thin) 이동, left_end 고정
+    - single_right: right_end(thin) 이동, right_start 고정
+    """
+    ct = raw_layout.get("cut_type", "single_center")
+    adjusted = dict(raw_layout)
+
+    # 좌측에 thin edge가 있는 cut type
+    left_has_thin = ct not in ("single_right",)
+    # 우측에 thin edge가 있는 cut type
+    right_has_thin = ct in ("dual", "single_right", "single_right_dual", "single_left_dual")
+
+    # Left thin edge → left_start만 이동
+    if left_has_thin and detected["left_thin_edge_bin"] is not None:
+        shift = (detected["left_thin_edge_bin"] - raw_layout["left_start_bin"]) + manual_left_adj
+        adjusted["left_start_mm"] = raw_layout["left_start_mm"] + shift * BIN_PITCH_MM
+        adjusted["left_start_bin"] = raw_layout["left_start_bin"] + shift
+
+    # Right thin edge → right_end만 이동
+    if (right_has_thin
+            and "right_end_bin" in raw_layout
+            and detected.get("right_thin_edge_bin") is not None):
+        shift = (detected["right_thin_edge_bin"] - raw_layout["right_end_bin"]) + manual_right_adj
+        adjusted["right_end_mm"] = raw_layout["right_end_mm"] + shift * BIN_PITCH_MM
+        adjusted["right_end_bin"] = raw_layout["right_end_bin"] + shift
+
+    return adjusted
+
+
 def apply_offset_to_layout(
     layout: dict,
     drift: dict,

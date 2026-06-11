@@ -506,11 +506,40 @@ if not is_flat_product:
             if _sample_scans:
                 roll_buf = build_roll_buffer_from_scans(_sample_scans, selected_name)
 
+        if roll_buf and roll_buf.count >= 1:
+            # 스캔 누적 표시 (헤더 보강)
+            _scan_total = roll_buf.count
+            st.caption(
+                f"Roll {scan_rollno or '-'}"
+                f"{'·' + scan_rollid if scan_rollid else ''}"
+                f" · **Scan {_scan_total}**"
+            )
+
         if roll_buf and roll_buf.count >= 2:
             with st.sidebar:
                 st.divider()
                 st.subheader("Aggregation")
                 st.caption(f"Roll: {roll_buf.count} scans")
+
+                # 집계 범위 선택
+                _agg_options = ["All", "Last 10", "Last 20", "Last 50", "Custom"]
+                _agg_sel = st.selectbox(
+                    "집계 범위", _agg_options, index=0, key="agg_range",
+                )
+                _agg_n = roll_buf.count  # default: 전체
+                if _agg_sel == "Last 10":
+                    _agg_n = 10
+                elif _agg_sel == "Last 20":
+                    _agg_n = 20
+                elif _agg_sel == "Last 50":
+                    _agg_n = 50
+                elif _agg_sel == "Custom":
+                    _agg_n = st.number_input(
+                        "스캔 수", 2, roll_buf.count, min(20, roll_buf.count),
+                        key="agg_custom_n",
+                    )
+                st.caption(f"집계: 최근 **{_agg_n}** / {roll_buf.count} scans")
+
                 _use_time_filter = st.checkbox("Time Filter", value=False, key="time_filter")
                 if _use_time_filter and roll_buf.start_time and roll_buf.end_time:
                     from datetime import time as dt_time
@@ -532,6 +561,10 @@ if not is_flat_product:
                         st.warning("필터 결과 0건 → 전체 사용")
                 else:
                     _all_data = roll_buf.get_all_data()
+
+                # 집계 범위 적용 (최근 N개만)
+                if _all_data is not None and _agg_n < len(_all_data):
+                    _all_data = _all_data[-_agg_n:]
 
     # 집계 계산
     if _all_data is not None and len(_all_data) >= 2:

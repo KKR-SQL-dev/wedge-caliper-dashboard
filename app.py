@@ -24,6 +24,7 @@ from core.mrad_calculator import (
     judge_gwa, judge_lwa, summarize_angles,
 )
 from core.profile_engine import generate_full_profile
+from core.target_loader import get_imported_target
 from core.recipe_matcher import match_recipe, parse_recipe
 from core.roll_aggregator import RollBuffer, ScanRecord, build_roll_buffer_from_scans, fetch_current_roll_buffer
 from core.sample_data import (
@@ -396,19 +397,30 @@ product = ProductMaster.from_dict(m)
 # 웨지 각도 0인 경우 (마스터 등록 플랫 제품 포함) → 플랫 처리
 is_flat_product = product.wedge_angle_mrad == 0.0
 
-df_target = generate_full_profile(product)
+# ── 타겟 로드: 임포트된 완성 타겟 우선, 없으면 파라미터 생성 ──
+_imported_target = get_imported_target(selected_name)
+_target_source = "imported"
 
+df_target = generate_full_profile(product)
 positions = df_target["Position_mm"].values
-target_mil = df_target["Target_mil"].values
 bin_nos = df_target["Bin"].values
+
+if _imported_target is not None and not is_flat_product:
+    # 임포트된 완성 타겟 사용 (재생성 없이 그대로)
+    target_mil = _imported_target.copy()
+    _target_source = "imported"
+else:
+    # 파라미터 기반 생성 (폴백)
+    target_mil = df_target["Target_mil"].values
+    _target_source = "generated"
 
 # 플랫 제품: 타겟을 수평선(목표두께)으로 설정
 if is_flat_product:
     _flat_target_cal = product.thin_edge_cal_mil  # 마스터 목표두께
     if _flat_target_cal <= 0:
-        # 마스터에 목표두께 없으면 실측 median 폴백
         _flat_target_cal = float(np.nanmedian(actual_mil)) if np.any(~np.isnan(actual_mil)) else 30.0
     target_mil = np.full_like(positions, _flat_target_cal)
+    _target_source = "flat"
 
 # actual_mil은 Live/Sample 모드 모두 위에서 이미 로드됨
 
@@ -777,7 +789,7 @@ with tab1:
     _bin_lbl = [str(b) for b in _bin_ticks]
 
     fig.update_layout(
-        title=f"Full Profile: {product.name} ({'Flat' if is_flat_product else product.cut_label})",
+        title=f"Full Profile: {product.name} ({'Flat' if is_flat_product else product.cut_label}) [target: {_target_source}]",
         xaxis_title="Position (mm)",
         yaxis_title="Caliper (mil)",
         height=500, hovermode="closest",

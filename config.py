@@ -208,52 +208,40 @@ def auto_refresh_masters():
 PORTAL_URL = "http://192.168.107.6:3501"
 
 def render_sidebar_portal():
-    """사이드바 최상단(네비게이션 위)에 쿠라레 메인포탈 링크를 렌더링.
-
-    Streamlit 자동 네비(App, Profile Generator …)는 그대로 유지하고,
-    CSS position:fixed 로 포탈 링크를 사이드바 영역 최상단에 고정 배치한다.
-    """
+    """사이드바 안에 포탈 링크 + 커스텀 네비를 렌더링 (자동 네비 대체)."""
     import streamlit as st
 
-    st.markdown(
-        f'''
-        <style>
-        /* ── 포탈 링크: 사이드바 영역 최상단 고정 ── */
-        #kuraray-portal {{
-            position: fixed;
-            top: 0; left: 0;
-            width: 21rem;          /* Streamlit 기본 사이드바 폭 */
-            z-index: 999999;
-            background: #F8FAFC;   /* secondaryBackgroundColor */
-            border-bottom: 1px solid #e2e8f0;
-        }}
-        #kuraray-portal a {{
-            display: flex; align-items: center; gap: 10px;
-            padding: 14px 20px;
-            text-decoration: none; color: #1e293b;
-            font-size: 15px; font-weight: 500;
-        }}
-        #kuraray-portal a:hover {{ background: #e2e8f0; }}
+    # 자동 네비 숨기기 + 커스텀 네비 스타일
+    st.markdown("""
+    <style>
+    [data-testid="stSidebarNav"] { display: none !important; }
+    .kp-portal { display:flex; align-items:center; gap:10px;
+                 padding:14px 20px; text-decoration:none; color:#1e293b;
+                 border-bottom:1px solid #e2e8f0; }
+    .kp-portal:hover { background:#e2e8f0; }
+    .kp-portal span { font-size:15px; font-weight:500; }
+    .kp-nav { padding:8px 0; border-bottom:1px solid #e2e8f0; }
+    .kp-nav a { display:block; padding:7px 24px; text-decoration:none;
+                color:#1e293b; font-size:14px; }
+    .kp-nav a:hover { background:#e2e8f0; }
+    </style>
+    """, unsafe_allow_html=True)
 
-        /* 사이드바 콘텐츠를 아래로 밀어서 포탈과 겹치지 않게 */
-        section[data-testid="stSidebar"] > div > div > div {{
-            margin-top: 52px !important;
-        }}
-        </style>
-
-        <div id="kuraray-portal">
-            <a href="{PORTAL_URL}" target="_self">
-                <svg width="20" height="20" viewBox="0 0 24 24"
-                     fill="none" stroke="#0ea5e9" stroke-width="2"
-                     stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/>
-                    <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1
-                          2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2
-                          2H5a2 2 0 0 1-2-2z"/>
-                </svg>
-                <span>쿠라레 메인 포탈</span>
-            </a>
-        </div>
-        ''',
+    st.sidebar.markdown(
+        f'''<a class="kp-portal" href="{PORTAL_URL}" target="_self">
+            <svg width="20" height="20" viewBox="0 0 24 24"
+                 fill="none" stroke="#0ea5e9" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/>
+                <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            </svg>
+            <span>쿠라레 메인 포탈</span>
+        </a>
+        <div class="kp-nav">
+            <a href="/">App</a>
+            <a href="/Profile_Generator">Profile Generator</a>
+            <a href="/Settings">Settings</a>
+            <a href="/Roll_History">Roll History</a>
+        </div>''',
         unsafe_allow_html=True,
     )

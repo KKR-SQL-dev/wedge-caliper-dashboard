@@ -49,7 +49,8 @@ st.markdown(
 '<style>'
 '.stMainBlockContainer{padding-top:1rem!important;padding-left:1rem!important;'
 'padding-right:1rem!important;padding-bottom:0.5rem!important;max-width:100%!important}'
-'.cat-icon{position:fixed;top:0.7rem;right:1.2rem;font-size:1.6rem;z-index:9999;cursor:default}'
+'.cat-icon{position:fixed;top:0.45rem;right:5rem;font-size:1.5rem;z-index:999999;cursor:default;'
+'text-decoration:none;line-height:1}'
 '</style>'
 '<div class="cat-icon" title="meow~">🐱</div>',
 unsafe_allow_html=True,

@@ -45,18 +45,15 @@ st.set_page_config(
 auto_refresh_masters()
 
 # ── 페이지 설정 ──────────────────────────────────────────
-st.markdown("""
-<style>
-    /* 메인 콘텐츠 패딩 최소화 – 전체 너비 활용 */
-    .stMainBlockContainer {
-        padding-top: 1rem !important;
-        padding-left: 1rem !important;
-        padding-right: 1rem !important;
-        padding-bottom: 0.5rem !important;
-        max-width: 100% !important;
-    }
-</style>
-""", unsafe_allow_html=True)
+st.markdown(
+'<style>'
+'.stMainBlockContainer{padding-top:1rem!important;padding-left:1rem!important;'
+'padding-right:1rem!important;padding-bottom:0.5rem!important;max-width:100%!important}'
+'.cat-icon{position:fixed;top:0.7rem;right:1.2rem;font-size:1.6rem;z-index:9999;cursor:default}'
+'</style>'
+'<div class="cat-icon" title="meow~">🐱</div>',
+unsafe_allow_html=True,
+)
 st.caption("**Monitoring Dashboard**")
 masters = load_masters()
 
